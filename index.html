@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Craft — Create your account</title>
+<style>
+  :root{
+    --bg:#f4f5f7; --card:#fff; --ink:#1a1d21; --muted:#6b7280;
+    --line:#e2e5e9; --accent:#2563eb; --ok:#16a34a; --bad:#dc2626;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    padding:40px 20px 120px;
+  }
+  .wrap{max-width:680px;margin:0 auto}
+  header{text-align:center;margin-bottom:32px}
+  .logo{
+    width:44px;height:44px;border-radius:10px;background:var(--accent);
+    margin:0 auto 14px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:20px;
+  }
+  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+  header p{margin:0;color:var(--muted);font-size:14px}
+
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:26px;margin-bottom:16px;
+  }
+  .field-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+  label{font-weight:600;font-size:14px}
+  .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
+  .check{color:var(--ok);font-weight:700;opacity:0;transition:opacity .2s}
+  .check.on{opacity:1}
+
+  input[type=text],input[type=email]{
+    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
+    font:inherit;background:#fff;
+  }
+  input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+  .readout{
+    font:600 22px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.06em;padding:10px 0;
+  }
+  button{font:inherit;cursor:pointer}
+  .btn{
+    padding:8px 14px;border:1px solid var(--line);border-radius:8px;
+    background:#fff;color:var(--ink);
+  }
+  .btn:hover{background:#f9fafb}
+  .btn:disabled{opacity:.4;cursor:not-allowed}
+
+  /* ---------- volume slingshot ---------- */
+  #sling{
+    display:block;width:100%;max-width:600px;margin:0 auto;
+    border:1px solid var(--line);border-radius:8px;background:#fbfcfd;
+    touch-action:none;cursor:grab;
+  }
+  #sling.dragging{cursor:grabbing}
+  .volbar{
+    display:flex;align-items:center;gap:12px;justify-content:center;
+    margin-top:12px;font-size:13px;color:var(--muted);
+  }
+  .volnum{font:700 20px/1 ui-monospace,Menlo,monospace;color:var(--ink)}
+
+  /* ---------- phone slider ---------- */
+  input[type=range]{width:100%;margin:6px 0}
+  .ticks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+
+  /* ---------- calendar ---------- */
+  .cal{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  .cal-head{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 10px;background:#f9fafb;border-bottom:1px solid var(--line);
+  }
+  .cal-month{font-weight:600;font-size:14px}
+  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line)}
+  .cal-grid div{background:#fff;text-align:center;padding:7px 0;font-size:13px}
+  .cal-grid .dow{background:#f9fafb;color:var(--muted);font-size:11px;font-weight:600}
+  .cal-grid .day{cursor:pointer}
+  .cal-grid .day:hover{background:#eff6ff}
+  .cal-grid .sel{background:var(--accent);color:#fff}
+  .cal-grid .pad{background:#fcfcfd}
+
+  /* ---------- keyboard ---------- */
+  .kb{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+  .kb button{
+    width:38px;height:36px;border:1px solid var(--line);border-radius:6px;
+    background:#fff;font-size:13px;transition:none;
+  }
+  .kb button:hover{background:#eff6ff}
+  .kb .wide{width:auto;padding:0 12px}
+
+  /* ---------- terms ---------- */
+  .termsbox{position:relative;height:74px;border:1px dashed var(--line);border-radius:8px}
+  .termsbox input{position:absolute;width:19px;height:19px;left:12px;top:27px;cursor:pointer}
+  .termsbox span{position:absolute;left:42px;top:26px;font-size:14px;color:var(--muted)}
+
+  /* ---------- cookie banner ---------- */
+  #cookie{
+    position:fixed;left:0;right:0;bottom:0;background:#fff;
+    border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(0,0,0,.09);
+    padding:16px 20px;z-index:50;max-height:52vh;overflow:auto;
+  }
+  #cookie h3{margin:0 0 4px;font-size:15px}
+  #cookie p{margin:0 0 12px;color:var(--muted);font-size:13px}
+  .toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:7px;margin-bottom:14px}
+  .tog{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+  .tog input{width:14px;height:14px;flex:none}
+  .cookie-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .cookie-count{font-size:12px;color:var(--muted);margin-left:auto}
+
+  /* ---------- submit ---------- */
+  #submit{
+    width:100%;padding:14px;border:none;border-radius:9px;background:var(--accent);
+    color:#fff;font-weight:600;font-size:15px;position:relative;overflow:hidden;
+  }
+  #submit .fill{
+    position:absolute;inset:0;background:rgba(255,255,255,.26);
+    width:0%;transition:width .05s linear;
+  }
+  #submit span{position:relative}
+  .status{text-align:center;color:var(--muted);font-size:13px;margin-top:10px;min-height:20px}
+
+  #done{display:none;text-align:center;padding:50px 20px}
+  #done h2{font-size:24px;margin:0 0 12px}
+  #done pre{
+    text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;
+    padding:16px;font-size:13px;overflow:auto;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap" id="form">
+  <header>
+    <div class="logo">C</div>
+    <h1>Create your account</h1>
+    <p>It takes less than a minute.</p>
+  </header>
+
+  <!-- 1. NAME — the only honest field on the entire page -->
+  <div class="card">
+    <div class="field-head"><label for="name">Full name</label><span class="check" id="ck-name">✓</span></div>
+    <p class="hint">Your legal name, as it appears on your ID.</p>
+    <input type="text" id="name" autocomplete="off" placeholder="Jane Doe">
+  </div>
+
+  <!-- 2. VOLUME — angry birds -->
+  <div class="card">
+    <div class="field-head"><label>Notification volume</label><span class="check" id="ck-vol">✓</span></div>
+    <p class="hint">Pull the speaker back into the sling and release. Where it lands sets your level.</p>
+    <canvas id="sling" width="600" height="270"></canvas>
+    <div class="volbar">
+      <span>Current level:</span><span class="volnum" id="volnum">—</span>
+      <span id="volnote"></span>
+    </div>
+  </div>
+
+  <!-- 3. PHONE — the million-value slider -->
+  <div class="card">
+    <div class="field-head"><label>Phone number</label><span class="check" id="ck-phone">✓</span></div>
+    <p class="hint">Select your area code, then scroll to your subscriber number.</p>
+
+    <select id="area" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;margin-bottom:18px">
+      <option value="">Select area code…</option>
+    </select>
+
+    <div class="readout" id="phone-read">(———) 000-0001</div>
+    <input type="range" id="phone" min="1" max="1000000" step="1" value="1">
+    <div class="ticks"><span>1</span><span>500,000</span><span>1,000,000</span></div>
+    <p class="hint" style="margin-top:10px">Tip: arrow keys adjust by exactly 1.</p>
+  </div>
+
+  <!-- 4. DOB — one month at a time, backwards only -->
+  <div class="card">
+    <div class="field-head"><label>Date of birth</label><span class="check" id="ck-dob">✓</span></div>
+    <p class="hint">Navigate to the month you were born and select the day.</p>
+    <div class="cal">
+      <div class="cal-head">
+        <button class="btn" id="prev">◀ Previous month</button>
+        <span class="cal-month" id="calm"></span>
+        <button class="btn" id="next" disabled>Next month ▶</button>
+      </div>
+      <div class="cal-grid" id="calg"></div>
+    </div>
+  </div>
+
+  <!-- 5. PASSWORD — shuffling on-screen keyboard -->
+  <div class="card">
+    <div class="field-head"><label>Password</label><span class="check" id="ck-pw">✓</span></div>
+    <p class="hint">Minimum 8 characters. For your security, use the on-screen keyboard.</p>
+    <input type="text" id="pw" readonly placeholder="Click the keys below">
+    <div class="kb" id="kb"></div>
+  </div>
+
+  <!-- 6. EMAIL — 700ms per character -->
+  <div class="card">
+    <div class="field-head"><label for="email">Email address</label><span class="check" id="ck-email">✓</span></div>
+    <p class="hint">Each character is validated against our servers before it appears.</p>
+    <input type="email" id="email" autocomplete="off" placeholder="you@example.com">
+    <p class="hint" id="emailnote" style="margin:8px 0 0;min-height:18px"></p>
+  </div>
+
+  <!-- 7. TERMS — flees the cursor -->
+  <div class="card">
+    <div class="field-head"><label>Terms of service</label><span class="check" id="ck-terms">✓</span></div>
+    <p class="hint">Please confirm you have read and agree to the terms.</p>
+    <div class="termsbox" id="termsbox">
+      <input type="checkbox" id="terms">
+      <span>I agree to the Terms of Service</span>
+    </div>
+  </div>
+
+  <button id="submit"><div class="fill" id="fill"></div><span>Hold to create account</span></button>
+  <div class="status" id="status"></div>
+</div>
+
+<div id="done" class="wrap">
+  <header><div class="logo">C</div><h1>Account created</h1></header>
+  <pre id="dump"></pre>
+  <p style="color:var(--muted);font-size:13px">Your information has been discarded. Please try again.</p>
+</div>
+
+<!-- COOKIES -->
+<div id="cookie">
+  <h3>We value your privacy</h3>
+  <p>Disable any non-essential partners you do not wish to share your data with, then continue.</p>
+  <div class="toggles" id="toggles"></div>
+  <div class="cookie-actions">
+    <button class="btn" id="acceptAll">Accept all</button>
+    <button class="btn" id="rejectAll">Reject all</button>
+    <button class="btn" id="continueBtn">Continue</button>
+    <span class="cookie-count" id="cookieCount"></span>
+  </div>
+</div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const state = { name:"", vol:null, area:"", phone:1, dob:null, pw:"", email:"", terms:false };
+const mark = (id, ok) => $(id).classList.toggle("on", !!ok);
+
+/* ===================== 1. NAME (works perfectly) ===================== */
+$("#name").addEventListener("input", e => {
+  state.name = e.target.value.trim();
+  mark("#ck-name", state.name.length > 0);
+});
+
+/* ===================== AUDIO ===================== */
+let actx = null, osc = null, gain = null;
+const MAX_GAIN = 0.11; // capped — annoying, not harmful
+function startTone(){
+  if (actx) return;
+  try {
+    actx = new (window.AudioContext || window.webkitAudioContext)();
+    osc = actx.createOscillator();
+    gain = actx.createGain();
+    const lfo = actx.createOscillator(), lfoGain = actx.createGain();
+    osc.type = "sawtooth"; osc.frequency.value = 442;
+    lfo.frequency.value = 5.5; lfoGain.gain.value = 7;
+    lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
+    gain.gain.value = state.vol === null ? MAX_GAIN * 0.55 : MAX_GAIN * state.vol / 100;
+    osc.connect(gain); gain.connect(actx.destination);
+    osc.start(); lfo.start();
+  } catch(e){ /* audio unavailable — page still works */ }
+}
+function applyVolume(v){
+  if (gain && actx) gain.gain.setTargetAtTime(MAX_GAIN * v / 100, actx.currentTime, 0.05);
+}
+document.addEventListener("pointerdown", startTone, { once:true });
+
+/* ===================== 2. SLINGSHOT VOLUME ===================== */
+const cv = $("#sling"), cx = cv.getContext("2d");
+const ANCHOR = {x:96, y:150}, MAXPULL = 74, GROUND = 224;
+const SCALE = {x0:210, x1:566};
+let pouch = {x:ANCHOR.x, y:ANCHOR.y}, dragging = false, proj = null, trail = [];
+
+function toCanvas(e){
+  const r = cv.getBoundingClientRect();
+  return { x:(e.clientX - r.left) * (cv.width / r.width), y:(e.clientY - r.top) * (cv.height / r.height) };
+}
+cv.addEventListener("pointerdown", e => {
+  if (proj) return;
+  const p = toCanvas(e);
+  if (Math.hypot(p.x - pouch.x, p.y - pouch.y) < 46){
+    dragging = true; cv.classList.add("dragging"); cv.setPointerCapture(e.pointerId);
+  }
+});
+cv.addEventListener("pointermove", e => {
+  if (!dragging) return;
+  const p = toCanvas(e);
+  let dx = p.x - ANCHOR.x, dy = p.y - ANCHOR.y;
+  const d = Math.hypot(dx, dy);
+  if (d > MAXPULL){ dx = dx / d * MAXPULL; dy = dy / d * MAXPULL; }
+  pouch = { x:ANCHOR.x + dx, y:ANCHOR.y + dy };
+});
+cv.addEventListener("pointerup", () => {
+  if (!dragging) return;
+  dragging = false; cv.classList.remove("dragging");
+  const vx = (ANCHOR.x - pouch.x) * 0.235, vy = (ANCHOR.y - pouch.y) * 0.235;
+  if (Math.hypot(vx, vy) < 0.6){ pouch = {...ANCHOR}; return; }
+  proj = { x:pouch.x, y:pouch.y, vx, vy };
+  trail = []; pouch = {...ANCHOR};
+});
+
+function land(x){
+  let v;
+  if (x < SCALE.x0) v = 0;
+  else if (x > SCALE.x1) v = 100;
+  else v = Math.round((x - SCALE.x0) / (SCALE.x1 - SCALE.x0) * 100);
+  state.vol = v; applyVolume(v);
+  $("#volnum").textContent = v;
+  $("#volnote").textContent = v === 0 ? "(silent — nice shot)" : v === 100 ? "(MAXIMUM)" : "";
+  mark("#ck-vol", true);
+  setTimeout(() => { proj = null; trail = []; }, 1100);
+}
+
+function drawSling(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  // ground + scale
+  cx.strokeStyle="#d7dbe0"; cx.lineWidth=1;
+  cx.beginPath(); cx.moveTo(0,GROUND+16); cx.lineTo(cv.width,GROUND+16); cx.stroke();
+  cx.fillStyle="#9aa2ad"; cx.font="10px system-ui"; cx.textAlign="center";
+  for (let v=0; v<=100; v+=10){
+    const x = SCALE.x0 + (SCALE.x1-SCALE.x0)*v/100;
+    cx.strokeStyle = v%50===0 ? "#9aa2ad" : "#dfe3e8";
+    cx.beginPath(); cx.moveTo(x,GROUND+16); cx.lineTo(x,GROUND+(v%50===0?27:22)); cx.stroke();
+    if (v%50===0) cx.fillText(v, x, GROUND+40);
+  }
+  cx.textAlign="left";
+  // slingshot
+  cx.strokeStyle="#8b5e3c"; cx.lineWidth=7; cx.lineCap="round";
+  cx.beginPath(); cx.moveTo(ANCHOR.x, GROUND+16); cx.lineTo(ANCHOR.x, ANCHOR.y+6); cx.stroke();
+  cx.lineWidth=6;
+  cx.beginPath(); cx.moveTo(ANCHOR.x, ANCHOR.y+8); cx.lineTo(ANCHOR.x-19, ANCHOR.y-24); cx.stroke();
+  cx.beginPath(); cx.moveTo(ANCHOR.x, ANCHOR.y+8); cx.lineTo(ANCHOR.x+19, ANCHOR.y-24); cx.stroke();
+  // bands
+  if (!proj){
+    cx.strokeStyle="#3d3d3d"; cx.lineWidth=4;
+    cx.beginPath(); cx.moveTo(ANCHOR.x-19, ANCHOR.y-24); cx.lineTo(pouch.x, pouch.y); cx.stroke();
+    cx.beginPath(); cx.moveTo(ANCHOR.x+19, ANCHOR.y-24); cx.lineTo(pouch.x, pouch.y); cx.stroke();
+  }
+  // trail
+  cx.fillStyle="#c9ced6";
+  trail.forEach(t => { cx.beginPath(); cx.arc(t.x,t.y,2,0,7); cx.fill(); });
+  // projectile
+  const b = proj || pouch;
+  cx.fillStyle="#2563eb"; cx.beginPath(); cx.arc(b.x,b.y,15,0,7); cx.fill();
+  cx.fillStyle="#fff"; cx.font="15px system-ui"; cx.textAlign="center"; cx.textBaseline="middle";
+  cx.fillText("♪", b.x, b.y+1);
+  cx.textAlign="left"; cx.textBaseline="alphabetic";
+}
+function tick(){
+  if (proj){
+    proj.vx *= 0.9995; proj.vy += 0.34;
+    proj.x += proj.vx; proj.y += proj.vy;
+    if (trail.length === 0 || Math.hypot(proj.x-trail[trail.length-1].x, proj.y-trail[trail.length-1].y) > 13)
+      trail.push({x:proj.x, y:proj.y});
+    if (proj.y >= GROUND){ proj.y = GROUND; const x = proj.x; proj = {x, y:GROUND, vx:0, vy:0}; land(x); }
+  }
+  drawSling(); requestAnimationFrame(tick);
+}
+tick();
+
+/* ===================== 3. PHONE ===================== */
+const AREAS = [212,213,214,215,216,217,218,219,224,225,228,229,231,234,239,240,248,251,252,253,254,256,260,262,267,269,270,276,281,301,302,303,304,305,307,308,309,310,312,313,314,315,316,317,318,319,320,321,323,325,330,331,334,336,337,339,347,351,352,360,361,386,401,402,404,405,406,407,408,409,410,412,413,414,415,417,419,423,425,430,432,434,435,440,443,458,469,470,475,478,479,480,484,501,502,503,504,505,507,508,509,510,512,513,515,516,517,518,520,530,540,541,551,559,561,562,563,567,570,571,573,574,575,580,585,586,601,602,603,605,606,607,608,609,610,612,614,615,616,617,618,619,620,623,626,630,631,636,641,646,650,651,660,661,662,667,678,682,701,702,703,704,706,707,708,712,713,714,715,716,717,718,719,720,724,727,731,732,734,737,740,754,757,760,762,763,765,769,770,772,773,774,775,779,781,785,786,801,802,803,804,805,806,808,810,812,813,814,815,816,817,818,828,830,831,832,843,845,847,848,850,856,857,858,859,860,862,863,864,865,870,872,878,901,903,904,906,907,908,909,910,912,913,914,915,916,917,918,919,920,925,928,929,931,936,937,940,941,947,949,951,952,954,956,970,971,972,973,978,979,980,984,985,989];
+const areaSel = $("#area");
+function shuffleAreas(){
+  const arr = AREAS.slice();
+  for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]] = [arr[j],arr[i]]; }
+  const cur = areaSel.value;
+  areaSel.innerHTML = '<option value="">Select area code…</option>' + arr.map(a=>`<option value="${a}">${a}</option>`).join("");
+  areaSel.value = cur;
+}
+shuffleAreas();
+areaSel.addEventListener("mousedown", shuffleAreas);   // re-randomise every time it opens
+areaSel.addEventListener("change", e => { state.area = e.target.value; renderPhone(); });
+
+const phoneSlider = $("#phone");
+function renderPhone(){
+  const s = String(state.phone).padStart(7,"0");
+  $("#phone-read").textContent = `(${state.area || "———"}) ${s.slice(0,3)}-${s.slice(3)}`;
+  mark("#ck-phone", !!state.area && state.phone > 1);
+}
+phoneSlider.addEventListener("input", e => { state.phone = +e.target.value; renderPhone(); });
+renderPhone();
+
+/* ===================== 4. DATE OF BIRTH ===================== */
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+let view = new Date(); view.setDate(1);
+function renderCal(){
+  $("#calm").textContent = `${MONTHS[view.getMonth()]} ${view.getFullYear()}`;
+  const g = $("#calg"); g.innerHTML = "";
+  ["S","M","T","W","T","F","S"].forEach(d => { const el = document.createElement("div"); el.className="dow"; el.textContent=d; g.appendChild(el); });
+  const first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+  const days = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
+  for (let i=0;i<first;i++){ const el=document.createElement("div"); el.className="pad"; g.appendChild(el); }
+  for (let d=1; d<=days; d++){
+    const el = document.createElement("div");
+    el.className = "day"; el.textContent = d;
+    if (state.dob && state.dob.getFullYear()===view.getFullYear() && state.dob.getMonth()===view.getMonth() && state.dob.getDate()===d)
+      el.classList.add("sel");
+    el.onclick = () => { state.dob = new Date(view.getFullYear(), view.getMonth(), d); mark("#ck-dob", true); renderCal(); };
+    g.appendChild(el);
+  }
+}
+function stepBack(){ view.setMonth(view.getMonth()-1); renderCal(); }
+let holdTimer = null, holdInt = null;
+$("#prev").addEventListener("pointerdown", () => {
+  stepBack();
+  holdTimer = setTimeout(() => { holdInt = setInterval(stepBack, 380); }, 600); // merciful auto-repeat
+});
+["pointerup","pointerleave","pointercancel"].forEach(ev =>
+  $("#prev").addEventListener(ev, () => { clearTimeout(holdTimer); clearInterval(holdInt); }));
+renderCal();
+
+/* ===================== 5. PASSWORD KEYBOARD ===================== */
+const KEYS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*".split("");
+function renderKb(){
+  const arr = KEYS.slice();
+  for (let i = arr.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
+  const kb = $("#kb"); kb.innerHTML = "";
+  arr.forEach(k => {
+    const b = document.createElement("button");
+    b.textContent = k; b.type = "button";
+    b.onclick = () => { state.pw += k; $("#pw").value = "•".repeat(state.pw.length); mark("#ck-pw", state.pw.length>=8); renderKb(); };
+    kb.appendChild(b);
+  });
+  const del = document.createElement("button");
+  del.className = "wide"; del.type = "button"; del.textContent = "⌫ Delete";
+  del.onclick = () => { state.pw = state.pw.slice(0,-1); $("#pw").value = "•".repeat(state.pw.length); mark("#ck-pw", state.pw.length>=8); renderKb(); };
+  kb.appendChild(del);
+}
+renderKb();
+
+/* ===================== 6. EMAIL (700ms per char) ===================== */
+const emailEl = $("#email"), emailNote = $("#emailnote");
+let pending = false;
+emailEl.addEventListener("keydown", e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key.length !== 1 && e.key !== "Backspace") return;
+  e.preventDefault();
+  if (pending){ emailNote.textContent = "Too fast — character discarded."; return; }
+  pending = true; emailNote.textContent = "Validating…";
+  const key = e.key;
+  setTimeout(() => {
+    state.email = key === "Backspace" ? state.email.slice(0,-1) : state.email + key;
+    emailEl.value = state.email;
+    pending = false; emailNote.textContent = "";
+    mark("#ck-email", /.+@.+\..+/.test(state.email));
+  }, 700);
+});
+emailEl.addEventListener("paste", e => { e.preventDefault(); emailNote.textContent = "Pasting is disabled for security."; });
+
+/* ===================== 7. FLEEING CHECKBOX ===================== */
+const box = $("#termsbox"), cb = $("#terms");
+box.addEventListener("mousemove", e => {
+  if (cb.checked) return;
+  const r = box.getBoundingClientRect(), c = cb.getBoundingClientRect();
+  const dist = Math.hypot(e.clientX - (c.left+c.width/2), e.clientY - (c.top+c.height/2));
+  if (dist < 62){
+    cb.style.left = Math.random() * (r.width - 34) + "px";
+    cb.style.top  = Math.random() * (r.height - 34) + "px";
+  }
+});
+cb.addEventListener("change", () => { state.terms = cb.checked; mark("#ck-terms", cb.checked); });
+// escape hatch: Tab to it and press Space. It cannot run from the keyboard.
+
+/* ===================== COOKIES ===================== */
+const PARTNERS = ["AdMesh","Trackr","PixelDrift","Nomatic","Beaconly","Segmentum","Clickwell","DataFlume","Optivo","Rezonate","Adnexus","Cohortly","Trailhead","Pingback","Vantage","Lumenad","Statsig","Wavelength","Corvid","Bidstream","Tapestry","Northstar","Adverse","Quantly"];
+const togWrap = $("#toggles");
+PARTNERS.forEach((p,i) => {
+  const l = document.createElement("label");
+  l.className = "tog";
+  l.innerHTML = `<input type="checkbox" checked data-p="${i}"><span>${p}</span>`;
+  togWrap.appendChild(l);
+});
+const allTogs = () => [...togWrap.querySelectorAll("input")];
+function countOn(){
+  const n = allTogs().filter(t=>t.checked).length;
+  $("#cookieCount").textContent = `${n} of ${PARTNERS.length} partners still enabled`;
+  return n;
+}
+togWrap.addEventListener("change", countOn);
+$("#acceptAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(); };
+$("#rejectAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(); }; // identical. of course.
+$("#continueBtn").onclick = () => {
+  if (countOn() > 0){ $("#cookieCount").style.color = "var(--bad)"; return; }
+  $("#cookie").remove();
+};
+countOn();
+
+/* ===================== SUBMIT (hold still for 8s) ===================== */
+const HOLD = 8000;
+let holdStart = 0, holdRAF = null, origin = null;
+const fill = $("#fill"), status = $("#status");
+function cancelHold(msg){
+  cancelAnimationFrame(holdRAF); holdRAF = null; fill.style.width = "0%";
+  if (msg) status.textContent = msg;
+}
+$("#submit").addEventListener("pointerdown", e => {
+  origin = {x:e.clientX, y:e.clientY}; holdStart = performance.now();
+  status.textContent = "Hold still…";
+  const step = () => {
+    const pct = Math.min(1, (performance.now()-holdStart)/HOLD);
+    fill.style.width = (pct*100) + "%";
+    if (pct >= 1){ cancelHold(""); finish(); return; }
+    holdRAF = requestAnimationFrame(step);
+  };
+  holdRAF = requestAnimationFrame(step);
+});
+window.addEventListener("pointermove", e => {
+  if (!holdRAF || !origin) return;
+  if (Math.hypot(e.clientX-origin.x, e.clientY-origin.y) > 4) cancelHold("You moved. Start again.");
+});
+window.addEventListener("pointerup", () => { if (holdRAF) cancelHold("Released too early."); });
+
+function finish(){
+  const missing = [];
+  if (!state.name) missing.push("full name");
+  if (state.vol === null) missing.push("notification volume");
+  if (!state.area || state.phone <= 1) missing.push("phone number");
+  if (!state.dob) missing.push("date of birth");
+  if (state.pw.length < 8) missing.push("password (8+ characters)");
+  if (!/.+@.+\..+/.test(state.email)) missing.push("email address");
+  if (!state.terms) missing.push("agreement to the terms");
+  if (missing.length){ status.textContent = "Missing: " + missing.join(", ") + "."; return; }
+
+  $("#form").style.display = "none";
+  $("#done").style.display = "block";
+  $("#dump").textContent = JSON.stringify({
+    name: state.name,
+    email: state.email,
+    phone: `(${state.area}) ${String(state.phone).padStart(7,"0").slice(0,3)}-${String(state.phone).padStart(7,"0").slice(3)}`,
+    dateOfBirth: state.dob.toDateString(),
+    password: "•".repeat(state.pw.length),
+    notificationVolume: state.vol
+  }, null, 2);
+  if (osc){ try { osc.stop(); } catch(e){} }
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
