@@ -15,6 +15,8 @@ PAGES = [
     ("signup",  "index.html",   "Sign Up"),
     ("feed",    "feed.html",    "Feed"),
     ("profile", "profile.html", "Profiles"),
+    ("settings","settings.html","Settings"),
+    ("privacy", "privacy.html", "Legal"),
     ("awards",  "awards.html",  "Awards"),
 ]
 

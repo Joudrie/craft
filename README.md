@@ -23,6 +23,8 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `feed.html` | The feed. 2013 stratum. Twelve crimes, most of them original to this project. |
 | `index.html` | Onboarding. Eight-step wizard, and none of it counts. |
 | `profile.html` | Six profiles. 2007 stratum. Each one ruined a different way, by its owner. |
+| `settings.html` | Settings. 2002 stratum — frames, teal, and the roach motel. |
+| `privacy.html` | The Privacy Policy. 28,778 words, and the scroll runs backwards. |
 | `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
@@ -138,6 +140,41 @@ setting on this website that is actually honoured.
 
 The header and friend rail live outside the profile container, so no matter what a
 member has done to their page, you can always leave. That's the escape hatch.
+
+## The basement (2002 stratum)
+
+**Settings** never got migrated — teal desktop, `MS Sans Serif`, a frame layout, a
+title bar with dead minimise/maximise buttons.
+
+- **Ten privacy toggles, each negated an arbitrary number of times.** *"Do not
+  disallow non-restricted profile sharing."* The checkbox tells you nothing on its
+  own, so a right-hand column reports what each setting **actually does** — which is
+  what makes it a puzzle rather than a trick. You can always verify. Ticking every box
+  leaves you at 5 of 10 sharing; decoding it properly gets all ten to PRIVATE.
+- **"Make Everything Private"** ticks every box, which is not the same thing.
+- **Save works. The confirmation lies** — it reports the inverse, and admits it:
+  *"(The table above is correct. This summary is not.)"*
+- **Your password is displayed** on the Account page, "for your convenience".
+
+**Deleting your account is seven gates**, each a different small task so the corridor
+stays playable: a confirmation, a survey where every answer is "I'll be back", three
+escalating phrases to type (`DELETE` → `DELETE MY ACCOUNT` → `I UNDERSTAND THIS IS
+PERMANENT`), a five-second hold, an identity check, and a 30-day cooling-off notice
+that cancels if you log in — while you are logged in.
+
+The final button says *"Your Friendspace account has been permanently deleted."*
+Then: *"Welcome back! You have 1 new notification. While you were away, you liked a
+post."* **Ghost stays locked.**
+
+**The Privacy Policy** is 28,778 words across 1,400 paragraphs — 47,143px, about 400
+screens at that pane height — displayed six lines at a time, and **the scroll wheel is
+inverted**. It resets to the top every 14 seconds.
+
+The escape hatch is a consequence of the crime rather than an exception to it: since
+everything is inverted, **`Home` jumps to the bottom.** The page tells you after two
+resets. Buried in the text: a clause claiming your immortal soul, one granting veto
+power over your children's names, and Clause 15.3, which states that the account
+deletion facility "is provided for illustrative purposes and does not delete accounts."
 
 ## Trophies
 
