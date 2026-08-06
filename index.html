@@ -104,6 +104,32 @@ input[type=range]{width:100%}
 .recpt td.k{color:#90949c;width:150px}
 .recpt td.v{font-family:ui-monospace,"Courier New",monospace}
 .strike{color:#c0392b;text-decoration:line-through;font-size:11px;display:block}
+
+/* ---- username ---- */
+.avail{font-size:12px;margin-top:8px;min-height:34px}
+.avail .no{color:#c0392b}
+.avail .sug{background:#f6f7f9;border:1px solid #ccd0d5;padding:7px 9px;margin-top:6px;
+  display:flex;align-items:center;gap:9px;font-family:ui-monospace,monospace;font-size:13px}
+
+/* ---- verification code ---- */
+.codebox{background:#f6f7f9;border:1px dashed #ccd0d5;padding:12px;text-align:center;margin-bottom:11px}
+.codebox b{font:bold 28px ui-monospace,"Courier New",monospace;letter-spacing:10px;color:#1d2129}
+.codebox .exp{font-size:11px;color:#90949c;margin-top:5px}
+
+/* ---- captcha ---- */
+.cap{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:294px;margin:11px 0}
+.cap div{height:90px;cursor:pointer;position:relative;border:3px solid transparent}
+.cap div.sel{border-color:#4c69ba}
+.cap div.sel:after{content:"✓";position:absolute;top:2px;left:6px;color:#fff;
+  font:bold 18px Helvetica;text-shadow:0 0 5px #000}
+
+/* ---- photo crop ---- */
+.cropwrap{position:relative;width:100%;height:236px;overflow:hidden;border:1px solid #ccd0d5;
+  background:linear-gradient(135deg,#8fa0c4,#b9c3d8);cursor:move;touch-action:none;user-select:none}
+.cropbox{position:absolute;width:98px;height:98px;border:2px solid #fff;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+.face{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(255,211,77,.9);
+  display:grid;place-items:center;font:10px Helvetica;color:#4a3800;text-align:center}
 </style>
 </head>
 <body>
@@ -126,6 +152,15 @@ input[type=range]{width:100%}
       <h2>What should we call you?</h2>
       <p class="hint">Your legal name, exactly as it appears on your ID.</p>
       <input class="tf" id="name" autocomplete="off" placeholder="Jane Doe">
+    </div>
+
+    <!-- USERNAME -->
+    <div class="step" data-step="u">
+      <h2>Pick a username</h2>
+      <p class="hint">This cannot be changed later. Or at all.</p>
+      <input class="tf" id="uname" autocomplete="off" placeholder="username">
+      <div style="margin-top:9px"><button class="fs-btn ghost" id="checkU">Check availability</button></div>
+      <div class="avail" id="avail"></div>
     </div>
 
     <!-- 2 PHONE -->
@@ -171,6 +206,38 @@ input[type=range]{width:100%}
       <p class="hint">Each character is verified with our servers before it appears.</p>
       <input class="tf" id="email" autocomplete="off" placeholder="you@example.com">
       <p class="hint" id="emailNote" style="margin:8px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- VERIFICATION CODE -->
+    <div class="step" data-step="v">
+      <h2>Verify your email</h2>
+      <p class="hint">We have sent a code to your inbox. For your convenience it is also shown below.</p>
+      <div class="codebox">
+        <b id="theCode">0000</b>
+        <div class="exp">This code expires in <span id="codeLeft">2.5</span> seconds.</div>
+      </div>
+      <input class="tf" id="codeIn" maxlength="4" autocomplete="off" placeholder="Enter the code" style="text-align:center;letter-spacing:8px;font-family:ui-monospace,monospace">
+      <p class="hint" id="codeNote" style="margin:8px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- CAPTCHA -->
+    <div class="step" data-step="c">
+      <h2>Confirm you are a human</h2>
+      <p class="hint" id="capPrompt">Select all squares containing a crosswalk.</p>
+      <div class="cap" id="cap"></div>
+      <button class="fs-btn ghost" id="capGo">Verify</button>
+      <p class="hint" id="capNote" style="margin:9px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- PROFILE PHOTO -->
+    <div class="step" data-step="p">
+      <h2>Position your profile photo</h2>
+      <p class="hint">Drag to move the photo until your face is inside the frame.</p>
+      <div class="cropwrap" id="cropwrap">
+        <div class="face" id="face">your<br>face</div>
+        <div class="cropbox" id="cropbox"></div>
+      </div>
+      <p class="hint" id="cropNote" style="margin:9px 0 0;min-height:16px"></p>
     </div>
 
     <!-- 6 VOLUME -->
@@ -245,26 +312,26 @@ input[type=range]{width:100%}
 <script>
 "use strict";
 var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
-var S = { name:"", phone:1, dob:null, pw:"", email:"", vol:null, terms:false };
+var S = { name:"", uname:"", phone:1, dob:null, pw:"", email:"", code:"", vol:null, terms:false };
 
 /* ============================================================
    WIZARD — the progress bar shrinks and the step count grows
    ============================================================ */
-var step = 0, STEPS = 8;
-var TITLES = ["Create your account","Contact details","About you","Security",
-              "Contact details","Preferences","Legal","Finish"];
+var stepEls = [].slice.call(document.querySelectorAll(".step[data-step]"));
+var step = 0, STEPS = stepEls.length;
+var TITLES = ["Create your account","Identity","Contact details","About you","Security",
+              "Contact details","Contact details","Security","Identity","Preferences",
+              "Legal","Finish"];
 /* "of N" keeps getting worse the further you go */
-var OF = [4, 6, 6, 9, 9, 11, 11, 8];
+var OF = [4, 6, 6, 9, 9, 11, 11, 14, 14, 16, 16, 12];
 
 function showStep(n){
   step = n;
-  [].forEach.call(document.querySelectorAll(".step[data-step]"), function(el){
-    el.classList.toggle("on", +el.dataset.step === n);
-  });
+  stepEls.forEach(function(el, i){ el.classList.toggle("on", i === n); });
   $("#stepTitle").textContent = TITLES[n];
   $("#stepOf").textContent = "Step " + (n+1) + " of " + OF[n];
   /* the bar runs backwards, then snaps to full at the end */
-  $("#bar").style.width = (n === STEPS-1 ? 100 : Math.max(5, 62 - n*7)) + "%";
+  $("#bar").style.width = (n === STEPS-1 ? 100 : Math.max(4, 62 - n*5)) + "%";
   $("#nextBtn").style.display = (n === STEPS-1) ? "none" : "";
   $("#msg").textContent = "";
 }
@@ -541,6 +608,7 @@ window.addEventListener("pointerup", function(){ if (raf) cancel("Released too e
 function finish(){
   var rows = [
     ["Name",     S.name || "(not provided)", null],
+    ["Username", "user847",                  S.uname || null],
     ["Phone",    "(555) 010-0100",           fmtPhone(S.phone)],
     ["Date of birth", new Date().toDateString(), S.dob ? S.dob.toDateString() : null],
     ["Email",    "user847@friendspace.example", S.email || null],
@@ -598,6 +666,152 @@ $("#contBtn").onclick = function(){
   $("#cookie").remove();
 };
 drawPartners();
+
+/* ============================================================
+   USERNAME — every name is taken. After three attempts the
+   system assigns you one, which you may accept. That is the
+   escape hatch, and it is also the joke.
+   ============================================================ */
+var uTries = 0;
+$("#checkU").addEventListener("click", function(){
+  var want = $("#uname").value.trim();
+  if (!want){ $("#avail").innerHTML = "<span class='no'>Enter a username first.</span>"; return; }
+  uTries++;
+  if (uTries < 3){
+    $("#avail").innerHTML = "<span class='no'>\u2716 <b>" + want + "</b> is taken.</span>" +
+      "<div style='color:#90949c;margin-top:4px'>Taken since " + (2004 + uTries) + ". Try another.</div>";
+    return;
+  }
+  var assigned = want.toLowerCase().replace(/[^a-z0-9]/g,"") + "_" +
+                 (1900 + Math.floor(Math.random()*99)) + "_xX" + Math.floor(Math.random()*90+10);
+  $("#avail").innerHTML =
+    "<span class='no'>\u2716 <b>" + want + "</b> is taken.</span>" +
+    "<div class='sug'><span id='sugName'>" + assigned + "</span>" +
+    "<button class='fs-btn' id='takeU' style='margin-left:auto'>Use this</button></div>" +
+    "<div style='color:#90949c;margin-top:5px'>This username is available.</div>";
+  $("#takeU").onclick = function(){
+    S.uname = assigned;
+    $("#uname").value = assigned;
+    $("#avail").innerHTML = "<span style='color:#2e7d32'>\u2714 <b>" + assigned + "</b> is yours forever.</span>";
+    T.unlock("identity");
+  };
+});
+
+/* ============================================================
+   VERIFICATION — the code is shown to you, and it rotates every
+   2.5 seconds. Four digits in two and a half seconds is a race
+   you can win, which is what keeps it a toy.
+   ============================================================ */
+var code = "0000", codeT0 = Date.now(), codeVerified = false;
+function rollCode(){
+  code = String(Math.floor(Math.random()*9000) + 1000);
+  codeT0 = Date.now();
+  var el = $("#theCode"); if (el) el.textContent = code;
+}
+rollCode();
+setInterval(function(){
+  if (codeVerified) return;
+  rollCode();
+  var inp = $("#codeIn");
+  if (inp && inp.value){
+    inp.value = "";
+    $("#codeNote").textContent = "That code expired. A new one has been issued.";
+  }
+}, 2500);
+setInterval(function(){
+  var el = $("#codeLeft"); if (!el || codeVerified) return;
+  el.textContent = Math.max(0, (2.5 - (Date.now()-codeT0)/1000)).toFixed(1);
+}, 90);
+$("#codeIn").addEventListener("input", function(){
+  if (this.value.length < 4) return;
+  if (this.value === code){
+    codeVerified = true;
+    S.code = code;
+    $("#codeNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Verified.</span>";
+    $("#theCode").style.color = "#2e7d32";
+    T.unlock("verified");
+  } else {
+    this.value = "";
+    $("#codeNote").textContent = "Incorrect. The code has changed since you started typing.";
+  }
+});
+
+/* ============================================================
+   CAPTCHA — the prompt changes every time you submit, so
+   whatever you picked was for the previous question. It gives
+   up on the third attempt.
+   ============================================================ */
+var CAP_PROMPTS = [
+  "Select all squares containing a crosswalk.",
+  "Select all squares containing a bus.",
+  "Select all squares containing regret.",
+  "Select all squares containing a crosswalk that is thinking about you.",
+  "Select all squares that do not contain squares."
+];
+var capTries = 0, capDone = false;
+(function buildCap(){
+  var host = $("#cap");
+  for (var i=0;i<9;i++){
+    var d = document.createElement("div");
+    var h = Math.floor(Math.random()*360);
+    d.style.background = "linear-gradient(" + Math.floor(Math.random()*360) + "deg,hsl(" + h +
+      ",30%,58%),hsl(" + ((h+40)%360) + ",26%,42%))";
+    d.onclick = function(){ if (!capDone) this.classList.toggle("sel"); };
+    host.appendChild(d);
+  }
+})();
+$("#capGo").addEventListener("click", function(){
+  if (capDone) return;
+  capTries++;
+  if (capTries >= 3){
+    capDone = true;
+    $("#capNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Thank you. We have stopped asking.</span>";
+    T.unlock("notarobot");
+    return;
+  }
+  [].forEach.call($("#cap").children, function(c){ c.classList.remove("sel"); });
+  $("#capPrompt").textContent = CAP_PROMPTS[capTries % CAP_PROMPTS.length];
+  $("#capNote").textContent = "Incorrect. Please try again.";
+});
+
+/* ============================================================
+   PROFILE PHOTO — dragging moves the frame, not the picture,
+   and it moves the wrong way. Inverted controls are learnable,
+   which is the difference between a toy and a wall.
+   ============================================================ */
+(function(){
+  var wrap = $("#cropwrap"), box = $("#cropbox"), face = $("#face");
+  var bx = 90, by = 70, dragging = false, last = null, done = false;
+  face.style.left = "63%"; face.style.top = "34%";
+  function place(){ box.style.left = bx + "px"; box.style.top = by + "px"; }
+  place();
+  wrap.addEventListener("pointerdown", function(e){
+    if (done) return;
+    dragging = true; last = {x:e.clientX, y:e.clientY};
+    wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener("pointermove", function(e){
+    if (!dragging || done) return;
+    /* inverted, and applied to the frame rather than the photo */
+    bx -= (e.clientX - last.x);
+    by -= (e.clientY - last.y);
+    bx = Math.max(0, Math.min(wrap.clientWidth - 98, bx));
+    by = Math.max(0, Math.min(wrap.clientHeight - 98, by));
+    last = {x:e.clientX, y:e.clientY};
+    place();
+    var f = face.getBoundingClientRect(), b = box.getBoundingClientRect();
+    var d = Math.hypot((f.left+f.width/2)-(b.left+b.width/2), (f.top+f.height/2)-(b.top+b.height/2));
+    if (d < 30){
+      done = true; dragging = false;
+      box.style.borderColor = "#2ecc71";
+      $("#cropNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Framed. This photo will not be used.</span>";
+      T.unlock("framed");
+    }
+  });
+  ["pointerup","pointercancel"].forEach(function(ev){
+    wrap.addEventListener(ev, function(){ dragging = false; });
+  });
+})();
 
 showStep(0);
 </script>

@@ -26,6 +26,8 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
+| `assets/people.js` | The membership. 25 accounts, shared by the feed and the profiles. |
+| `build.py` | Bundles all four screens into one self-contained `friendspace.html`. |
 
 ## Feed crimes
 
@@ -47,9 +49,16 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 The infinite scroll has a 900ms debounce. **Outrun it and you reach the footer** —
 a skill-based escape hatch, and a trophy.
 
+## Build
+
+`python3 build.py` inlines the shared CSS/JS, scopes each page's stylesheet to its own
+screen, and emits `friendspace.html` — one self-contained file with hash routing
+(`#signup`, `#feed`, `#profile`, `#awards`) and no external requests. The multi-file
+version stays the source of truth.
+
 ## Onboarding
 
-Eight steps, and **it does not matter what you put in.** The confirmation screen shows
+Twelve steps, and **it does not matter what you put in.** The confirmation screen shows
 what Friendspace recorded next to a struck-through copy of what you actually entered.
 They never match. The phone number you spent two minutes selecting is filed as
 `(555) 010-0100`.
@@ -58,8 +67,18 @@ They never match. The phone number you spent two minutes selecting is filed as
   values per pixel, so dragging cannot land an exact number. Zoom narrows the range
   10× at a time; seven zooms takes you from 100,000,000 down to a window of ten,
   where the arrow keys finish the job. Tedium converted into a mechanic you can learn.
-- **Progress** — the step counter reads *1 of 4 → 2 of 6 → 4 of 9 → 6 of 11 → 8 of 8*,
-  while the bar shrinks from 62% to 20% before snapping to full.
+- **Username** — every name you want is taken. After three attempts the system assigns
+  you one, `kegan_1967_xX47`, which you may accept. That is the escape hatch and also
+  the joke.
+- **Email verification** — the code is displayed to you, and rotates every 2.5 seconds.
+  Four digits in two and a half seconds is a race you can win.
+- **CAPTCHA** — the prompt changes every time you submit, so whatever you selected was
+  for the previous question. It gives up on the third attempt. *"Select all squares
+  containing regret."*
+- **Profile photo** — dragging moves the frame rather than the picture, and it moves
+  the wrong way. Inverted controls are learnable, which is what keeps it a toy.
+- **Progress** — the step counter reads *1 of 4 → 2 of 6 → 4 of 9 → 8 of 14 → 10 of 16
+  → 12 of 12*, while the bar shrinks from 62% before snapping to full.
 - **Back** — "You cannot go back. Everything you have entered is final."
 - **Cookie banner** — a hydra. Switching a partner off switches two earlier ones back
   on, so working top-down never converges. Start from the bottom and it falls in

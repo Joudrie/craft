@@ -1,0 +1,2575 @@
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<style>
+/* ============================================================
+   Friendspace — main stylesheet
+   Last updated: 3/14/2002
+   TODO: finish the redesign (started 2013)
+   TODO: remove old styles below (do not delete, breaks profiles)
+   ============================================================ */
+
+:root{
+  /* 2013 stratum */
+  --fs-blue:#3b5998;          /* it was RIGHT THERE */
+  --fs-blue-lt:#5f7ec1;
+  --fs-chrome:#dfe3ee;
+  --fs-bg:#e9ebee;
+  --fs-card:#fff;
+  --fs-line:#dddfe2;
+  --fs-ink:#1d2129;
+  --fs-muted:#90949c;
+  /* the contrast crime: a "subtle" text colour, 1.4:1 against card */
+  --fs-whisper:#f2f3f5;
+  --fs-sponsor:#f0f0f0;
+}
+
+*{box-sizing:border-box}
+
+html,body{margin:0;padding:0}
+
+body{
+  background:var(--fs-bg);
+  color:var(--fs-ink);
+  font:13px/1.34 Helvetica, Arial, "Lucida Grande", sans-serif;
+  /* crime: the page is built for 800x600 and admits nothing else */
+  min-width:1010px;
+}
+
+a{color:var(--fs-blue);text-decoration:none}
+a:hover{text-decoration:underline}
+a:visited{color:#5a4b8a}
+
+/* ---------- header (2013, but the logo is from 2004) ---------- */
+.fs-header{
+  position:sticky;top:0;z-index:40;
+  background:var(--fs-blue);
+  border-bottom:1px solid #29487d;
+  height:43px;
+}
+.fs-header-in{
+  max-width:1000px;margin:0 auto;height:43px;
+  display:flex;align-items:center;gap:11px;padding:0 8px;
+}
+.fs-logo{
+  font:italic bold 23px/1 Georgia,"Times New Roman",serif;
+  color:#fff;letter-spacing:-.04em;
+  text-shadow:2px 2px 0 #1e3163, 3px 3px 4px rgba(0,0,0,.4);
+  /* crime: brand wordmark in a serif nothing else on the site uses */
+  padding-right:4px;
+}
+.fs-logo span{color:#ffd34d;font-size:11px;vertical-align:super;letter-spacing:0}
+
+.fs-search{
+  flex:0 0 210px;height:24px;border:1px solid #1d3a72;border-radius:2px;
+  padding:0 7px;font:12px Helvetica,Arial,sans-serif;background:#fff;
+}
+.fs-search:focus{outline:2px solid #ffd34d}
+
+.fs-nav{display:flex;align-items:center;gap:3px;margin-left:auto}
+.fs-nav a{
+  color:#dfe3ee;font-size:12px;padding:5px 8px;border-radius:2px;position:relative;
+}
+.fs-nav a:hover{background:#4a6bb0;text-decoration:none}
+
+.fs-badge-count{
+  display:inline-block;min-width:16px;height:16px;padding:0 4px;margin-left:4px;
+  background:#f33;color:#fff;border-radius:8px;
+  font:bold 10px/16px Verdana,sans-serif;text-align:center;vertical-align:2px;
+}
+.fs-badge-count.neg{background:#111;color:#0f0}
+
+/* ---------- 3-column shell ---------- */
+.fs-shell{
+  max-width:1000px;margin:9px auto 0;
+  display:grid;grid-template-columns:184px 1fr 218px;gap:11px;
+  align-items:start;
+  padding:0 8px 60px;
+}
+/* crime: the middle column disables scroll anchoring, so inserting content
+   above the viewport shoves everything down. the browser would have fixed
+   this for free. */
+.fs-col-mid{overflow-anchor:none}
+
+.fs-rail{position:sticky;top:52px}
+
+/* ---------- cards ---------- */
+.fs-card{
+  background:var(--fs-card);
+  border:1px solid var(--fs-line);
+  border-radius:3px;
+  margin-bottom:9px;
+}
+.fs-card-h{
+  padding:6px 9px;border-bottom:1px solid var(--fs-line);
+  font-weight:bold;font-size:12px;color:#4b4f56;
+  /* crime: 1px off from the body padding below it, everywhere, forever */
+}
+.fs-card-b{padding:8px 10px}
+
+.fs-rail-title{
+  font:bold 11px Helvetica,Arial,sans-serif;color:var(--fs-muted);
+  text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px 2px;
+}
+
+/* ---------- composer ---------- */
+.fs-compose textarea{
+  width:100%;border:1px solid var(--fs-line);border-radius:2px;padding:7px;
+  font:14px Helvetica,Arial,sans-serif;resize:none;height:56px;
+}
+.fs-compose textarea:focus{outline:1px solid var(--fs-blue-lt)}
+.fs-compose-foot{display:flex;align-items:center;gap:8px;margin-top:6px}
+.fs-count{font-size:11px;color:var(--fs-muted);margin-left:auto}
+
+.fs-btn{
+  background:linear-gradient(#4c69ba,#3b55a0);border:1px solid #29487d;
+  color:#fff;font:bold 12px Helvetica,Arial,sans-serif;
+  padding:4px 11px;border-radius:2px;cursor:pointer;
+}
+.fs-btn:hover{background:linear-gradient(#5b78c9,#425cab)}
+.fs-btn:active{background:#35497f}
+.fs-btn.ghost{
+  background:#f6f7f9;color:#4b4f56;border:1px solid #ced0d4;
+}
+
+/* ---------- posts ---------- */
+.fs-post{
+  background:var(--fs-card);border:1px solid var(--fs-line);border-radius:3px;
+  margin-bottom:9px;position:relative;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1), font-size .5s ease, opacity .3s;
+  transform-origin:top center;
+}
+.fs-post.arriving{animation:fsSlideIn .45s cubic-bezier(.2,1.3,.35,1) both}
+@keyframes fsSlideIn{from{opacity:0;transform:translateY(-16px) scaleY(.9)}to{opacity:1;transform:none}}
+
+.fs-post-h{display:flex;align-items:flex-start;gap:8px;padding:9px 10px 0}
+.fs-av{
+  width:38px;height:38px;flex:none;border-radius:2px;
+  background:linear-gradient(135deg,#b9c3d8,#8fa0c4);
+  font:bold 15px/38px Helvetica,sans-serif;color:#fff;text-align:center;
+  /* crime: images sized by attribute, aspect ratio is a suggestion */
+}
+.fs-who{flex:1;min-width:0}
+.fs-name{font-weight:bold;color:var(--fs-blue);font-size:13px}
+.fs-when{color:var(--fs-muted);font-size:11px}
+.fs-post-body{padding:7px 10px 9px;font-size:13px;line-height:1.42;white-space:pre-wrap}
+.fs-post.collapsed .fs-post-body{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.fs-photo{
+  display:block;width:100%;height:190px;border-top:1px solid var(--fs-line);
+  border-bottom:1px solid var(--fs-line);
+}
+
+.fs-post-actions{
+  display:flex;align-items:center;gap:2px;padding:4px 6px;
+  border-top:1px solid #f0f1f3;
+}
+.fs-act{
+  background:none;border:none;color:#4b4f56;font:bold 12px Helvetica,Arial,sans-serif;
+  padding:5px 9px;border-radius:2px;cursor:pointer;
+}
+.fs-act:hover{background:#f2f3f5}
+.fs-act.liked{color:#3b5998}
+.fs-act.holding{background:#dfe3ee}
+.fs-likes{margin-left:auto;font-size:11px;color:var(--fs-muted);padding-right:6px}
+
+/* the disguised-ad label: 4px, #F0F0F0 on #FFF — 1.05:1 contrast */
+.fs-sponsored{
+  font-size:4px;color:var(--fs-sponsor);letter-spacing:.5px;
+  padding:0 10px;cursor:pointer;user-select:none;line-height:1.1;
+}
+.fs-sponsored:hover{color:#c8c8c8}
+
+/* ---------- modal (the like confirmation) ---------- */
+.fs-modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  animation:fsFade .18s both;
+}
+@keyframes fsFade{from{opacity:0}to{opacity:1}}
+.fs-modal{
+  background:#fff;border:1px solid #29487d;border-radius:3px;width:400px;
+  box-shadow:0 4px 22px rgba(0,0,0,.4);
+  animation:fsPopIn .28s cubic-bezier(.2,1.5,.4,1) both;
+}
+@keyframes fsPopIn{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.fs-modal h3{
+  margin:0;padding:8px 11px;background:var(--fs-blue);color:#fff;
+  font:bold 13px Helvetica,Arial,sans-serif;
+}
+.fs-modal .b{padding:14px 13px;font-size:13px;line-height:1.45}
+.fs-modal .f{padding:9px 13px;border-top:1px solid var(--fs-line);text-align:right;display:flex;gap:7px;justify-content:flex-end}
+
+/* ---------- rail bits ---------- */
+.fs-person{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px}
+.fs-person .fs-av{width:26px;height:26px;font-size:11px;line-height:26px}
+.fs-top8{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.fs-top8 .slot{position:relative;text-align:center;font-size:9px;color:var(--fs-muted)}
+.fs-top8 .slot .fs-av{width:100%;height:34px;line-height:34px;font-size:12px}
+.fs-top8 .rank{
+  position:absolute;top:-3px;left:-3px;background:#f33;color:#fff;
+  font:bold 9px/13px Verdana;width:14px;height:14px;border-radius:7px;
+}
+
+/* the whisper text: technically present, practically invisible */
+.fs-whisper{color:var(--fs-whisper);font-size:11px}
+
+/* ---------- loader / footer ---------- */
+.fs-loader{
+  text-align:center;padding:16px;color:var(--fs-muted);font-size:12px;
+}
+.fs-spinner{
+  display:inline-block;width:14px;height:14px;border:2px solid #ccd;
+  border-top-color:var(--fs-blue);border-radius:50%;
+  animation:fsSpin .7s linear infinite;vertical-align:-3px;margin-right:6px;
+}
+@keyframes fsSpin{to{transform:rotate(360deg)}}
+
+.fs-footer{
+  max-width:1000px;margin:0 auto;padding:18px 8px 50px;
+  border-top:1px solid #ccd0d5;color:#8d949e;font-size:11px;text-align:center;
+  /* the only useful links on the site live down here, behind infinite scroll */
+}
+.fs-footer a{color:#8d949e;margin:0 5px}
+.fs-footer .ring{font-family:"Courier New",monospace;margin-top:8px;color:#666}
+.fs-counter{
+  display:inline-block;background:#000;color:#0f0;padding:2px 5px;margin-top:9px;
+  font:bold 13px/1 "Courier New",monospace;letter-spacing:3px;border:2px inset #555;
+}
+
+/* ---------- sparkle cursor trail (ambient crime) ---------- */
+.fs-sparkle{
+  position:fixed;width:6px;height:6px;pointer-events:none;z-index:9998;
+  border-radius:50%;animation:fsFall .9s linear forwards;
+}
+@keyframes fsFall{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(26px) scale(.2)}
+}
+
+</style>
+<style>
+.screen{display:none}
+.screen.on{display:block}
+/* ===== index.html ===== */
+
+#screen-signup{min-width:0;background:#e9ebee}
+#screen-signup .wrap{max-width:660px;margin:22px auto 120px;padding:0 12px}
+#screen-signup .wiz{background:#fff;border:1px solid #dddfe2;border-radius:3px}
+#screen-signup .wiz-h{
+  background:linear-gradient(#4c69ba,#3b55a0);color:#fff;padding:9px 13px;
+  font:bold 14px Helvetica,Arial,sans-serif;display:flex;align-items:center;gap:9px;
+}
+#screen-signup .wiz-h .of{margin-left:auto;font-weight:normal;font-size:11px;color:#dfe3ee}
+#screen-signup .bar{height:9px;background:#e4e6eb;border-bottom:1px solid #dddfe2;position:relative;overflow:hidden}
+#screen-signup .bar i{
+  position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#7ab648,#5d9c33);
+  width:62%;transition:width .55s cubic-bezier(.3,1.4,.4,1);
+}
+#screen-signup .step{padding:20px 22px 24px;display:none}
+#screen-signup .step.on{display:block;animation:fadeUp .3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
+#screen-signup .step h2{margin:0 0 3px;font:bold 17px Helvetica,Arial,sans-serif;color:#1d2129}
+#screen-signup .step .hint{margin:0 0 16px;color:#90949c;font-size:12px}
+#screen-signup .tf{width:100%;padding:8px 10px;border:1px solid #ccd0d5;border-radius:2px;font:14px Helvetica,Arial,sans-serif}
+#screen-signup .tf:focus{outline:2px solid #4c69ba;outline-offset:-1px}
+#screen-signup .foot{
+  padding:11px 22px 16px;border-top:1px solid #eceef0;display:flex;align-items:center;gap:9px;
+}
+#screen-signup .foot .msg{font-size:11px;color:#90949c;margin-left:auto;text-align:right;max-width:290px}
+#screen-signup .back{opacity:.4;cursor:not-allowed}
+#screen-signup .phone-read{
+  font:bold 27px/1 ui-monospace,"Courier New",monospace;letter-spacing:.05em;
+  text-align:center;padding:12px 0 6px;color:#1d2129;
+}
+#screen-signup .zoomrow{display:flex;align-items:center;gap:7px;margin:10px 0 4px}
+#screen-signup .zoomrow .lvl{font-size:11px;color:#90949c;margin-left:auto;text-align:right}
+#screen-signup input[type=range]{width:100%}
+#screen-signup .ticks{display:flex;justify-content:space-between;font-size:10px;color:#90949c;margin-top:2px}
+#screen-signup .flash{animation:fl .4s}
+@keyframes fl{0%{background:#fff9d6}100%{background:transparent}}
+#screen-signup .cal{border:1px solid #dddfe2;border-radius:2px}
+#screen-signup .cal-h{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:#f6f7f9;border-bottom:1px solid #dddfe2}
+#screen-signup .cal-m{font-weight:bold;font-size:13px}
+#screen-signup .cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#e4e6eb}
+#screen-signup .cal-g div{background:#fff;text-align:center;padding:6px 0;font-size:12px}
+#screen-signup .cal-g .dow{background:#f6f7f9;color:#90949c;font-size:10px;font-weight:bold}
+#screen-signup .cal-g .day{cursor:pointer}
+#screen-signup .cal-g .day:hover{background:#eef2fa}
+#screen-signup .cal-g .sel{background:#3b5998;color:#fff}
+#screen-signup .cal-g .pad{background:#fbfcfd}
+#screen-signup .kb{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+#screen-signup .kb button{width:34px;height:32px;border:1px solid #ccd0d5;border-radius:2px;background:#fff;font-size:12px;cursor:pointer}
+#screen-signup .kb button:hover{background:#eef2fa}
+#screen-signup .kb .wide{width:auto;padding:0 10px}
+#screen-signup .termsbox{position:relative;height:70px;border:1px dashed #ccd0d5;border-radius:2px}
+#screen-signup .termsbox input{position:absolute;width:18px;height:18px;left:12px;top:26px;cursor:pointer}
+#screen-signup .termsbox span{position:absolute;left:40px;top:25px;font-size:13px;color:#4b4f56}
+#screen-signup .hold{
+  width:100%;padding:12px;border:1px solid #29487d;border-radius:2px;
+  background:linear-gradient(#4c69ba,#3b55a0);color:#fff;font:bold 14px Helvetica,Arial,sans-serif;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+#screen-signup .hold .fill{position:absolute;inset:0;background:rgba(255,255,255,.3);width:0;transition:width .05s linear}
+#screen-signup .hold span{position:relative}
+#screen-signup #cookie{
+  position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid #3b5998;
+  box-shadow:0 -6px 24px rgba(0,0,0,.16);padding:13px 18px;z-index:60;max-height:56vh;overflow:auto;
+}
+#screen-signup #cookie h3{margin:0 0 3px;font:bold 14px Helvetica,Arial,sans-serif}
+#screen-signup #cookie p{margin:0 0 10px;color:#90949c;font-size:12px}
+#screen-signup .plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:5px;margin-bottom:11px}
+#screen-signup .p{display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 5px;border:1px solid #eceef0;border-radius:2px}
+#screen-signup .p.off{opacity:.45;background:#f6f7f9}
+#screen-signup .p .n{color:#90949c;font:bold 10px monospace;width:17px;flex:none}
+#screen-signup .cact{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+#screen-signup .cact .left{font-size:11px;color:#90949c;margin-left:auto}
+#screen-signup #done{display:none}
+#screen-signup .recpt{background:#fff;border:1px solid #dddfe2;border-radius:3px;padding:0;overflow:hidden}
+#screen-signup .recpt table{width:100%;border-collapse:collapse;font-size:13px}
+#screen-signup .recpt td{padding:7px 12px;border-bottom:1px solid #f0f1f3;vertical-align:top}
+#screen-signup .recpt td.k{color:#90949c;width:150px}
+#screen-signup .recpt td.v{font-family:ui-monospace,"Courier New",monospace}
+#screen-signup .strike{color:#c0392b;text-decoration:line-through;font-size:11px;display:block}
+#screen-signup .avail{font-size:12px;margin-top:8px;min-height:34px}
+#screen-signup .avail .no{color:#c0392b}
+#screen-signup .avail .sug{background:#f6f7f9;border:1px solid #ccd0d5;padding:7px 9px;margin-top:6px;
+  display:flex;align-items:center;gap:9px;font-family:ui-monospace,monospace;font-size:13px}
+#screen-signup .codebox{background:#f6f7f9;border:1px dashed #ccd0d5;padding:12px;text-align:center;margin-bottom:11px}
+#screen-signup .codebox b{font:bold 28px ui-monospace,"Courier New",monospace;letter-spacing:10px;color:#1d2129}
+#screen-signup .codebox .exp{font-size:11px;color:#90949c;margin-top:5px}
+#screen-signup .cap{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;max-width:294px;margin:11px 0}
+#screen-signup .cap div{height:90px;cursor:pointer;position:relative;border:3px solid transparent}
+#screen-signup .cap div.sel{border-color:#4c69ba}
+#screen-signup .cap div.sel:after{content:"✓";position:absolute;top:2px;left:6px;color:#fff;
+  font:bold 18px Helvetica;text-shadow:0 0 5px #000}
+#screen-signup .cropwrap{position:relative;width:100%;height:236px;overflow:hidden;border:1px solid #ccd0d5;
+  background:linear-gradient(135deg,#8fa0c4,#b9c3d8);cursor:move;touch-action:none;user-select:none}
+#screen-signup .cropbox{position:absolute;width:98px;height:98px;border:2px solid #fff;
+  box-shadow:0 0 0 9999px rgba(0,0,0,.45);pointer-events:none}
+#screen-signup .face{position:absolute;width:56px;height:56px;border-radius:50%;background:rgba(255,211,77,.9);
+  display:grid;place-items:center;font:10px Helvetica;color:#4a3800;text-align:center}
+
+/* ===== feed.html ===== */
+
+/* ===== profile.html ===== */
+
+#screen-profile{min-width:0;background:#e9ebee}
+#screen-profile .page{max-width:1000px;margin:9px auto;padding:0 8px 60px;display:grid;
+      grid-template-columns:190px 1fr;gap:11px;align-items:start}
+#screen-profile .rail{position:sticky;top:52px;z-index:10}
+#screen-profile .rail .fs-card-b{padding:6px;max-height:58vh;overflow-y:auto}
+#screen-profile .who{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:2px;cursor:pointer;font-size:12px}
+#screen-profile .who:hover{background:#eef2fa}
+#screen-profile .who.cur{background:#3b5998;color:#fff}
+#screen-profile .who.cur .sm{color:#cdd8ef}
+#screen-profile .who .av{width:26px;height:26px;flex:none;border-radius:2px;color:#fff;
+         font:bold 10px/26px Helvetica;text-align:center}
+#screen-profile .who .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#screen-profile .who .sm{display:block;font-size:10px;color:#90949c}
+#screen-profile .songbar{
+  position:fixed;right:12px;bottom:12px;z-index:70;background:#222;color:#ddd;
+  border:2px outset #666;padding:7px 10px;font:11px Verdana,sans-serif;
+}
+#screen-profile .songbar b{color:#ffd34d}
+#screen-profile .songbar button{
+  background:#444;color:#fff;border:1px outset #888;font:11px Verdana;
+  padding:2px 7px;cursor:pointer;margin-left:6px;
+}
+#screen-profile #profile{background:#fff;border:1px solid #dddfe2;border-radius:3px;padding:14px;overflow:visible}
+#screen-profile #profile h1{margin:0 0 2px;font:bold 21px Helvetica,Arial,sans-serif}
+#screen-profile #profile .tag{color:#90949c;font-size:12px;margin-bottom:12px}
+#screen-profile #profile .sec{margin:15px 0 5px;font:bold 13px Helvetica;border-bottom:2px solid #3b5998;padding-bottom:2px}
+#screen-profile #profile .bio{font-size:13px;line-height:1.5;white-space:pre-wrap}
+#screen-profile #profile .hero{display:flex;gap:13px;align-items:flex-start}
+#screen-profile #profile .pic{width:104px;height:104px;flex:none;color:#fff;font:bold 30px/104px Helvetica;text-align:center}
+#screen-profile #profile .stats{font-size:12px;color:#4b4f56;margin-top:7px}
+#screen-profile .t8{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+#screen-profile .t8 .s{position:relative;text-align:center;font-size:10px;cursor:pointer}
+#screen-profile .t8 .s .av{height:52px;color:#fff;font:bold 15px/52px Helvetica;border-radius:2px}
+#screen-profile .t8 .s .rk{position:absolute;top:-4px;left:-4px;background:#f33;color:#fff;
+           font:bold 10px/16px Verdana;width:16px;height:16px;border-radius:8px}
+#screen-profile .t8 .s.me .av{outline:3px solid #ffd34d}
+#screen-profile .t8 .s.me .rk{background:#ffd34d;color:#000}
+#screen-profile .wall .c{border-bottom:1px solid #eceef0;padding:8px 2px;font-size:12px}
+#screen-profile .wall .c .cn{font-weight:bold;color:#3b5998}
+#screen-profile .wall .c .cd{color:#90949c;font-size:10px}
+#screen-profile .note{background:#fff9d6;border:1px solid #e8d98a;padding:6px 9px;font-size:11px;
+      color:#7a6a1e;margin-bottom:9px;border-radius:2px}
+
+
+/* ===== awards.html ===== */
+
+#screen-awards{
+  margin:0;padding:0;
+  background-color:#000033;
+  
+  background-image:
+    radial-gradient(1px 1px at 20px 30px,#fff,transparent),
+    radial-gradient(1px 1px at 90px 70px,#fff,transparent),
+    radial-gradient(2px 2px at 140px 20px,#ffd,transparent),
+    radial-gradient(1px 1px at 60px 150px,#fff,transparent);
+  background-size:180px 180px;
+  background-attachment:fixed;
+  font-family:"Comic Sans MS","Comic Sans",cursive;
+  color:#ffff00;
+  text-align:center;
+}
+#screen-awards table{margin:0 auto;border-collapse:collapse}
+#screen-awards .frame{
+  width:760px;margin:10px auto;background:#111144;
+  border:6px ridge #ffcc00;padding:0;
+}
+#screen-awards h1{
+  margin:0;padding:10px;font-size:34px;
+  background:linear-gradient(#ff0000,#ff9900,#ffff00,#33cc33,#3366ff,#9933ff);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  -webkit-text-stroke:1px #000;
+  font-family:Impact,"Arial Black",sans-serif;letter-spacing:1px;
+}
+#screen-awards .sub{color:#00ffff;font-size:13px;padding-bottom:8px}
+#screen-awards marquee{background:#000;color:#00ff00;font:bold 13px "Courier New",monospace;padding:3px 0;border-top:2px groove #666;border-bottom:2px groove #666}
+#screen-awards hr{border:none;height:5px;background:repeating-linear-gradient(90deg,#ff0,#ff0 8px,#f0f 8px,#f0f 16px);margin:10px 0}
+#screen-awards .award-row{
+  display:flex;align-items:center;gap:11px;text-align:left;
+  background:#1a1a55;border:2px outset #4444aa;margin:6px 10px;padding:7px 9px;
+}
+#screen-awards .award-row.got{background:#1a3a1a;border-color:#44aa44}
+#screen-awards .award-meta{flex:1;color:#ffffcc;font-size:12px;line-height:1.35}
+#screen-awards .award-meta b{color:#ffff00;font-size:14px}
+#screen-awards .award-meta span{color:#aab}
+#screen-awards .award-meta i{color:#7788aa;font-size:10px}
+#screen-awards .award-state{
+  font:bold 11px "Courier New",monospace;color:#ff4444;white-space:nowrap;
+}
+#screen-awards .award-row.got .award-state{color:#44ff44}
+#screen-awards .tally{
+  background:#000;color:#0f0;display:inline-block;padding:4px 9px;margin:8px;
+  font:bold 17px "Courier New",monospace;border:3px inset #666;letter-spacing:4px;
+}
+#screen-awards .nav{padding:10px;font-size:12px}
+#screen-awards .nav a{color:#00ffff}
+#screen-awards .nav a:visited{color:#ff88ff}
+#screen-awards .constr{margin:12px 0 4px;color:#ffcc00;font-size:12px}
+#screen-awards .constr .bar{
+  display:inline-block;width:190px;height:15px;border:2px inset #888;background:#333;
+  vertical-align:-3px;overflow:hidden;position:relative;
+}
+#screen-awards .constr .bar i{
+  position:absolute;inset:0;width:34%;
+  background:repeating-linear-gradient(45deg,#ff0 0 8px,#000 8px 16px);
+  animation:crawl 1.1s linear infinite;
+}
+@keyframes crawl{from{background-position:0 0}to{background-position:22px 0}}
+#screen-awards .reset{
+  background:#552222;color:#ffaaaa;border:2px outset #aa4444;
+  font-family:"Comic Sans MS",cursive;font-size:11px;padding:3px 8px;cursor:pointer;
+}
+#screen-awards .foot{color:#8888aa;font-size:10px;padding:9px}
+#screen-awards blink{animation:bl 1s steps(1) infinite}
+@keyframes bl{50%{opacity:0}}
+
+</style>
+<script>
+/* Friendspace — Awards & Achievements Engine
+ * "Recognising excellence since 2003."
+ *
+ * Shared across every page. Persists to localStorage so the Awards page can
+ * display your accumulated honours. One trophy is deliberately unobtainable.
+ */
+(function (global) {
+  "use strict";
+
+  var KEY = "fs_awards_v1";
+
+  /* ---- registry -------------------------------------------------------- */
+  var REGISTRY = [
+    // signup
+    { id: "marksman",     name: "Marksman",       desc: "Land the volume slingshot on exactly 0.",            where: "Sign-up" },
+    { id: "escape",       name: "Escape Artist",  desc: "Catch the fleeing checkbox.",                        where: "Sign-up" },
+    { id: "completionist",name: "Completionist",  desc: "Disable every one of our valued partners.",          where: "Sign-up" },
+    { id: "longway",      name: "The Long Way",   desc: "Travel 300 months into the past.",                   where: "Sign-up" },
+    { id: "precision",    name: "Precision",      desc: "Zoom the number selector all the way in.",           where: "Sign-up" },
+    { id: "identity",     name: "Identity",       desc: "Accept the username you were assigned.",             where: "Sign-up" },
+    { id: "verified",     name: "Verified",       desc: "Type the code before it expires.",                   where: "Sign-up" },
+    { id: "notarobot",    name: "Not A Robot",    desc: "Satisfy the CAPTCHA. Eventually.",                   where: "Sign-up" },
+    { id: "framed",       name: "Framed",         desc: "Get your face inside the frame.",                    where: "Sign-up" },
+    { id: "hydra",        name: "Hydra",          desc: "Work out which end of the partner list to start at.", where: "Sign-up" },
+    // feed
+    { id: "persistence",  name: "Persistence",    desc: "Successfully like a post.",                          where: "Feed" },
+    { id: "regret",       name: "Regret",         desc: "Attempt to un-like a post.",                         where: "Feed" },
+    { id: "spotter",      name: "Spotter",        desc: "Notice that something was sponsored.",               where: "Feed" },
+    { id: "compression",  name: "Compression",    desc: "Collapse a post down to a single line.",             where: "Feed" },
+    { id: "void",         name: "Into The Void",  desc: "Publish a post and watch it leave.",                 where: "Feed" },
+    { id: "negative",     name: "Below Zero",     desc: "Drive your notification count beneath zero.",         where: "Feed" },
+    { id: "speedrunner",  name: "Speedrunner",    desc: "Outrun the loader and reach the footer.",            where: "Feed" },
+    // deeper strata
+    { id: "archaeologist",name: "Archaeologist",  desc: "Reach the 2002 stratum.",                            where: "Settings" },
+    { id: "readit",       name: "Actually Read It",desc: "Scroll the Privacy Policy to the very bottom.",     where: "Legal" },
+    { id: "climber",      name: "Social Climber", desc: "Reach position #1 in someone's Top 8.",              where: "Profiles" },
+    { id: "rubbernecker", name: "Rubbernecker",   desc: "Visit every profile. Look at what they've done.",    where: "Profiles" },
+    { id: "silence",      name: "Silence",        desc: "Stop all six profile songs at once.",               where: "Profiles" },
+    // the lie
+    { id: "ghost",        name: "Ghost",          desc: "Successfully delete your account.",                  where: "Settings", impossible: true }
+  ];
+
+  /* ---- persistence ----------------------------------------------------- */
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; }
+    catch (e) { return {}; }
+  }
+  function save(o) {
+    try { localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {}
+  }
+
+  var earned = load();
+
+  /* ---- a small celebratory noise --------------------------------------- */
+  var actx = null;
+  function ding() {
+    try {
+      actx = actx || new (global.AudioContext || global.webkitAudioContext)();
+      [880, 1108.7, 1318.5].forEach(function (f, i) {
+        var o = actx.createOscillator(), g = actx.createGain();
+        o.type = "square"; o.frequency.value = f;
+        var t = actx.currentTime + i * 0.07;
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.05, t + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
+        o.connect(g); g.connect(actx.destination);
+        o.start(t); o.stop(t + 0.25);
+      });
+    } catch (e) { /* no audio, no problem */ }
+  }
+
+  /* ---- styles (injected so every page gets them) ----------------------- */
+  var CSS = [
+    ".fs-badge{display:inline-block;width:88px;height:31px;position:relative;overflow:hidden;",
+      "border:2px outset #c0c0c0;background:linear-gradient(180deg,#6a8fd8 0%,#2c4d9b 45%,#16306e 55%,#3a63b8 100%);",
+      "color:#ffe680;font:bold 9px/1.05 Verdana,Geneva,sans-serif;text-align:center;",
+      "text-shadow:1px 1px 0 #000,0 0 3px #ffb300;letter-spacing:.02em;",
+      "display:inline-flex;align-items:center;justify-content:center;padding:0 3px;vertical-align:middle}",
+    ".fs-badge.locked{background:linear-gradient(180deg,#b8b8b8,#6e6e6e);color:#3a3a3a;text-shadow:1px 1px 0 #ddd;filter:saturate(.2)}",
+    ".fs-badge .shine{position:absolute;top:-40px;left:-60px;width:32px;height:120px;",
+      "background:linear-gradient(90deg,transparent,rgba(255,255,255,.85),transparent);transform:rotate(22deg);",
+      "animation:fsShine 3.4s linear infinite}",
+    ".fs-badge.locked .shine{display:none}",
+    "@keyframes fsShine{0%{left:-60px}55%{left:130px}100%{left:130px}}",
+    "#fs-toaster{position:fixed;right:14px;bottom:14px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none}",
+    ".fs-toast{display:flex;align-items:center;gap:10px;background:#fffbe6;border:3px ridge #ffcc00;",
+      "padding:9px 13px 9px 9px;box-shadow:4px 4px 0 rgba(0,0,0,.35);font:11px Verdana,Geneva,sans-serif;color:#3a2d00;",
+      "animation:fsPop .45s cubic-bezier(.2,1.6,.4,1) both;max-width:330px}",
+    ".fs-toast b{display:block;font-size:12px;color:#8a6b00;margin-bottom:1px}",
+    ".fs-toast .m{font-size:10px;color:#6b5a1e}",
+    "@keyframes fsPop{0%{transform:translateX(120%) scale(.8)}70%{transform:translateX(-6%) scale(1.04)}100%{transform:translateX(0) scale(1)}}"
+  ].join("");
+
+  function injectCSS() {
+    if (document.getElementById("fs-award-css")) return;
+    var s = document.createElement("style");
+    s.id = "fs-award-css";
+    s.textContent = CSS;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  /* ---- badge markup ---------------------------------------------------- */
+  function badge(t, isEarned) {
+    var d = document.createElement("span");
+    d.className = "fs-badge" + (isEarned ? "" : " locked");
+    d.title = t.name + " — " + t.desc;
+    d.innerHTML = '<span class="shine"></span>' + t.name.toUpperCase();
+    return d;
+  }
+
+  /* ---- toast ----------------------------------------------------------- */
+  function toast(t) {
+    injectCSS();
+    var host = document.getElementById("fs-toaster");
+    if (!host) {
+      host = document.createElement("div");
+      host.id = "fs-toaster";
+      document.body.appendChild(host);
+    }
+    var el = document.createElement("div");
+    el.className = "fs-toast";
+    el.appendChild(badge(t, true));
+    var txt = document.createElement("div");
+    txt.innerHTML = "<b>Award Unlocked!</b>" + t.name +
+      '<div class="m">' + t.desc + "</div>";
+    el.appendChild(txt);
+    host.appendChild(el);
+    ding();
+    setTimeout(function () {
+      el.style.transition = "opacity .5s, transform .5s";
+      el.style.opacity = "0";
+      el.style.transform = "translateX(40%)";
+      setTimeout(function () { el.remove(); }, 520);
+    }, 4200);
+  }
+
+  /* ---- api ------------------------------------------------------------- */
+  var Trophies = {
+    registry: REGISTRY,
+
+    get: function (id) {
+      for (var i = 0; i < REGISTRY.length; i++) if (REGISTRY[i].id === id) return REGISTRY[i];
+      return null;
+    },
+
+    has: function (id) { return !!earned[id]; },
+
+    count: function () { return Object.keys(earned).length; },
+
+    /** Unlock a trophy. Impossible trophies silently refuse, forever. */
+    unlock: function (id) {
+      var t = this.get(id);
+      if (!t) return false;
+      if (t.impossible) return false;   // Ghost. Sorry.
+      if (earned[id]) return false;
+      earned[id] = Date.now();
+      save(earned);
+      toast(t);
+      return true;
+    },
+
+    /** Wipe progress (used by the Awards page's hostile reset). */
+    reset: function () { earned = {}; save(earned); },
+
+    badge: badge,
+
+    /** Render the full award cabinet into a container. */
+    render: function (host) {
+      injectCSS();
+      host.innerHTML = "";
+      REGISTRY.forEach(function (t) {
+        var got = !!earned[t.id];
+        var row = document.createElement("div");
+        row.className = "award-row" + (got ? " got" : "");
+        var b = badge(t, got);
+        row.appendChild(b);
+        var meta = document.createElement("div");
+        meta.className = "award-meta";
+        meta.innerHTML = "<b>" + t.name + "</b><br><span>" + t.desc + "</span>" +
+          '<br><i>' + t.where + "</i>";
+        row.appendChild(meta);
+        var st = document.createElement("div");
+        st.className = "award-state";
+        st.textContent = got ? "★ AWARDED" : "not yet earned";
+        row.appendChild(st);
+        host.appendChild(row);
+      });
+    }
+  };
+
+  injectCSS();
+  global.FS = global.FS || {};
+  global.FS.Trophies = Trophies;
+
+})(window);
+
+</script>
+<script>
+/* Friendspace — the membership.
+ *
+ * Shared by feed.html and profile.html so that a post in the feed belongs to an
+ * account you can actually go and visit. Most of these are trash by content;
+ * a handful are trash by stylesheet, because their owner pasted CSS into the
+ * profile editor and Friendspace does not validate it.
+ */
+(function (global) {
+  "use strict";
+
+  var P = [
+
+    /* ---------- the ones who are simply people ---------- */
+    {
+      id:"terri", name:"Terri from HR", ini:"TH", col:"#b58f5a", friends:41, note:440,
+      tag:"Human Resources Business Partner II",
+      bio:"Hello! I use Friendspace to stay connected with colleagues.\n\nPlease direct all " +
+          "workplace concerns to the appropriate channel and not to this profile.\n\nGo team!",
+      css:"",
+      posts:["Reminder that the annual potluck is either this Saturday or last Saturday.",
+             "Per my last post.",
+             "Just a friendly reminder that this platform is monitored."],
+      comments:[{n:"Brayden Kowalczyk", d:"4h ago", t:"happy work anniversary!!"},
+                {n:"Dad", d:"4h ago", t:"Is this the Terri from the thing"}]
+    },
+    {
+      id:"dad", name:"Dad", ini:"D", col:"#6f8f6f", friends:12, note:392,
+      tag:"Retired",
+      bio:"body { background-color: blue; }\n" +
+          "font { font-family: Arial; size: 3; }\n" +
+          ".profile { width: 100%; }\n" +
+          "TABLE.friendSpace { border: 1px solid; }\n" +
+          "/* paste this in the box */\n" +
+          "H1 { color: #000080; }\n" +
+          "marquee { speed: fast; }\n\nSusan is this right",
+      css:"",
+      posts:["This is a test post. Please ignore.\n\nSent from my Friendspace",
+             "Does anyone know a good plumber",
+             "Testing 2",
+             "Well, that's that."],
+      comments:[{n:"Your Cousin's Wife", d:"4h ago", t:"Uncle Rick that goes in the OTHER box"},
+                {n:"Dad", d:"4h ago", t:"Testing"},
+                {n:"Dad", d:"4h ago", t:"Testing 2"}]
+    },
+    {
+      id:"deb", name:"Aunt Deb", ini:"AD", col:"#b56f6f", friends:88, note:349,
+      tag:"Blessed 🙏",
+      bio:"Welcome to my page! I love my family, my garden, and my grandbabies.\n\n" +
+          "I do not know why the page is so wide. I did not do that.",
+      css:"#profile{min-width:3400px;background:linear-gradient(120deg,#cfe8c0,#f0e4b8 40%,#e8c0c0);" +
+          "background-size:3400px 100%;background-repeat:no-repeat}",
+      posts:["AMEN 🙏",
+             "Happy birthday to my beautiful daughter who does not have a Friendspace and will never see this",
+             "My condolences to the family. She was a wonderful car."],
+      comments:[{n:"Dad", d:"4h ago", t:"Deb your page goes sideways"},
+                {n:"Aunt Deb", d:"4h ago", t:"I know Rick"}]
+    },
+    {
+      id:"marcus", name:"MARCUS_1987", ini:"M", col:"#5a86b5", friends:203, note:293,
+      tag:"keeping it real since 1987",
+      bio:"whats up friendspace. hit me up. i fixed my layout last night it looks way better now",
+      css:"#profile *{display:inline!important}#profile{display:block!important;line-height:2.1}" +
+          "#profile .pic,#profile .t8 .av{width:40px!important;height:22px!important;" +
+          "line-height:22px!important;font-size:10px!important}",
+      posts:["throwback to when this website worked",
+             "why is the scrollbar doing that",
+             "looks fine on my end"],
+      comments:[{n:"xXx_Nightshade_xXx", d:"4h ago", t:"bro what happened"},
+                {n:"MARCUS_1987", d:"4h ago", t:"looks fine on my end"}]
+    },
+    {
+      id:"nightshade", name:"xXx_Nightshade_xXx", ini:"XN", col:"#2a2a33", friends:666, note:311,
+      tag:"the darkness is my only friend",
+      bio:"dont bother reading this you cant see it anyway\n\nthats the point",
+      css:"#profile{background:#0a0a0e;color:#16161c}#profile a{color:#131319}" +
+          "#profile *{font-family:Papyrus,fantasy!important;cursor:crosshair}" +
+          "#profile .sec{border-bottom-color:#1a1a22;color:#17171e}#profile .tag{color:#141419}" +
+          "#profile .wall .c{border-bottom-color:#111118}#profile .wall .c .cn{color:#181820}",
+      posts:["nobody understands", "13 years ago today I posted this. Sharing it again."],
+      comments:[{n:"Aunt Deb", d:"4h ago", t:"Honey I cant read any of this"},
+                {n:"MARCUS_1987", d:"4h ago", t:"sick layout bro"}]
+    },
+    {
+      id:"ashleigh", name:"★·.·´¯`·.·★ Ashleigh ★·.·´¯`·.·★", ini:"A", col:"#c47bb4", friends:1204, note:523,
+      tag:"~*~ liVe LaUgH lOvE ~*~",
+      bio:"hey everyone!!! welcome 2 my page!!! ♥♥♥\n\nplz sign my wall!!! ♥",
+      css:"#profile{background:#ff66cc;color:#5a005a;" +
+          "background-image:radial-gradient(2px 2px at 12px 18px,#fff,transparent)," +
+          "radial-gradient(2px 2px at 60px 44px,#ffff66,transparent);background-size:74px 74px}" +
+          "#profile *{font-family:'Comic Sans MS',cursive!important;text-shadow:2px 2px 0 #ff00ff;letter-spacing:2px}" +
+          "#profile h1{transform:rotate(-3deg);color:#fff}" +
+          "#profile .sec{border-bottom:3px dashed #ffff00;color:#fff}" +
+          "#profile .bio{background:rgba(255,255,255,.35);padding:8px;transform:rotate(1deg)}" +
+          "#profile .wall .c{border-bottom:2px dotted #ffff66}",
+      posts:["plz sign my wall!!! ♥", "who keeps moving me to slot 6"],
+      comments:[{n:"Brayden Kowalczyk", d:"4h ago", t:"signed ur wall ♥ sign mine back"},
+                {n:"Terri from HR", d:"4h ago", t:"Ashleigh could you please make this readable for the newsletter"}]
+    },
+
+    /* ---------- the trash ---------- */
+    {
+      id:"dad2", name:"Dad (2)", ini:"D2", col:"#8f9f6f", friends:3, note:415,
+      tag:"Retired",
+      bio:"sorry everyone i got hacked this is my new account please add me\n\nthis is the real one",
+      css:"",
+      posts:["sorry everyone i was hacked. do not click the link i sent. also do not click this link",
+             "this is the real dad",
+             "add my new account"],
+      comments:[{n:"Aunt Deb", d:"4h ago", t:"Rick is this you"},
+                {n:"Dad", d:"4h ago", t:"That is not me"},
+                {n:"Dad (2)", d:"4h ago", t:"it is me"}]
+    },
+    {
+      id:"jessica", name:"Jessica  Williams ✔", ini:"JW", col:"#9aa8b8", friends:4, note:466,
+      tag:"Model / Entrepreneur / Traveler",
+      bio:"hi :) i am new here add me\n\nSee my other photos at the link\n\n" +
+          "[link removed]\n[link removed]\n[link removed]",
+      css:"",
+      posts:["hi :) new here, add me",
+             "Check out this link 🔗 [link removed]",
+             "hello handsome how are you today"],
+      comments:[{n:"Gen. Marcus Steele", d:"4h ago", t:"Hello Jessica. I too am new here."},
+                {n:"Terri from HR", d:"4h ago", t:"Reported."}]
+    },
+    {
+      id:"moonriver", name:"MoonRiver Wellness ✨ Ask Me How!", ini:"MW", col:"#c9a8d6", friends:2891, note:587,
+      tag:"Boss Babe · Team Leader · Dream Builder",
+      bio:"hey girl!! ✨\n\ni was JUST like you. tired. stuck. scrolling.\n\nthen i said yes to me.\n\n" +
+          "not a scam. not an mlm. an OPPORTUNITY.\n\ndm me the word ✨MOON✨ (must be exact)",
+      css:"#profile{background:linear-gradient(160deg,#fde6f4,#e6f0ff 60%,#fff4e0)}" +
+          "#profile *{font-family:'Brush Script MT',cursive!important;text-transform:lowercase!important;" +
+          "line-height:2.4!important;letter-spacing:1px}" +
+          "#profile h1{font-size:34px}#profile .sec{border-bottom-color:#e6b8d6}",
+      posts:["hey girl!! ✨ i was JUST like you. then i said yes to me.",
+             "only 3 spots left on my team!! (there are always 3 spots)",
+             "not an mlm. an opportunity. dm me the word ✨MOON✨ (must be exact)"],
+      comments:[{n:"Terri from HR", d:"4h ago", t:"Please stop messaging colleagues about this"},
+                {n:"MoonRiver Wellness ✨ Ask Me How!", d:"4h ago", t:"hey girl!! 💕 quick question"}]
+    },
+    {
+      id:"bigsavings", name:"BIG SAVINGS DAILY!!!", ini:"BS", col:"#e05a2b", friends:41288, note:622,
+      tag:"OFFICIAL PAGE ✔✔✔",
+      bio:"TYPE AMEN TO WIN\n\n99% CANT SHARE THIS\n\nWE ARE GIVING AWAY 40 RVS THAT DIDNT SELL\n\n" +
+          "ONLY 2 LEFT!!! (posted 2013)",
+      css:"#profile{background:#fff200}#profile *{font-family:Impact,'Arial Black',sans-serif!important;" +
+          "text-transform:uppercase!important;color:#c00}" +
+          "#profile h1{animation:pulse .6s infinite alternate}" +
+          "@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.09)}}" +
+          "#profile .sec{border-bottom:4px double #c00}",
+      posts:["TYPE AMEN TO WIN A FREE RV. 99% OF PEOPLE CANT DO THIS.",
+             "COSTCO IS GIVING AWAY $500 COUPONS TO EVERYONE WHO SHARES. THIS IS NOT A JOKE.",
+             "ONLY 2 LEFT!!! (posted 2013)"],
+      comments:[{n:"Aunt Deb", d:"4h ago", t:"AMEN"},
+                {n:"Sharon Whitaker", d:"4h ago", t:"AMEN 🙏"},
+                {n:"Dad", d:"4h ago", t:"Amen"},
+                {n:"Marlene Hodge", d:"4h ago", t:"Beautiful!"}]
+    },
+    {
+      id:"gensteele", name:"Gen. Marcus Steele", ini:"MS", col:"#5d6b52", friends:9, note:277,
+      tag:"United States Army · Deployed",
+      bio:"I am a widower general stationed overseas. I do not use this website often.\n\n" +
+          "I am looking for genuine friendship only. I am not able to video call due to " +
+          "military regulations.\n\nDo you have a moment to discuss a private matter.",
+      css:"#profile .pic{filter:blur(2px)}#profile *{user-select:none}",
+      posts:["Greetings. I am a widower general stationed overseas.",
+             "Do you have a moment to discuss a private matter.",
+             "I am unable to video call due to military regulations."],
+      comments:[{n:"Terri from HR", d:"4h ago", t:"This is a scam account everyone"},
+                {n:"Aunt Deb", d:"4h ago", t:"What a nice young man"}]
+    },
+    {
+      id:"ricks", name:"Rick's Small Engine Repair", ini:"RS", col:"#7a6a4f", friends:63, note:330,
+      tag:"Permanently closed · Still posting",
+      bio:"SMALL ENGINE REPAIR — MOWERS, TRIMMERS, GENERATORS\n\nCLOSED SINCE 2011\n\n" +
+          "WE ARE STILL CLOSED\n\nPlease stop calling the house",
+      css:"#profile{text-align:center}#profile *{letter-spacing:-2px!important;" +
+          "font-family:'Arial Narrow',Arial,sans-serif!important}" +
+          "#profile .pic{width:230px!important;height:60px!important;line-height:60px!important}",
+      posts:["WE ARE CLOSED",
+             "STILL CLOSED",
+             "Please stop calling the house"],
+      comments:[{n:"Guy You Met At A Wedding In 2011", d:"4h ago", t:"are you open"},
+                {n:"Rick's Small Engine Repair", d:"4h ago", t:"NO"}]
+    },
+    {
+      id:"crypto", name:"Braydon | Financial Freedom 📈", ini:"BF", col:"#3f7d5a", friends:5107, note:494,
+      tag:"6 figures at 23 · DM for mentorship",
+      bio:"most people will never read this.\n\nthats why most people are broke.\n\n" +
+          "i woke up at 4am today. did you.\n\nDM me FREEDOM for the blueprint ($1,997 value)",
+      css:"",
+      posts:["most people will never read this. thats why most people are broke.",
+             "i woke up at 4am today. did you.",
+             "Not financial advice. But it is advice. And it is financial."],
+      comments:[{n:"MARCUS_1987", d:"4h ago", t:"what do you actually do though"},
+                {n:"Braydon | Financial Freedom 📈", d:"4h ago", t:"DM me FREEDOM"}]
+    },
+    {
+      id:"sharon", name:"Sharon Whitaker", ini:"SW", col:"#a8895a", friends:317, note:370,
+      tag:"Grandma of 6 🌻",
+      bio:"Just here for the grandbabies and the funny pictures.\n\n" +
+          "Someone please tell me how to make the letters bigger.",
+      css:"",
+      posts:["[minion holding a wine glass]\n\nIT'S 5 O'CLOCK SOMEWHERE!!!",
+             "[minion]\n\nI'M NOT ARGUING I'M JUST EXPLAINING WHY I'M RIGHT",
+             "Someone please tell me how to make the letters bigger"],
+      comments:[{n:"Marlene Hodge", d:"4h ago", t:"Beautiful!"},
+                {n:"Aunt Deb", d:"4h ago", t:"So true Sharon"}]
+    },
+    {
+      id:"gerald", name:"Gerald Pruitt", ini:"GP", col:"#6b7f96", friends:29, note:262,
+      tag:"—",
+      bio:"weather tomorrow",
+      css:"",
+      posts:["google", "weather tomorrow", "how to delete a post", "www.friendspace.com"],
+      comments:[{n:"Your Cousin's Wife", d:"4h ago", t:"Dad this is the status box again"},
+                {n:"Gerald Pruitt", d:"4h ago", t:"ok"}]
+    },
+    {
+      id:"marlene", name:"Marlene Hodge", ini:"MH", col:"#b58fa8", friends:404, note:440,
+      tag:"Beautiful!",
+      bio:"Beautiful!",
+      css:"",
+      posts:["Beautiful!", "So beautiful!", "Beautiful!!"],
+      comments:[{n:"Marlene Hodge", d:"4h ago", t:"Beautiful!"},
+                {n:"Marlene Hodge", d:"4h ago", t:"Beautiful!"},
+                {n:"Terri from HR", d:"4h ago", t:"Marlene this is a post about a flood"}]
+    },
+    {
+      id:"tyler", name:"@tyler.builds", ini:"TB", col:"#4f5f6f", friends:812, note:349,
+      tag:"Automated · cross-posting since 2019",
+      bio:"I posted a new photo to my Instagram\n\n[link expired]\n\n" +
+          "I posted a new photo to my Instagram\n\n[link expired]",
+      css:"",
+      posts:["I posted a new photo to my Instagram [link expired]",
+             "I posted a new photo to my Instagram [link expired]",
+             "I posted a new photo to my Instagram [link expired]"],
+      comments:[{n:"Kyle \"Big Kyle\" Petersen", d:"4h ago", t:"link doesnt work"},
+                {n:"Kyle \"Big Kyle\" Petersen", d:"4h ago", t:"still doesnt work"}]
+    },
+    {
+      id:"severed", name:"SEVERED CIRCUIT", ini:"SC", col:"#3a3a44", friends:118, note:207,
+      tag:"Metalcore · Dayton OH · est. 2006",
+      bio:"NEW EP 'THE HOLLOWING' OUT NOW ON MYSPACE\n\nSHOWS:\nnone\n\n" +
+          "BOOKING: severedcircuitbooking@[expired]\n\nlast updated 2009",
+      css:"#profile{background:#151519;color:#8a8a94}#profile .sec{color:#c0392b;border-bottom-color:#3a1a1a}" +
+          "#profile h1{font-family:Impact,sans-serif;letter-spacing:4px;color:#c0392b}",
+      posts:["NEW EP 'THE HOLLOWING' OUT NOW ON MYSPACE",
+             "SHOWS: none",
+             "check out my band"],
+      comments:[{n:"Kyle \"Big Kyle\" Petersen", d:"posted 3/11/2009", t:"sick set last night boys"},
+                {n:"MARCUS_1987", d:"4h ago", t:"are you guys still together"}]
+    },
+    {
+      id:"coach", name:"Coach Danny R.", ini:"CD", col:"#5a7d4f", friends:246, note:294,
+      tag:"U12 Travel · Assistant Coach",
+      bio:"FINAL: 3-2\nFINAL: 1-4\nFINAL: 2-2\nFINAL: 6-0\nFINAL: 0-1\n\nProud of these kids.",
+      css:"",
+      posts:["FINAL: 3-2", "FINAL: 0-1", "FINAL: 2-2. Proud of these kids."],
+      comments:[{n:"Aunt Deb", d:"4h ago", t:"Which team is ours"},
+                {n:"Coach Danny R.", d:"4h ago", t:"FINAL: 3-2"}]
+    },
+    {
+      id:"patricia", name:"Patricia Nunn", ini:"PN", col:"#8f7f9a", friends:521, note:330,
+      tag:"So sorry for your loss ♥",
+      bio:"Thinking of you all during this difficult time. ♥",
+      css:"",
+      posts:["So sorry for your loss ♥",
+             "Thinking of you during this difficult time ♥",
+             "Praying for the family ♥"],
+      comments:[{n:"Brayden Kowalczyk", d:"4h ago", t:"Patricia this is my new couch"},
+                {n:"Patricia Nunn", d:"4h ago", t:"So sorry for your loss ♥"}]
+    },
+    {
+      id:"walter", name:"Walter Kessler", ini:"WK", col:"#7f7f7f", friends:71, note:392,
+      tag:"—",
+      bio:"Buick1974!\n\nhow do i delete a post",
+      css:"",
+      posts:["Buick1974!", "how do i delete a post", "nevermind"],
+      comments:[{n:"Terri from HR", d:"4h ago", t:"Walter change your password immediately"},
+                {n:"MARCUS_1987", d:"4h ago", t:"nice password bro"},
+                {n:"Walter Kessler", d:"4h ago", t:"Buick1975!"}]
+    },
+    {
+      id:"kyle", name:"Kyle \"Big Kyle\" Petersen", ini:"KP", col:"#8a7bc4", friends:389, note:466,
+      tag:"guy from your high school",
+      bio:"you know me\n\nyou dont remember me but you know me",
+      css:"",
+      posts:["check out my band",
+             "Not to be dramatic but I will be taking a break from Friendspace. See you in about 40 minutes.",
+             "hey is your wall ok"],
+      comments:[{n:"MARCUS_1987", d:"4h ago", t:"big kyle!!"},
+                {n:"Kyle \"Big Kyle\" Petersen", d:"4h ago", t:"you know it"}]
+    },
+    {
+      id:"brayden", name:"Brayden Kowalczyk", ini:"BK", col:"#7b91c4", friends:157, note:523,
+      tag:"living, laughing, loving",
+      bio:"Just wanted to say thank you to everyone. You know why.",
+      css:"",
+      posts:["Just wanted to say thank you to everyone. You know why.",
+             "Anyone else's Friendspace acting funny today or is it just mine",
+             "Selling: one (1) couch. Free. Must take today. Also I've moved."],
+      comments:[{n:"Patricia Nunn", d:"4h ago", t:"So sorry for your loss ♥"},
+                {n:"Aunt Deb", d:"4h ago", t:"What happened honey"}]
+    },
+    {
+      id:"cousin", name:"Your Cousin's Wife", ini:"CW", col:"#7bc4a8", friends:602, note:415,
+      tag:"—",
+      bio:"Admin of 4 local buy-nothing groups. Do not message me about the couch.",
+      css:"",
+      posts:["Does anybody know how to delete an account. asking for me",
+             "PSA: if you can read this, my account is working. If you cannot read this, please let me know.",
+             "I have read the Terms of Service. All 30,000 words. Ask me anything."],
+      comments:[{n:"Brayden Kowalczyk", d:"4h ago", t:"is the couch still available"},
+                {n:"Your Cousin's Wife", d:"4h ago", t:"no"}]
+    },
+    {
+      id:"wedding", name:"Guy You Met At A Wedding In 2011", ini:"GW", col:"#a8a85a", friends:1043, note:262,
+      tag:"we talked for like 20 minutes",
+      bio:"Hey! Great meeting you at the wedding. We should grab a beer sometime.\n\n" +
+          "(posted 2011, never followed up)",
+      css:"",
+      posts:["Just liked a post and it took 11 seconds. Living the dream.",
+             "hey is your wall ok",
+             "Congratulations to my nephew on his graduation from the thing he graduated from!!!"],
+      comments:[{n:"Kyle \"Big Kyle\" Petersen", d:"4h ago", t:"who is this"},
+                {n:"Guy You Met At A Wedding In 2011", d:"4h ago", t:"we talked for like 20 minutes"}]
+    }
+  ];
+
+  global.FS = global.FS || {};
+  global.FS.People = P;
+  global.FS.person = function (id) {
+    for (var i = 0; i < P.length; i++) if (P[i].id === id) return P[i];
+    return null;
+  };
+  global.FS.randomPerson = function () { return P[Math.floor(Math.random() * P.length)]; };
+
+})(window);
+
+</script>
+
+<div class="fs-header"><div class="fs-header-in">
+  <div class="fs-logo">Friendspace<span>BETA</span></div>
+  <input class="fs-search" id="search" placeholder="Search Friendspace" autocomplete="off">
+  <div class="fs-nav"><a href="#signup" data-nav="signup">Sign Up</a><a href="#feed" data-nav="feed">Feed</a><a href="#profile" data-nav="profile">Profiles</a><a href="#awards" data-nav="awards">Awards</a><a href="#feed" id="bell">Notifications<span class="fs-badge-count" id="notif">47</span></a></div>
+</div></div>
+
+<div class="screen" id="screen-signup">
+
+
+
+<div class="wrap" id="wrap">
+  <div class="wiz">
+    <div class="wiz-h">
+      <span id="stepTitle">Create your account</span>
+      <span class="of" id="stepOf">Step 1 of 4</span>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+
+    <!-- 1 NAME -->
+    <div class="step on" data-step="0">
+      <h2>What should we call you?</h2>
+      <p class="hint">Your legal name, exactly as it appears on your ID.</p>
+      <input class="tf" id="name" autocomplete="off" placeholder="Jane Doe">
+    </div>
+
+    <!-- USERNAME -->
+    <div class="step" data-step="u">
+      <h2>Pick a username</h2>
+      <p class="hint">This cannot be changed later. Or at all.</p>
+      <input class="tf" id="uname" autocomplete="off" placeholder="username">
+      <div style="margin-top:9px"><button class="fs-btn ghost" id="checkU">Check availability</button></div>
+      <div class="avail" id="avail"></div>
+    </div>
+
+    <!-- 2 PHONE -->
+    <div class="step" data-step="1">
+      <h2>Phone number</h2>
+      <p class="hint">Scroll to your number. The selector covers 1 to 100,000,000.</p>
+      <div class="phone-read" id="phoneRead">(000) 000-0001</div>
+      <input type="range" id="phone" min="1" max="100000000" step="1" value="1">
+      <div class="ticks"><span id="tkLo">1</span><span id="tkHi">100,000,000</span></div>
+      <div class="zoomrow">
+        <button class="fs-btn ghost" id="zoomIn">🔍 Zoom in</button>
+        <button class="fs-btn ghost" id="zoomOut">Zoom out</button>
+        <span class="lvl" id="lvl"></span>
+      </div>
+      <p class="hint" style="margin:8px 0 0">Arrow keys adjust by exactly 1.</p>
+    </div>
+
+    <!-- 3 DOB -->
+    <div class="step" data-step="2">
+      <h2>Date of birth</h2>
+      <p class="hint">Navigate to the month you were born, then choose the day.</p>
+      <div class="cal">
+        <div class="cal-h">
+          <button class="fs-btn ghost" id="prev">◀ Previous month</button>
+          <span class="cal-m" id="calm"></span>
+          <button class="fs-btn ghost" id="next" disabled>Next month ▶</button>
+        </div>
+        <div class="cal-g" id="calg"></div>
+      </div>
+    </div>
+
+    <!-- 4 PASSWORD -->
+    <div class="step" data-step="3">
+      <h2>Choose a password</h2>
+      <p class="hint">Minimum 8 characters. For your security, please use the on-screen keyboard.</p>
+      <input class="tf" id="pw" readonly placeholder="Use the keys below">
+      <div class="kb" id="kb"></div>
+    </div>
+
+    <!-- 5 EMAIL -->
+    <div class="step" data-step="4">
+      <h2>Email address</h2>
+      <p class="hint">Each character is verified with our servers before it appears.</p>
+      <input class="tf" id="email" autocomplete="off" placeholder="you@example.com">
+      <p class="hint" id="emailNote" style="margin:8px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- VERIFICATION CODE -->
+    <div class="step" data-step="v">
+      <h2>Verify your email</h2>
+      <p class="hint">We have sent a code to your inbox. For your convenience it is also shown below.</p>
+      <div class="codebox">
+        <b id="theCode">0000</b>
+        <div class="exp">This code expires in <span id="codeLeft">2.5</span> seconds.</div>
+      </div>
+      <input class="tf" id="codeIn" maxlength="4" autocomplete="off" placeholder="Enter the code" style="text-align:center;letter-spacing:8px;font-family:ui-monospace,monospace">
+      <p class="hint" id="codeNote" style="margin:8px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- CAPTCHA -->
+    <div class="step" data-step="c">
+      <h2>Confirm you are a human</h2>
+      <p class="hint" id="capPrompt">Select all squares containing a crosswalk.</p>
+      <div class="cap" id="cap"></div>
+      <button class="fs-btn ghost" id="capGo">Verify</button>
+      <p class="hint" id="capNote" style="margin:9px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- PROFILE PHOTO -->
+    <div class="step" data-step="p">
+      <h2>Position your profile photo</h2>
+      <p class="hint">Drag to move the photo until your face is inside the frame.</p>
+      <div class="cropwrap" id="cropwrap">
+        <div class="face" id="face">your<br>face</div>
+        <div class="cropbox" id="cropbox"></div>
+      </div>
+      <p class="hint" id="cropNote" style="margin:9px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- 6 VOLUME -->
+    <div class="step" data-step="5">
+      <h2>Notification volume</h2>
+      <p class="hint">Pull the speaker back into the sling and release. Where it lands is your level.</p>
+      <canvas id="sling" width="600" height="260" style="width:100%;border:1px solid #dddfe2;border-radius:2px;background:#fbfcfd;touch-action:none;cursor:grab"></canvas>
+      <div style="text-align:center;margin-top:9px;font-size:12px;color:#90949c">
+        Level: <b id="volnum" style="font:bold 18px ui-monospace,monospace;color:#1d2129">—</b>
+        <span id="volnote"></span>
+      </div>
+    </div>
+
+    <!-- 7 TERMS -->
+    <div class="step" data-step="6">
+      <h2>Terms of Service</h2>
+      <p class="hint">Please confirm that you have read and agree to all 30,000 words.</p>
+      <div class="termsbox" id="termsbox">
+        <input type="checkbox" id="terms">
+        <span>I agree to the Friendspace Terms of Service</span>
+      </div>
+    </div>
+
+    <!-- 8 SUBMIT -->
+    <div class="step" data-step="7">
+      <h2>Almost there</h2>
+      <p class="hint">Press and hold to create your account. Do not move the pointer.</p>
+      <button class="hold" id="hold"><div class="fill" id="fill"></div><span>Hold to create account</span></button>
+    </div>
+
+    <div class="foot">
+      <button class="fs-btn ghost back" id="back" title="You cannot go back.">◀ Back</button>
+      <button class="fs-btn" id="nextBtn">Continue</button>
+      <span class="msg" id="msg"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== DONE ===================== -->
+<div class="wrap" id="done">
+  <div class="wiz">
+    <div class="wiz-h">Welcome to Friendspace</div>
+    <div class="step on">
+      <h2>Your account has been created.</h2>
+      <p class="hint">Thank you for taking the time. Here is what we recorded.</p>
+      <div class="recpt"><table id="receipt"></table></div>
+      <p style="font-size:12px;color:#90949c;margin:14px 0 0">
+        Some entries were corrected automatically for your convenience.
+      </p>
+      <p class="fs-whisper" style="margin:3px 0 0">It never mattered what you put in.</p>
+      <div style="margin-top:18px">
+        <a class="fs-btn" href="feed.html" style="display:inline-block;text-decoration:none">Continue to Friendspace →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== COOKIES ===================== -->
+<div id="cookie">
+  <h3>We value your privacy</h3>
+  <p>Switch off any partners you would prefer not to share your data with, then continue.
+     <span style="color:#c0392b">Partners are processed in order.</span></p>
+  <div class="plist" id="plist"></div>
+  <div class="cact">
+    <button class="fs-btn ghost" id="acceptAll">Accept all</button>
+    <button class="fs-btn ghost" id="rejectAll">Reject all</button>
+    <button class="fs-btn" id="contBtn">Continue</button>
+    <span class="left" id="left"></span>
+  </div>
+</div>
+
+
+</div>
+<div class="screen" id="screen-feed">
+
+
+<div class="fs-shell">
+
+  <!-- ============ LEFT RAIL ============ -->
+  <div class="fs-rail">
+    <div class="fs-card">
+      <div class="fs-card-b">
+        <div class="fs-person">
+          <div class="fs-av">YO</div>
+          <div><b>You</b><br><span class="fs-whisper">member since 2004</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Your Top 8</div>
+    <div class="fs-card">
+      <div class="fs-card-b">
+        <div class="fs-top8" id="top8"></div>
+        <div style="font-size:10px;color:#90949c;margin-top:7px">
+          Reordered nightly. Everyone is notified.
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Shortcuts</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:12px;line-height:1.9">
+        <a href="#">Groups</a><br>
+        <a href="#">Events</a><br>
+        <a href="#">Guestbook</a><br>
+        <a href="awards.html">Awards Cabinet</a><br>
+        <span class="fs-whisper">Settings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MIDDLE ============ -->
+  <div class="fs-col-mid">
+
+    <div class="fs-card fs-compose">
+      <div class="fs-card-h">What's on your mind?</div>
+      <div class="fs-card-b">
+        <textarea id="composer" placeholder="Share something with your friends."></textarea>
+        <div class="fs-compose-foot">
+          <button class="fs-btn" id="postBtn">Post</button>
+          <button class="fs-btn ghost" id="photoBtn">Photo</button>
+          <span class="fs-count" id="charCount">0 of 300 characters remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="shuffleBanner" style="display:none"></div>
+    <div id="feed"></div>
+
+    <div class="fs-loader" id="loader">
+      <span class="fs-spinner"></span>Loading more of the content you love…
+    </div>
+  </div>
+
+  <!-- ============ RIGHT RAIL ============ -->
+  <div class="fs-rail">
+    <div class="fs-rail-title">Sponsored</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:11px;line-height:1.5">
+        <div style="height:64px;background:linear-gradient(135deg,#ff9a3c,#ff4d4d);color:#fff;
+             font:bold 13px/64px Impact,sans-serif;text-align:center;margin-bottom:5px">
+          CLICK HERE NOW
+        </div>
+        <b>You Won't Believe #4</b><br>
+        <span style="color:#90949c">Local mothers are furious about this.</span>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Birthdays</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:12px">
+        It's <b>someone's</b> birthday today.<br>
+        <span class="fs-whisper">We're not going to say whose.</span>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">People You May Know</div>
+    <div class="fs-card">
+      <div class="fs-card-b" id="pymk"></div>
+    </div>
+  </div>
+</div>
+
+<div class="fs-footer" id="footer">
+  <div>
+    <a href="#">About</a>·<a href="#">Help</a>·<a href="#">Privacy Policy</a>·
+    <a href="#">Terms</a>·<a href="#">Delete Account</a>·<a href="#">Contact Us</a>
+  </div>
+  <div style="margin-top:6px">Friendspace © 2004–2026 · a Palgorithm Holdings company</div>
+  <div style="margin-top:4px">Last updated: 3/14/2002 · Best viewed at 800×600 in Netscape</div>
+  <div class="ring">‹ prev &nbsp;|&nbsp; <a href="#">random</a> &nbsp;|&nbsp; next ›<br>
+    <span style="font-size:10px">member of the FriendRing™ webring</span></div>
+  <div class="fs-counter" id="counter">000847</div>
+  <div style="font-size:10px;margin-top:5px">You are visitor number</div>
+</div>
+
+
+</div>
+<div class="screen" id="screen-profile">
+
+
+
+<div class="page">
+  <div class="rail">
+    <div class="fs-rail-title">Friends</div>
+    <div class="fs-card"><div class="fs-card-b" id="friends"></div></div>
+    <div class="fs-rail-title">Profile Editor</div>
+    <div class="fs-card"><div class="fs-card-b" style="font-size:11px;color:#90949c;line-height:1.5">
+      Paste custom CSS to personalise your profile.<br><br>
+      <span style="color:#c0392b">We do not validate this.</span>
+    </div></div>
+  </div>
+
+  <!-- everything below can be, and has been, destroyed by its owner -->
+  <div id="profile"></div>
+</div>
+
+<style id="userCSS"></style>
+
+<div class="songbar">
+  ♫ <b id="songCount">0</b> profile songs playing
+  <button id="mute">Stop</button>
+</div>
+
+
+</div>
+<div class="screen" id="screen-awards">
+
+<div class="frame">
+  <h1>~*~ MY AWARDS ~*~</h1>
+  <div class="sub">This page is a testament to my achievements.</div>
+
+  <marquee scrollamount="6">
+    ★ WELCOME TO THE FRIENDSPACE AWARDS CABINET ★ PLEASE SIGN MY GUESTBOOK ★
+    THIS PAGE IS BEST VIEWED IN NETSCAPE NAVIGATOR AT 800x600 ★
+    CONGRATULATIONS ON YOUR AWARDS ★
+  </marquee>
+
+  <div class="tally" id="tally">0 / 0</div>
+  <div style="color:#00ffff;font-size:11px">awards collected</div>
+
+  <hr>
+
+  <div id="cabinet"></div>
+
+  <hr>
+
+  <div class="constr">
+    <blink>UNDER CONSTRUCTION</blink><br>
+    <span class="bar"><i></i></span><br>
+    <span style="font-size:10px;color:#aaa">this page is 34% complete (since 2002)</span>
+  </div>
+
+  <div class="nav">
+    <a href="feed.html">« back to Friendspace</a> &nbsp;|&nbsp;
+    <a href="index.html">sign up</a> &nbsp;|&nbsp;
+    <a href="#" id="guest">sign my guestbook</a>
+    <br><br>
+    <button class="reset" id="reset">reset my awards</button>
+  </div>
+
+  <div class="foot">
+    Friendspace Awards Cabinet · last updated 3/14/2002<br>
+    You are visitor #<span id="v">000847</span> · <a href="#" style="color:#8888aa">webring</a>
+  </div>
+</div>
+
+
+</div>
+
+<script>
+(function(){
+  var boots = {}, booted = {};
+  boots.signup = function(){
+
+"use strict";
+var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
+var S = { name:"", uname:"", phone:1, dob:null, pw:"", email:"", code:"", vol:null, terms:false };
+
+/* ============================================================
+   WIZARD — the progress bar shrinks and the step count grows
+   ============================================================ */
+var stepEls = [].slice.call(document.querySelectorAll(".step[data-step]"));
+var step = 0, STEPS = stepEls.length;
+var TITLES = ["Create your account","Identity","Contact details","About you","Security",
+              "Contact details","Contact details","Security","Identity","Preferences",
+              "Legal","Finish"];
+/* "of N" keeps getting worse the further you go */
+var OF = [4, 6, 6, 9, 9, 11, 11, 14, 14, 16, 16, 12];
+
+function showStep(n){
+  step = n;
+  stepEls.forEach(function(el, i){ el.classList.toggle("on", i === n); });
+  $("#stepTitle").textContent = TITLES[n];
+  $("#stepOf").textContent = "Step " + (n+1) + " of " + OF[n];
+  /* the bar runs backwards, then snaps to full at the end */
+  $("#bar").style.width = (n === STEPS-1 ? 100 : Math.max(4, 62 - n*5)) + "%";
+  $("#nextBtn").style.display = (n === STEPS-1) ? "none" : "";
+  $("#msg").textContent = "";
+}
+
+$("#back").addEventListener("click", function(){
+  $("#msg").textContent = "You cannot go back. Everything you have entered is final.";
+});
+
+$("#nextBtn").addEventListener("click", function(){
+  if (step < STEPS-1) showStep(step+1);
+});
+
+/* ============================================================
+   1. NAME — works perfectly. The only one that does.
+   ============================================================ */
+$("#name").addEventListener("input", function(){ S.name = this.value.trim(); });
+
+/* ============================================================
+   2. PHONE — one slider, 1 to 100,000,000.
+   At full range that is ~167,000 values per pixel, so dragging
+   alone cannot land an exact number. The zoom narrows the range
+   10x at a time: seven zooms takes you from 100M to a window of
+   ten, where the arrow keys finish the job. Tedium becomes a
+   mechanic you can learn — a toy, not a wall.
+   ============================================================ */
+var lo = 1, hi = 100000000, sl = $("#phone");
+
+function fmtPhone(v){
+  var s = String(v).padStart(10, "0");
+  return "(" + s.slice(0,3) + ") " + s.slice(3,6) + "-" + s.slice(6);
+}
+function commas(n){ return n.toLocaleString("en-US"); }
+
+function drawPhone(){
+  sl.min = lo; sl.max = hi; sl.value = S.phone;
+  $("#phoneRead").textContent = fmtPhone(S.phone);
+  $("#tkLo").textContent = commas(lo);
+  $("#tkHi").textContent = commas(hi);
+  var span = hi - lo;
+  var perPx = Math.max(1, Math.round(span/600));
+  $("#lvl").innerHTML = "range " + commas(span) + " wide<br>" +
+    "≈ " + commas(perPx) + (perPx === 1 ? " number" : " numbers") + " per pixel";
+  $("#zoomOut").disabled = (span >= 100000000);
+  $("#zoomIn").disabled  = (span <= 10);
+}
+sl.addEventListener("input", function(){ S.phone = +this.value; drawPhone(); });
+
+$("#zoomIn").addEventListener("click", function(){
+  var span = Math.max(10, Math.round((hi - lo) / 10));
+  lo = Math.max(1, S.phone - Math.round(span/2));
+  hi = Math.min(100000000, lo + span);
+  lo = Math.max(1, hi - span);
+  drawPhone();
+  $("#phoneRead").classList.remove("flash"); void $("#phoneRead").offsetWidth;
+  $("#phoneRead").classList.add("flash");
+  if (hi - lo <= 10) T.unlock("precision");
+});
+$("#zoomOut").addEventListener("click", function(){
+  var span = Math.min(100000000 - 1, (hi - lo) * 10);
+  lo = Math.max(1, S.phone - Math.round(span/2));
+  hi = Math.min(100000000, lo + span);
+  lo = Math.max(1, hi - span);
+  drawPhone();
+});
+drawPhone();
+
+/* ============================================================
+   3. DATE OF BIRTH — backwards only
+   ============================================================ */
+var MON = ["January","February","March","April","May","June","July",
+           "August","September","October","November","December"];
+var view = new Date(); view.setDate(1);
+var monthsBack = 0;
+
+function renderCal(){
+  $("#calm").textContent = MON[view.getMonth()] + " " + view.getFullYear();
+  var g = $("#calg"); g.innerHTML = "";
+  ["S","M","T","W","T","F","S"].forEach(function(d){
+    var e = document.createElement("div"); e.className = "dow"; e.textContent = d; g.appendChild(e);
+  });
+  var first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+  var days = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
+  for (var i=0;i<first;i++){ var p=document.createElement("div"); p.className="pad"; g.appendChild(p); }
+  for (var d=1; d<=days; d++){
+    (function(d){
+      var e = document.createElement("div");
+      e.className = "day"; e.textContent = d;
+      if (S.dob && S.dob.getFullYear()===view.getFullYear() &&
+          S.dob.getMonth()===view.getMonth() && S.dob.getDate()===d) e.classList.add("sel");
+      e.onclick = function(){ S.dob = new Date(view.getFullYear(), view.getMonth(), d); renderCal(); };
+      g.appendChild(e);
+    })(d);
+  }
+}
+function stepBack(){
+  view.setMonth(view.getMonth()-1); renderCal();
+  if (++monthsBack >= 300) T.unlock("longway");
+}
+var ht=null, hi2=null;
+$("#prev").addEventListener("pointerdown", function(){
+  stepBack();
+  ht = setTimeout(function(){ hi2 = setInterval(stepBack, 340); }, 550);
+});
+["pointerup","pointerleave","pointercancel"].forEach(function(ev){
+  $("#prev").addEventListener(ev, function(){ clearTimeout(ht); clearInterval(hi2); });
+});
+renderCal();
+
+/* ============================================================
+   4. PASSWORD — 68 keys, reshuffled after every press
+   ============================================================ */
+var KEYS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*".split("");
+function renderKb(){
+  var a = KEYS.slice();
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+  var kb = $("#kb"); kb.innerHTML = "";
+  a.forEach(function(k){
+    var b = document.createElement("button");
+    b.type="button"; b.textContent = k;
+    b.onclick = function(){ S.pw += k; $("#pw").value = "•".repeat(S.pw.length); renderKb(); };
+    kb.appendChild(b);
+  });
+  var d = document.createElement("button");
+  d.type="button"; d.className="wide"; d.textContent="⌫ Delete";
+  d.onclick = function(){ S.pw = S.pw.slice(0,-1); $("#pw").value = "•".repeat(S.pw.length); renderKb(); };
+  kb.appendChild(d);
+}
+renderKb();
+
+/* ============================================================
+   5. EMAIL — 700ms per character
+   ============================================================ */
+var pending = false;
+$("#email").addEventListener("keydown", function(e){
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key.length !== 1 && e.key !== "Backspace") return;
+  e.preventDefault();
+  if (pending){ $("#emailNote").textContent = "Too fast — that character was discarded."; return; }
+  pending = true; $("#emailNote").textContent = "Verifying…";
+  var k = e.key, el = this;
+  setTimeout(function(){
+    S.email = (k === "Backspace") ? S.email.slice(0,-1) : S.email + k;
+    el.value = S.email; pending = false; $("#emailNote").textContent = "";
+  }, 700);
+});
+$("#email").addEventListener("paste", function(e){
+  e.preventDefault(); $("#emailNote").textContent = "Pasting is disabled for your security.";
+});
+
+/* ============================================================
+   6. VOLUME — the slingshot
+   ============================================================ */
+var cv = $("#sling"), cx = cv.getContext("2d");
+var ANCHOR = {x:96,y:146}, MAXPULL = 74, GROUND = 216, SC = {x0:210, x1:566};
+var pouch = {x:ANCHOR.x,y:ANCHOR.y}, dragging = false, proj = null, trail = [];
+
+function toCv(e){
+  var r = cv.getBoundingClientRect();
+  return { x:(e.clientX-r.left)*(cv.width/r.width), y:(e.clientY-r.top)*(cv.height/r.height) };
+}
+cv.addEventListener("pointerdown", function(e){
+  if (proj) return;
+  var p = toCv(e);
+  if (Math.hypot(p.x-pouch.x, p.y-pouch.y) < 46){ dragging = true; cv.setPointerCapture(e.pointerId); }
+});
+cv.addEventListener("pointermove", function(e){
+  if (!dragging) return;
+  var p = toCv(e), dx = p.x-ANCHOR.x, dy = p.y-ANCHOR.y, d = Math.hypot(dx,dy);
+  if (d > MAXPULL){ dx = dx/d*MAXPULL; dy = dy/d*MAXPULL; }
+  pouch = {x:ANCHOR.x+dx, y:ANCHOR.y+dy};
+});
+cv.addEventListener("pointerup", function(){
+  if (!dragging) return;
+  dragging = false;
+  var vx = (ANCHOR.x-pouch.x)*0.235, vy = (ANCHOR.y-pouch.y)*0.235;
+  if (Math.hypot(vx,vy) < 0.6){ pouch = {x:ANCHOR.x,y:ANCHOR.y}; return; }
+  proj = {x:pouch.x, y:pouch.y, vx:vx, vy:vy};
+  trail = []; pouch = {x:ANCHOR.x,y:ANCHOR.y};
+});
+function land(x){
+  var v = x < SC.x0 ? 0 : x > SC.x1 ? 100 :
+          Math.round((x-SC.x0)/(SC.x1-SC.x0)*100);
+  S.vol = v;
+  /* the level you land governs profile songs later. it is the only setting
+     on this entire website that is actually honoured. */
+  try { localStorage.setItem("fs_volume", v); } catch (e) {}
+  $("#volnum").textContent = v;
+  $("#volnote").textContent = v===0 ? "(silent — nice shot)" : v===100 ? "(MAXIMUM)" : "";
+  if (v === 0) T.unlock("marksman");
+  setTimeout(function(){ proj = null; trail = []; }, 1100);
+}
+function draw(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  cx.strokeStyle="#d7dbe0"; cx.lineWidth=1;
+  cx.beginPath(); cx.moveTo(0,GROUND+16); cx.lineTo(cv.width,GROUND+16); cx.stroke();
+  cx.fillStyle="#9aa2ad"; cx.font="10px Helvetica"; cx.textAlign="center";
+  for (var v=0; v<=100; v+=10){
+    var x = SC.x0 + (SC.x1-SC.x0)*v/100;
+    cx.strokeStyle = v%50===0 ? "#9aa2ad" : "#dfe3e8";
+    cx.beginPath(); cx.moveTo(x,GROUND+16); cx.lineTo(x,GROUND+(v%50===0?27:22)); cx.stroke();
+    if (v%50===0) cx.fillText(v, x, GROUND+39);
+  }
+  cx.textAlign="left";
+  cx.strokeStyle="#8b5e3c"; cx.lineWidth=7; cx.lineCap="round";
+  cx.beginPath(); cx.moveTo(ANCHOR.x,GROUND+16); cx.lineTo(ANCHOR.x,ANCHOR.y+6); cx.stroke();
+  cx.lineWidth=6;
+  cx.beginPath(); cx.moveTo(ANCHOR.x,ANCHOR.y+8); cx.lineTo(ANCHOR.x-19,ANCHOR.y-24); cx.stroke();
+  cx.beginPath(); cx.moveTo(ANCHOR.x,ANCHOR.y+8); cx.lineTo(ANCHOR.x+19,ANCHOR.y-24); cx.stroke();
+  if (!proj){
+    cx.strokeStyle="#3d3d3d"; cx.lineWidth=4;
+    cx.beginPath(); cx.moveTo(ANCHOR.x-19,ANCHOR.y-24); cx.lineTo(pouch.x,pouch.y); cx.stroke();
+    cx.beginPath(); cx.moveTo(ANCHOR.x+19,ANCHOR.y-24); cx.lineTo(pouch.x,pouch.y); cx.stroke();
+  }
+  cx.fillStyle="#c9ced6";
+  trail.forEach(function(t){ cx.beginPath(); cx.arc(t.x,t.y,2,0,7); cx.fill(); });
+  var b = proj || pouch;
+  cx.fillStyle="#3b5998"; cx.beginPath(); cx.arc(b.x,b.y,15,0,7); cx.fill();
+  cx.fillStyle="#fff"; cx.font="15px Helvetica"; cx.textAlign="center"; cx.textBaseline="middle";
+  cx.fillText("♪", b.x, b.y+1);
+  cx.textAlign="left"; cx.textBaseline="alphabetic";
+}
+function tick(){
+  if (proj){
+    proj.vy += 0.34; proj.x += proj.vx; proj.y += proj.vy;
+    if (!trail.length || Math.hypot(proj.x-trail[trail.length-1].x, proj.y-trail[trail.length-1].y) > 13)
+      trail.push({x:proj.x,y:proj.y});
+    if (proj.y >= GROUND){ var x = proj.x; proj = {x:x,y:GROUND,vx:0,vy:0}; land(x); }
+  }
+  draw(); requestAnimationFrame(tick);
+}
+tick();
+
+/* ============================================================
+   7. TERMS — flees the mouse, cannot flee the keyboard
+   ============================================================ */
+var box = $("#termsbox"), cb = $("#terms");
+box.addEventListener("mousemove", function(e){
+  if (cb.checked) return;
+  var r = box.getBoundingClientRect(), c = cb.getBoundingClientRect();
+  if (Math.hypot(e.clientX-(c.left+c.width/2), e.clientY-(c.top+c.height/2)) < 60){
+    cb.style.left = Math.random()*(r.width-34) + "px";
+    cb.style.top  = Math.random()*(r.height-34) + "px";
+  }
+});
+cb.addEventListener("change", function(){
+  S.terms = cb.checked;
+  if (cb.checked) T.unlock("escape");
+});
+
+/* ============================================================
+   8. SUBMIT — hold still for eight seconds
+   ============================================================ */
+var HOLD = 8000, raf = null, t0 = 0, origin = null;
+function cancel(m){ cancelAnimationFrame(raf); raf = null; $("#fill").style.width = "0%"; if (m) $("#msg").textContent = m; }
+$("#hold").addEventListener("pointerdown", function(e){
+  origin = {x:e.clientX,y:e.clientY}; t0 = performance.now();
+  $("#msg").textContent = "Hold still…";
+  (function loop(){
+    var p = Math.min(1, (performance.now()-t0)/HOLD);
+    $("#fill").style.width = (p*100) + "%";
+    if (p >= 1){ cancel(""); finish(); return; }
+    raf = requestAnimationFrame(loop);
+  })();
+});
+window.addEventListener("pointermove", function(e){
+  if (!raf || !origin) return;
+  if (Math.hypot(e.clientX-origin.x, e.clientY-origin.y) > 4) cancel("You moved. Start again.");
+});
+window.addEventListener("pointerup", function(){ if (raf) cancel("Released too early."); });
+
+/* ============================================================
+   THE PAYOFF — it never mattered what you put in
+   ============================================================ */
+function finish(){
+  var rows = [
+    ["Name",     S.name || "(not provided)", null],
+    ["Username", "user847",                  S.uname || null],
+    ["Phone",    "(555) 010-0100",           fmtPhone(S.phone)],
+    ["Date of birth", new Date().toDateString(), S.dob ? S.dob.toDateString() : null],
+    ["Email",    "user847@friendspace.example", S.email || null],
+    ["Password", "stored in plain text",     S.pw ? "•".repeat(S.pw.length) : null],
+    ["Notification volume", "100 (default)", S.vol === null ? null : String(S.vol)]
+  ];
+  $("#receipt").innerHTML = rows.map(function(r){
+    return "<tr><td class='k'>" + r[0] + "</td><td class='v'>" + r[1] +
+      (r[2] ? "<span class='strike'>you entered: " + r[2] + "</span>" : "") + "</td></tr>";
+  }).join("");
+  $("#wrap").style.display = "none";
+  $("#done").style.display = "block";
+  window.scrollTo(0,0);
+}
+
+/* ============================================================
+   COOKIES — a hydra. Switching a partner off switches two
+   earlier ones back on, so working top-down never converges.
+   Start from the bottom and it falls in twelve clicks.
+   The banner tells you: "Partners are processed in order."
+   ============================================================ */
+var PARTNERS = ["AdMesh","Trackr","PixelDrift","Nomatic","Beaconly","Segmentum",
+                "Clickwell","DataFlume","Optivo","Rezonate","Cohortly","Bidstream"];
+var spawns = PARTNERS.map(function(_, i){
+  var pool = [], out = [];
+  for (var j=0;j<i;j++) pool.push(j);
+  for (var k=0;k<2 && pool.length;k++) out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+  return out;
+});
+var on = PARTNERS.map(function(){ return true; });
+
+function drawPartners(){
+  var host = $("#plist"); host.innerHTML = "";
+  PARTNERS.forEach(function(name, i){
+    var d = document.createElement("label");
+    d.className = "p" + (on[i] ? "" : " off");
+    d.innerHTML = "<span class='n'>" + String(i+1).padStart(2,"0") + "</span>" +
+      "<input type='checkbox'" + (on[i] ? " checked" : "") + "><span>" + name + "</span>";
+    d.querySelector("input").onchange = function(){
+      on[i] = this.checked;
+      if (!this.checked) spawns[i].forEach(function(j){ on[j] = true; });
+      drawPartners();
+    };
+    host.appendChild(d);
+  });
+  var n = on.filter(Boolean).length;
+  $("#left").textContent = n + " of " + PARTNERS.length + " partners still enabled";
+  $("#left").style.color = n ? "#90949c" : "#2e7d32";
+}
+$("#acceptAll").onclick = function(){ on = on.map(function(){ return true; }); drawPartners(); };
+$("#rejectAll").onclick = function(){ on = on.map(function(){ return true; }); drawPartners(); };
+$("#contBtn").onclick = function(){
+  if (on.filter(Boolean).length){ $("#left").style.color = "#c0392b"; return; }
+  T.unlock("completionist"); T.unlock("hydra");
+  $("#cookie").remove();
+};
+drawPartners();
+
+/* ============================================================
+   USERNAME — every name is taken. After three attempts the
+   system assigns you one, which you may accept. That is the
+   escape hatch, and it is also the joke.
+   ============================================================ */
+var uTries = 0;
+$("#checkU").addEventListener("click", function(){
+  var want = $("#uname").value.trim();
+  if (!want){ $("#avail").innerHTML = "<span class='no'>Enter a username first.</span>"; return; }
+  uTries++;
+  if (uTries < 3){
+    $("#avail").innerHTML = "<span class='no'>\u2716 <b>" + want + "</b> is taken.</span>" +
+      "<div style='color:#90949c;margin-top:4px'>Taken since " + (2004 + uTries) + ". Try another.</div>";
+    return;
+  }
+  var assigned = want.toLowerCase().replace(/[^a-z0-9]/g,"") + "_" +
+                 (1900 + Math.floor(Math.random()*99)) + "_xX" + Math.floor(Math.random()*90+10);
+  $("#avail").innerHTML =
+    "<span class='no'>\u2716 <b>" + want + "</b> is taken.</span>" +
+    "<div class='sug'><span id='sugName'>" + assigned + "</span>" +
+    "<button class='fs-btn' id='takeU' style='margin-left:auto'>Use this</button></div>" +
+    "<div style='color:#90949c;margin-top:5px'>This username is available.</div>";
+  $("#takeU").onclick = function(){
+    S.uname = assigned;
+    $("#uname").value = assigned;
+    $("#avail").innerHTML = "<span style='color:#2e7d32'>\u2714 <b>" + assigned + "</b> is yours forever.</span>";
+    T.unlock("identity");
+  };
+});
+
+/* ============================================================
+   VERIFICATION — the code is shown to you, and it rotates every
+   2.5 seconds. Four digits in two and a half seconds is a race
+   you can win, which is what keeps it a toy.
+   ============================================================ */
+var code = "0000", codeT0 = Date.now(), codeVerified = false;
+function rollCode(){
+  code = String(Math.floor(Math.random()*9000) + 1000);
+  codeT0 = Date.now();
+  var el = $("#theCode"); if (el) el.textContent = code;
+}
+rollCode();
+setInterval(function(){
+  if (codeVerified) return;
+  rollCode();
+  var inp = $("#codeIn");
+  if (inp && inp.value){
+    inp.value = "";
+    $("#codeNote").textContent = "That code expired. A new one has been issued.";
+  }
+}, 2500);
+setInterval(function(){
+  var el = $("#codeLeft"); if (!el || codeVerified) return;
+  el.textContent = Math.max(0, (2.5 - (Date.now()-codeT0)/1000)).toFixed(1);
+}, 90);
+$("#codeIn").addEventListener("input", function(){
+  if (this.value.length < 4) return;
+  if (this.value === code){
+    codeVerified = true;
+    S.code = code;
+    $("#codeNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Verified.</span>";
+    $("#theCode").style.color = "#2e7d32";
+    T.unlock("verified");
+  } else {
+    this.value = "";
+    $("#codeNote").textContent = "Incorrect. The code has changed since you started typing.";
+  }
+});
+
+/* ============================================================
+   CAPTCHA — the prompt changes every time you submit, so
+   whatever you picked was for the previous question. It gives
+   up on the third attempt.
+   ============================================================ */
+var CAP_PROMPTS = [
+  "Select all squares containing a crosswalk.",
+  "Select all squares containing a bus.",
+  "Select all squares containing regret.",
+  "Select all squares containing a crosswalk that is thinking about you.",
+  "Select all squares that do not contain squares."
+];
+var capTries = 0, capDone = false;
+(function buildCap(){
+  var host = $("#cap");
+  for (var i=0;i<9;i++){
+    var d = document.createElement("div");
+    var h = Math.floor(Math.random()*360);
+    d.style.background = "linear-gradient(" + Math.floor(Math.random()*360) + "deg,hsl(" + h +
+      ",30%,58%),hsl(" + ((h+40)%360) + ",26%,42%))";
+    d.onclick = function(){ if (!capDone) this.classList.toggle("sel"); };
+    host.appendChild(d);
+  }
+})();
+$("#capGo").addEventListener("click", function(){
+  if (capDone) return;
+  capTries++;
+  if (capTries >= 3){
+    capDone = true;
+    $("#capNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Thank you. We have stopped asking.</span>";
+    T.unlock("notarobot");
+    return;
+  }
+  [].forEach.call($("#cap").children, function(c){ c.classList.remove("sel"); });
+  $("#capPrompt").textContent = CAP_PROMPTS[capTries % CAP_PROMPTS.length];
+  $("#capNote").textContent = "Incorrect. Please try again.";
+});
+
+/* ============================================================
+   PROFILE PHOTO — dragging moves the frame, not the picture,
+   and it moves the wrong way. Inverted controls are learnable,
+   which is the difference between a toy and a wall.
+   ============================================================ */
+(function(){
+  var wrap = $("#cropwrap"), box = $("#cropbox"), face = $("#face");
+  var bx = 90, by = 70, dragging = false, last = null, done = false;
+  face.style.left = "63%"; face.style.top = "34%";
+  function place(){ box.style.left = bx + "px"; box.style.top = by + "px"; }
+  place();
+  wrap.addEventListener("pointerdown", function(e){
+    if (done) return;
+    dragging = true; last = {x:e.clientX, y:e.clientY};
+    wrap.setPointerCapture(e.pointerId);
+  });
+  wrap.addEventListener("pointermove", function(e){
+    if (!dragging || done) return;
+    /* inverted, and applied to the frame rather than the photo */
+    bx -= (e.clientX - last.x);
+    by -= (e.clientY - last.y);
+    bx = Math.max(0, Math.min(wrap.clientWidth - 98, bx));
+    by = Math.max(0, Math.min(wrap.clientHeight - 98, by));
+    last = {x:e.clientX, y:e.clientY};
+    place();
+    var f = face.getBoundingClientRect(), b = box.getBoundingClientRect();
+    var d = Math.hypot((f.left+f.width/2)-(b.left+b.width/2), (f.top+f.height/2)-(b.top+b.height/2));
+    if (d < 30){
+      done = true; dragging = false;
+      box.style.borderColor = "#2ecc71";
+      $("#cropNote").innerHTML = "<span style='color:#2e7d32'>\u2714 Framed. This photo will not be used.</span>";
+      T.unlock("framed");
+    }
+  });
+  ["pointerup","pointercancel"].forEach(function(ev){
+    wrap.addEventListener(ev, function(){ dragging = false; });
+  });
+})();
+
+showStep(0);
+
+  };
+  boots.feed = function(){
+
+"use strict";
+var T = FS.Trophies;
+var $ = function(s){ return document.querySelector(s); };
+
+/* ============================================================
+   CAST
+   ============================================================ */
+/* the feed draws from the same roster as the profiles, so every post in
+   here belongs to an account you can actually go and visit. */
+var PEOPLE = FS.People.map(function(p){
+  return {n:p.name, i:p.ini, c:p.col, id:p.id, posts:p.posts};
+});
+
+var ADS = [
+  {t:"Doctors HATE him. Local man discovers one weird trick.", s:"#ff9a3c"},
+  {t:"Your PC may be at risk. 3 issues detected. Scan now.", s:"#4d9aff"},
+  {t:"Singles in [Location Unavailable] want to connect with you.", s:"#ff4d94"},
+  {t:"Friendspace Premium — remove ads for $4.99/month.*\n\n*does not remove ads", s:"#7b5bd6"},
+  {t:"You have been selected to receive a free iPod Nano.", s:"#5ad68a"},
+  {t:"Congratulations! You are the 1,000,000th visitor.", s:"#d6b45a"}
+];
+
+/* ============================================================
+   FEED CONSTRUCTION
+   ============================================================ */
+var uid = 0, feed = $("#feed"), postCount = 0, MAX_POSTS = 220;
+
+function person(){ return PEOPLE[Math.floor(Math.random()*PEOPLE.length)]; }
+
+function makePost(opts){
+  opts = opts || {};
+  var isAd = opts.ad;
+  var p = opts.person || person();
+  var el = document.createElement("div");
+  el.className = "fs-post";
+  el.dataset.id = ++uid;
+  el.dataset.text = opts.text || "";
+
+  var likes = Math.floor(Math.random()*400);
+  var av = '<div class="fs-av" style="background:' + (isAd ? "#888" : p.c) + '">' +
+           (isAd ? "AD" : p.i) + "</div>";
+
+  el.innerHTML =
+    (isAd ? '<div class="fs-sponsored" title="">Sponsored</div>' : "") +
+    '<div class="fs-post-h">' + av +
+      '<div class="fs-who"><div class="fs-name">' + (isAd ? "Palgorithm Partner Network" : esc(p.n)) + "</div>" +
+      '<div class="fs-when">4h ago</div></div></div>' +
+    '<div class="fs-post-body">' + esc(opts.text) + "</div>" +
+    (opts.photo ? '<div class="fs-photo" style="background:linear-gradient(135deg,' + opts.photo +
+        ');display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font:11px Helvetica">' +
+        "image not available</div>" : "") +
+    '<div class="fs-post-actions">' +
+      '<button class="fs-act like">Like</button>' +
+      '<button class="fs-act">Comment</button>' +
+      '<button class="fs-act seemore">See more</button>' +
+      '<span class="fs-likes">' + likes + " people like this</span>" +
+    "</div>";
+
+  el.dataset.likes = likes;
+  wirePost(el);
+  return el;
+}
+
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function randomPost(){
+  if (Math.random() < 0.22){
+    var a = ADS[Math.floor(Math.random()*ADS.length)];
+    return makePost({ad:true, text:a.t, photo:a.s + "," + a.s + "88"});
+  }
+  var who = person();
+  return makePost({
+    person: who,
+    text: who.posts[Math.floor(Math.random()*who.posts.length)],
+    photo: Math.random() < 0.25 ? "#b9c3d8,#7f8fb0" : null
+  });
+}
+
+function fill(n){
+  var frag = document.createDocumentFragment();
+  for (var i=0; i<n && postCount < MAX_POSTS; i++){ frag.appendChild(randomPost()); postCount++; }
+  feed.appendChild(frag);
+}
+
+/* ============================================================
+   CRIME: liking requires a long press, a confirmation, and is
+   permanent. (Roach motel, Brignull. Nielsen #3.)
+   ============================================================ */
+function wirePost(el){
+  var likeBtn = el.querySelector(".like");
+  var holdTimer = null, held = false;
+
+  likeBtn.addEventListener("pointerdown", function(){
+    if (el.dataset.liked){
+      T.unlock("regret");
+      flash(el, "Likes are permanent. This is for your protection.");
+      return;
+    }
+    held = false;
+    likeBtn.classList.add("holding");
+    likeBtn.textContent = "Keep holding…";
+    holdTimer = setTimeout(function(){
+      held = true;
+      likeBtn.classList.remove("holding");
+      likeBtn.textContent = "Like";
+      confirmLike(el, likeBtn);
+    }, 1200);
+  });
+  ["pointerup","pointerleave","pointercancel"].forEach(function(ev){
+    likeBtn.addEventListener(ev, function(){
+      clearTimeout(holdTimer);
+      if (!held && !el.dataset.liked){
+        likeBtn.classList.remove("holding");
+        likeBtn.textContent = "Like";
+      }
+    });
+  });
+
+  /* CRIME: "See more" collapses instead of expanding. */
+  el.querySelector(".seemore").addEventListener("click", function(){
+    if (el.classList.contains("collapsed")){
+      T.unlock("compression");
+      flash(el, "There is no more to see.");
+      return;
+    }
+    el.classList.add("collapsed");
+    this.textContent = "See more";
+  });
+
+  /* CRIME: disguised ads. The label is 4px, #F0F0F0 on white. */
+  var sp = el.querySelector(".fs-sponsored");
+  if (sp) sp.addEventListener("click", function(){
+    T.unlock("spotter");
+    this.style.cssText = "font-size:11px;color:#c00;padding:3px 10px;font-weight:bold";
+    this.textContent = "Sponsored (you found it)";
+  });
+}
+
+function confirmLike(el, btn){
+  var bg = document.createElement("div");
+  bg.className = "fs-modal-bg";
+  bg.innerHTML =
+    '<div class="fs-modal"><h3>Confirm Positive Sentiment</h3>' +
+    '<div class="b">You are about to express approval of this content.<br><br>' +
+    "<b>Likes are permanent and cannot be withdrawn.</b> Your reaction will be shared " +
+    "with 24 partners and with anyone who has ever met you.</div>" +
+    '<div class="f"><button class="fs-btn ghost" data-no>Cancel</button>' +
+    '<button class="fs-btn" data-yes>I understand, proceed</button></div></div>';
+  document.body.appendChild(bg);
+  bg.querySelector("[data-no]").onclick = function(){ bg.remove(); };
+  bg.querySelector("[data-yes]").onclick = function(){
+    bg.remove();
+    el.dataset.liked = "1";
+    btn.classList.add("liked");
+    btn.textContent = "Liked ✓";
+    T.unlock("persistence");
+  };
+}
+
+function flash(el, msg){
+  var f = document.createElement("div");
+  f.textContent = msg;
+  f.style.cssText = "position:absolute;right:8px;bottom:38px;background:#333;color:#fff;" +
+    "font:11px Helvetica;padding:4px 8px;border-radius:2px;z-index:5;opacity:0;" +
+    "transition:opacity .2s;pointer-events:none";
+  el.appendChild(f);
+  requestAnimationFrame(function(){ f.style.opacity = "1"; });
+  setTimeout(function(){ f.style.opacity = "0"; setTimeout(function(){ f.remove(); }, 260); }, 1700);
+}
+
+/* ============================================================
+   CRIME: new posts insert ABOVE your scroll position.
+   The middle column sets overflow-anchor:none, deliberately
+   disabling the browser feature that exists to prevent this.
+   ============================================================ */
+setInterval(function(){
+  if (document.hidden) return;
+  var p = randomPost();
+  p.classList.add("arriving");
+  feed.insertBefore(p, feed.firstChild);
+  postCount++;
+  bumpNotifications(-1);
+  setTimeout(function(){ p.classList.remove("arriving"); }, 500);
+}, 9000);
+
+/* ============================================================
+   CRIME: the feed reshuffles as you scroll, so no post can be
+   found twice. Animated with FLIP so the crime is legible —
+   an invisible reshuffle is just confusion.
+   ============================================================ */
+var scrolled = 0, lastY = window.scrollY;
+function reshuffle(){
+  var kids = [].slice.call(feed.children);
+  if (kids.length < 4) return;
+
+  /* FLIP: remember where each element was, keyed by the element itself */
+  var before = new Map();
+  kids.forEach(function(k){ before.set(k, k.getBoundingClientRect().top); });
+
+  for (var i = kids.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+  }
+  kids.forEach(function(k){ feed.appendChild(k); });
+
+  kids.forEach(function(k){
+    var was = before.get(k);
+    var now = k.getBoundingClientRect().top;
+    var dy = was - now;
+    if (!dy) return;
+    k.style.transition = "none";
+    k.style.transform = "translateY(" + dy + "px)";
+    requestAnimationFrame(function(){
+      k.style.transition = "transform .45s cubic-bezier(.2,.9,.3,1)";
+      k.style.transform = "";
+    });
+  });
+
+  banner("Your feed was refreshed to show you the best content.");
+}
+
+function banner(msg){
+  var b = $("#shuffleBanner");
+  b.textContent = msg;
+  b.style.cssText = "display:block;background:#fff9d6;border:1px solid #e8d98a;" +
+    "padding:6px 9px;font-size:11px;color:#7a6a1e;margin-bottom:9px;border-radius:2px";
+  clearTimeout(b._t);
+  b._t = setTimeout(function(){ b.style.display = "none"; }, 2600);
+}
+
+/* ============================================================
+   read/unread sizing — the posts you've already seen get bigger
+   ============================================================ */
+var seen = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (e.isIntersecting && !e.target.dataset.seen){
+      e.target._t = setTimeout(function(){
+        e.target.dataset.seen = "1";
+        e.target.style.fontSize = "15px";
+        e.target.style.transform = "scale(1.015)";
+      }, 1400);
+    } else if (!e.isIntersecting){
+      clearTimeout(e.target._t);
+    }
+  });
+}, {threshold:0.6});
+
+var watchNew = new MutationObserver(function(muts){
+  muts.forEach(function(m){
+    [].forEach.call(m.addedNodes, function(n){
+      if (n.nodeType === 1 && n.classList.contains("fs-post")){
+        seen.observe(n);
+        if (!n.dataset.seen) n.style.fontSize = "12px";
+      }
+    });
+  });
+});
+watchNew.observe(feed, {childList:true});
+
+/* ============================================================
+   CRIME: notification badge counts DOWN as you receive more.
+   ============================================================ */
+var notifCount = 47;
+function bumpNotifications(d){
+  notifCount += d;
+  var el = $("#notif");
+  el.textContent = notifCount;
+  el.classList.toggle("neg", notifCount < 0);
+  if (notifCount < 0) T.unlock("negative");
+}
+$("#bell").addEventListener("click", function(e){
+  e.preventDefault();
+  bumpNotifications(-5);
+  banner("You have no new notifications. You have fewer than that.");
+});
+
+/* ============================================================
+   CRIME: your own posts vanish, then a stranger replies to them
+   ============================================================ */
+$("#composer").addEventListener("input", function(){
+  /* the counter counts the wrong direction and is also wrong */
+  $("#charCount").textContent = this.value.length + " of 300 characters remaining";
+});
+
+$("#postBtn").addEventListener("click", function(){
+  var txt = $("#composer").value.trim();
+  if (!txt) return;
+  $("#composer").value = "";
+  $("#charCount").textContent = "0 of 300 characters remaining";
+
+  var mine = makePost({person:{n:"You", i:"YO", c:"#3b5998"}, text:txt});
+  mine.classList.add("arriving");
+  feed.insertBefore(mine, feed.firstChild);
+
+  setTimeout(function(){
+    mine.style.transition = "opacity .6s, transform .6s";
+    mine.style.opacity = "0";
+    mine.style.transform = "scale(.96)";
+    setTimeout(function(){
+      mine.remove();
+      T.unlock("void");
+      var who = person();
+      var reply = makePost({
+        person: who,
+        text: "Replying to your post — totally agree!!\n\n(original post unavailable)"
+      });
+      reply.classList.add("arriving");
+      feed.insertBefore(reply, feed.firstChild);
+      banner("Your post was published successfully and is visible to everyone except you.");
+    }, 620);
+  }, 2200);
+});
+
+$("#photoBtn").addEventListener("click", function(){
+  banner("Photo upload is temporarily unavailable. It has been temporarily unavailable since 2009.");
+});
+
+/* ============================================================
+   CRIME: search results sorted by irrelevance
+   ============================================================ */
+$("#search").addEventListener("input", function(){
+  var q = this.value.trim().toLowerCase();
+  var kids = [].slice.call(feed.children);
+  if (!q){ return; }
+  kids.map(function(k){
+    var body = (k.querySelector(".fs-post-body") || {}).textContent || "";
+    var score = 0;
+    for (var i=0;i<q.length;i++) if (body.toLowerCase().indexOf(q[i]) > -1) score++;
+    return {k:k, score:score};
+  }).sort(function(a,b){ return a.score - b.score; })   /* ascending. worst first. */
+    .forEach(function(o){ feed.appendChild(o.k); });
+  banner('Showing results for "' + this.value + '", sorted by relevance.');
+});
+
+/* ============================================================
+   CRIME: infinite scroll, with the only useful links in the
+   footer. But the loader has a 900ms debounce — outrun it and
+   you reach the bottom of Friendspace.
+   ============================================================ */
+var loadTimer = null, feedDead = false;
+window.addEventListener("scroll", function(){
+  var dy = Math.abs(window.scrollY - lastY);
+  lastY = window.scrollY;
+  scrolled += dy;
+  if (scrolled > 1400){ scrolled = 0; reshuffle(); }
+
+  if (feedDead) return;
+  var nearBottom = window.innerHeight + window.scrollY > document.body.offsetHeight - 700;
+  if (nearBottom && !loadTimer){
+    loadTimer = setTimeout(function(){
+      loadTimer = null;
+      if (!feedDead) fill(6);
+    }, 900);
+  }
+});
+
+var footWatch = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (!e.isIntersecting || feedDead) return;
+    e.target._fv = setTimeout(function(){
+      feedDead = true;
+      clearTimeout(loadTimer); loadTimer = null;
+      $("#loader").innerHTML = "You have reached the end of Friendspace. " +
+        "This was not supposed to be possible.";
+      T.unlock("speedrunner");
+    }, 300);
+  });
+  entries.forEach(function(e){ if (!e.isIntersecting) clearTimeout(e.target._fv); });
+}, {threshold:0.25});
+footWatch.observe($("#footer"));
+
+/* ============================================================
+   AMBIENT
+   ============================================================ */
+/* the like counts are a live random walk */
+setInterval(function(){
+  [].slice.call(feed.querySelectorAll(".fs-likes")).slice(0, 14).forEach(function(el){
+    var post = el.closest(".fs-post");
+    var n = +post.dataset.likes + Math.round((Math.random()-0.48) * 9);
+    post.dataset.likes = n;
+    el.textContent = n + " people like this";
+  });
+}, 1500);
+
+/* the visitor counter counts down */
+var visitors = 847;
+setInterval(function(){
+  visitors--;
+  $("#counter").textContent = String(Math.max(0, visitors)).padStart(6, "0");
+}, 4000);
+
+/* sparkle cursor trail */
+var lastSpark = 0;
+document.addEventListener("mousemove", function(e){
+  var now = Date.now();
+  if (now - lastSpark < 38) return;
+  lastSpark = now;
+  var s = document.createElement("div");
+  s.className = "fs-sparkle";
+  s.style.left = e.clientX + "px";
+  s.style.top = e.clientY + "px";
+  s.style.background = "hsl(" + Math.floor(Math.random()*360) + ",95%,65%)";
+  document.body.appendChild(s);
+  setTimeout(function(){ s.remove(); }, 900);
+});
+
+/* Top 8 + People You May Know */
+(function(){
+  var t8 = $("#top8");
+  PEOPLE.slice(0,8).forEach(function(p,i){
+    var d = document.createElement("div");
+    d.className = "slot";
+    d.innerHTML = '<span class="rank">' + (i+1) + "</span>" +
+      '<div class="fs-av" style="background:' + p.c + '">' + p.i + "</div>";
+    t8.appendChild(d);
+  });
+  var pk = $("#pymk");
+  PEOPLE.slice(4,9).forEach(function(p){
+    var d = document.createElement("div");
+    d.className = "fs-person";
+    d.innerHTML = '<div class="fs-av" style="background:' + p.c + '">' + p.i + "</div>" +
+      "<div style='min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>" +
+      esc(p.n) + "<br><span class='fs-whisper'>0 mutual friends</span></div>";
+    pk.appendChild(d);
+  });
+})();
+
+/* the Top 8 reorders itself and tells everyone */
+setInterval(function(){
+  var t8 = $("#top8");
+  var kids = [].slice.call(t8.children);
+  var a = Math.floor(Math.random()*kids.length), b = Math.floor(Math.random()*kids.length);
+  if (a === b) return;
+  var avA = kids[a].querySelector(".fs-av"), avB = kids[b].querySelector(".fs-av");
+  var tmp = avA.outerHTML;
+  avA.outerHTML = avB.outerHTML;
+  avB.outerHTML = tmp;
+  banner("Your Top 8 was reordered. All 8 people have been notified.");
+}, 23000);
+
+/* go */
+fill(9);
+
+  };
+  boots.profile = function(){
+
+"use strict";
+var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
+
+/* ============================================================
+   THE CAST — each profile carries the CSS its owner pasted in
+   around 2007. Scoped to #profile so the navigation survives;
+   everything inside it is fair game.
+   ============================================================ */
+var PROFILES = FS.People;
+
+var T8 = ["BK","A","D","TH","M","XN","AD","KP"];
+var T8C = ["#7b91c4","#c47bb4","#6f8f6f","#b58f5a","#5a86b5","#4a4a55","#b56f6f","#8a7bc4"];
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+var cur = null, visited = {}, myRank = 7, decayTimer = null;
+
+function renderFriends(){
+  var host = $("#friends"); host.innerHTML = "";
+  PROFILES.forEach(function(p){
+    var d = document.createElement("div");
+    d.className = "who" + (cur && cur.id === p.id ? " cur" : "");
+    d.innerHTML = "<div class='av' style='background:" + p.col + "'>" + p.ini + "</div>" +
+      "<div class='nm'>" + p.name + "<span class='sm'>" + p.friends + " friends</span></div>";
+    d.onclick = function(){ show(p.id); };
+    host.appendChild(d);
+  });
+}
+
+/* CRIME: comments are written straight into innerHTML. In 2009 somebody left
+   a <marquee> open and a <font> unclosed. Every comment after theirs has been
+   inside those tags ever since. This is not simulated — the tags really are
+   unbalanced and the browser really does the rest. */
+function wallHTML(list){
+  var out = "<div class='wall'>";
+  list.forEach(function(c){
+    out += "<div class='c'><span class='cn'>" + c.n + "</span> " +
+           "<span class='cd'>" + c.d + "</span><br>" + c.t + "</div>";
+  });
+  out += "<div class='c'><span class='cn'>Kyle \"Big Kyle\" Petersen</span> " +
+         "<span class='cd'>posted 3/11/2009</span><br>" +
+         "check out my band <marquee>";      /* never closed */
+  out += "<div class='c'><span class='cn'>Guy You Met At A Wedding In 2011</span> " +
+         "<span class='cd'>4h ago</span><br>hey is your wall ok</div>";
+  out += "<div class='c'><span class='cn'>Brayden Kowalczyk</span> " +
+         "<span class='cd'>4h ago</span><br>" +
+         "HAPPY BIRTHDAY<font size='7' color='#cc0000'>";   /* also never closed */
+  out += "<div class='c'><span class='cn'>Aunt Deb</span> " +
+         "<span class='cd'>4h ago</span><br>Why is everything so big now</div>";
+  out += "</div>";
+  return out;
+}
+
+function show(id){
+  var p = PROFILES.filter(function(x){ return x.id === id; })[0];
+  if (!p) p = PROFILES[0];
+  cur = p;
+  visited[p.id] = true;
+  if (Object.keys(visited).length === PROFILES.length) T.unlock("rubbernecker");
+
+  myRank = 7;
+  clearInterval(decayTimer);
+
+  /* the owner's stylesheet, applied without validation */
+  var bundled = !!document.getElementById("screen-profile");
+  $("#userCSS").textContent = bundled
+    ? p.css.replace(/#profile/g, "#screen-profile #profile")
+    : p.css;
+
+  $("#profile").innerHTML =
+    (p.css ? "<div class='note'>This member has customised their profile.</div>" : "") +
+    "<div class='hero'>" +
+      "<div class='pic' style='background:" + p.col + "'>" + p.ini + "</div>" +
+      "<div><h1>" + p.name + "</h1>" +
+      "<div class='tag'>" + p.tag + "</div>" +
+      "<div class='stats'><b id='fcount'>" + p.friends + "</b> friends &nbsp;·&nbsp; " +
+      "member since 2004 &nbsp;·&nbsp; last online <b>4h ago</b></div></div>" +
+    "</div>" +
+    "<div class='sec'>About Me</div><div class='bio'>" + p.bio + "</div>" +
+    "<div class='sec'>" + p.name.split(" ")[0] + "'s Top 8</div>" +
+    "<div class='t8' id='t8'></div>" +
+    "<div style='font-size:10px;color:#90949c;margin-top:5px'>" +
+      "Reordered nightly. Everyone is notified.</div>" +
+    "<div class='sec'>Comment Wall</div>" + wallHTML(p.comments);
+
+  renderT8();
+  renderFriends();
+  startSong(p);
+  friendDecay = p.friends;
+
+  /* CRIME: the Top 8 slides you back down while you climb it. */
+  decayTimer = setInterval(function(){
+    if (myRank >= 7 || myRank === 0) return;
+    myRank++;
+    renderT8();
+  }, 2600);
+}
+
+function renderT8(){
+  var host = $("#t8"); if (!host) return;
+  host.innerHTML = "";
+  var order = [];
+  for (var i=0;i<8;i++) order.push(i);
+  for (var i=0;i<8;i++){
+    var isMe = (i === myRank);
+    var d = document.createElement("div");
+    d.className = "s" + (isMe ? " me" : "");
+    var ini = isMe ? "YOU" : T8[i], col = isMe ? "#3b5998" : T8C[i];
+    d.innerHTML = "<span class='rk'>" + (i+1) + "</span>" +
+      "<div class='av' style='background:" + col + "'>" + ini + "</div>";
+    if (isMe) d.onclick = climb;
+    host.appendChild(d);
+  }
+}
+
+function climb(){
+  if (myRank === 0) return;
+  myRank--;
+  renderT8();
+  if (myRank === 0){
+    clearInterval(decayTimer);
+    T.unlock("climber");
+  }
+}
+
+/* CRIME: the friend count drops as you read the page. */
+var friendDecay = 0;
+window.addEventListener("scroll", function(){
+  var fc = $("#fcount"); if (!fc || friendDecay <= 0) return;
+  if (window.scrollY % 3 === 0){
+    friendDecay--;
+    fc.textContent = friendDecay;
+  }
+});
+
+/* ============================================================
+   CRIME: profile songs autoplay and STACK. Visiting six profiles
+   leaves six songs running at once. The level you landed with
+   the slingshot during sign-up governs the volume — the only
+   setting on this website that is actually honoured.
+   ============================================================ */
+var actx = null, voices = {};
+function vol(){
+  var v = parseInt(localStorage.getItem("fs_volume"), 10);
+  return isNaN(v) ? 35 : v;
+}
+function startSong(p){
+  if (voices[p.id]) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    var o = actx.createOscillator(), g = actx.createGain(), lfo = actx.createOscillator(), lg = actx.createGain();
+    o.type = "triangle"; o.frequency.value = p.note;
+    lfo.frequency.value = 4.2; lg.gain.value = 3;
+    lfo.connect(lg); lg.connect(o.frequency);
+    g.gain.value = 0.05 * vol() / 100;      /* capped, and stacking-aware */
+    o.connect(g); g.connect(actx.destination);
+    o.start(); lfo.start();
+    voices[p.id] = {o:o, lfo:lfo, g:g};
+  } catch(e){}
+  updateSongs();
+}
+function updateSongs(){
+  $("#songCount").textContent = Object.keys(voices).length;
+}
+$("#mute").addEventListener("click", function(){
+  var n = Object.keys(voices).length;
+  Object.keys(voices).forEach(function(k){
+    try { voices[k].o.stop(); voices[k].lfo.stop(); } catch(e){}
+    delete voices[k];
+  });
+  updateSongs();
+  if (n >= 6) T.unlock("silence");
+});
+
+/* go */
+renderFriends();
+if (document.getElementById("screen-profile")){
+  show("terri");                                   /* bundled: the router owns the hash */
+} else {
+  show((location.hash || "#terri").slice(1));
+  window.addEventListener("hashchange", function(){ show(location.hash.slice(1)); });
+}
+
+  };
+  boots.awards = function(){
+
+"use strict";
+var T = FS.Trophies;
+var cab = document.getElementById("cabinet");
+
+function draw(){
+  T.render(cab);
+  var total = T.registry.length;
+  document.getElementById("tally").textContent = T.count() + " / " + total;
+}
+draw();
+
+/* The reset button is a roach motel in miniature: it confirms, then
+   confirmshames, then does nothing. Your awards are permanent. */
+document.getElementById("reset").addEventListener("click", function(){
+  if (!confirm("Reset all awards?\n\nThis cannot be undone.")) return;
+  if (!confirm("Are you sure? You worked so hard for these.")) return;
+  alert("Your awards have been preserved for your convenience.");
+});
+
+document.getElementById("guest").addEventListener("click", function(e){
+  e.preventDefault();
+  alert("The guestbook is full.\n\n(last signed: 2006)");
+});
+
+/* the visitor counter goes the wrong way here too */
+var v = 847;
+setInterval(function(){
+  v--;
+  document.getElementById("v").textContent = String(Math.max(0,v)).padStart(6,"0");
+}, 4000);
+
+/* keep the cabinet live if a trophy fires in another tab */
+window.addEventListener("storage", draw);
+
+  };
+
+  function go(name){
+    if (!boots[name]) name = "signup";
+    [].forEach.call(document.querySelectorAll(".screen"), function(el){
+      el.classList.toggle("on", el.id === "screen-" + name);
+    });
+    [].forEach.call(document.querySelectorAll("[data-nav]"), function(a){
+      a.style.background = (a.dataset.nav === name) ? "#4a6bb0" : "";
+    });
+    if (!booted[name]){
+      booted[name] = 1;
+      try { boots[name](); } catch (e) { console.error("boot " + name, e); }
+    }
+    window.scrollTo(0, 0);
+  }
+
+  window.addEventListener("hashchange", function(){ go(location.hash.slice(1).split("/")[0]); });
+  go((location.hash || "#signup").slice(1).split("/")[0]);
+})();
+</script>

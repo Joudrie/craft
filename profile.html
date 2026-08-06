@@ -157,7 +157,10 @@ function show(id){
   clearInterval(decayTimer);
 
   /* the owner's stylesheet, applied without validation */
-  $("#userCSS").textContent = p.css;
+  var bundled = !!document.getElementById("screen-profile");
+  $("#userCSS").textContent = bundled
+    ? p.css.replace(/#profile/g, "#screen-profile #profile")
+    : p.css;
 
   $("#profile").innerHTML =
     (p.css ? "<div class='note'>This member has customised their profile.</div>" : "") +
@@ -266,8 +269,12 @@ $("#mute").addEventListener("click", function(){
 
 /* go */
 renderFriends();
-show((location.hash || "#terri").slice(1));
-window.addEventListener("hashchange", function(){ show(location.hash.slice(1)); });
+if (document.getElementById("screen-profile")){
+  show("terri");                                   /* bundled: the router owns the hash */
+} else {
+  show((location.hash || "#terri").slice(1));
+  window.addEventListener("hashchange", function(){ show(location.hash.slice(1)); });
+}
 </script>
 </body>
 </html>
