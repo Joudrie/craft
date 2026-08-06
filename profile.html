@@ -4,6 +4,7 @@
 <title>Untitled Document</title>
 <link rel="stylesheet" href="assets/friendspace.css">
 <script src="assets/trophies.js"></script>
+<script src="assets/people.js"></script>
 <style>
 /* Chrome that lives OUTSIDE #profile, so that no matter what a user has
    pasted into their stylesheet, you can always leave. This is the escape
@@ -12,7 +13,7 @@ body{min-width:0;background:#e9ebee}
 .page{max-width:1000px;margin:9px auto;padding:0 8px 60px;display:grid;
       grid-template-columns:190px 1fr;gap:11px;align-items:start}
 .rail{position:sticky;top:52px;z-index:10}
-.rail .fs-card-b{padding:6px}
+.rail .fs-card-b{padding:6px;max-height:58vh;overflow-y:auto}
 .who{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:2px;cursor:pointer;font-size:12px}
 .who:hover{background:#eef2fa}
 .who.cur{background:#3b5998;color:#fff}
@@ -99,102 +100,7 @@ var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
    around 2007. Scoped to #profile so the navigation survives;
    everything inside it is fair game.
    ============================================================ */
-var PROFILES = [
-  {
-    id:"terri", name:"Terri from HR", ini:"TH", col:"#b58f5a", friends:41, note:440,
-    tag:"Human Resources Business Partner II",
-    bio:"Hello! I use Friendspace to stay connected with colleagues.\n\nPlease direct all " +
-        "workplace concerns to the appropriate channel and not to this profile.\n\nGo team!",
-    css:"",  /* never customised anything. the only readable page here. */
-    comments:[
-      {n:"Brayden Kowalczyk", d:"4h ago", t:"happy work anniversary!!"},
-      {n:"Dad", d:"4h ago", t:"Is this the Terri from the thing"}
-    ]
-  },
-  {
-    id:"nightshade", name:"xXx_Nightshade_xXx", ini:"XN", col:"#2a2a33", friends:666, note:311,
-    tag:"the darkness is my only friend",
-    bio:"dont bother reading this you cant see it anyway\n\nthats the point",
-    /* set the text colour one shade off the background. a real thing people did. */
-    css:"#profile{background:#0a0a0e;color:#16161c}" +
-        "#profile a{color:#131319}" +
-        "#profile *{font-family:Papyrus,fantasy!important;cursor:crosshair}" +
-        "#profile .sec{border-bottom-color:#1a1a22;color:#17171e}" +
-        "#profile .tag{color:#141419}" +
-        "#profile .wall .c{border-bottom-color:#111118}" +
-        "#profile .wall .c .cn{color:#181820}",
-    comments:[
-      {n:"Aunt Deb", d:"4h ago", t:"Honey I cant read any of this"},
-      {n:"MARCUS_1987", d:"4h ago", t:"sick layout bro"}
-    ]
-  },
-  {
-    id:"ashleigh", name:"★·.·´¯`·.·★ Ashleigh ★·.·´¯`·.·★", ini:"A", col:"#c47bb4", friends:1204, note:523,
-    tag:"~*~ liVe LaUgH lOvE ~*~",
-    bio:"hey everyone!!! welcome 2 my page!!! ♥♥♥\n\nplz sign my wall!!! ♥",
-    css:"#profile{background:#ff66cc;color:#5a005a;" +
-        "background-image:radial-gradient(2px 2px at 12px 18px,#fff,transparent)," +
-        "radial-gradient(2px 2px at 60px 44px,#ffff66,transparent);background-size:74px 74px}" +
-        "#profile *{font-family:'Comic Sans MS',cursive!important;text-shadow:2px 2px 0 #ff00ff;" +
-        "letter-spacing:2px}" +
-        "#profile h1{transform:rotate(-3deg);color:#fff}" +
-        "#profile .sec{border-bottom:3px dashed #ffff00;color:#fff}" +
-        "#profile .bio{background:rgba(255,255,255,.35);padding:8px;transform:rotate(1deg)}" +
-        "#profile .wall .c{border-bottom:2px dotted #ffff66}",
-    comments:[
-      {n:"Brayden Kowalczyk", d:"4h ago", t:"signed ur wall ♥ sign mine back"},
-      {n:"Terri from HR", d:"4h ago", t:"Ashleigh could you please make this readable for the newsletter"}
-    ]
-  },
-  {
-    id:"dad", name:"Dad", ini:"D", col:"#6f8f6f", friends:12, note:392,
-    tag:"Retired",
-    /* pasted the stylesheet into the About Me box instead of the CSS box.
-       the page is fine. the bio is a stylesheet. */
-    bio:"body { background-color: blue; }\n" +
-        "font { font-family: Arial; size: 3; }\n" +
-        ".profile { width: 100%; }\n" +
-        "TABLE.friendSpace { border: 1px solid; }\n" +
-        "/* paste this in the box */\n" +
-        "H1 { color: #000080; }\n" +
-        "marquee { speed: fast; }\n" +
-        "\nSusan is this right",
-    css:"",
-    comments:[
-      {n:"Your Cousin's Wife", d:"4h ago", t:"Uncle Rick that goes in the OTHER box"},
-      {n:"Dad", d:"4h ago", t:"Testing"},
-      {n:"Dad", d:"4h ago", t:"Testing 2"}
-    ]
-  },
-  {
-    id:"deb", name:"Aunt Deb", ini:"AD", col:"#b56f6f", friends:88, note:349,
-    tag:"Blessed 🙏",
-    bio:"Welcome to my page! I love my family, my garden, and my grandbabies.\n\n" +
-        "I do not know why the page is so wide. I did not do that.",
-    /* uploaded a background at full camera resolution and set it to not repeat */
-    css:"#profile{min-width:3400px;" +
-        "background:linear-gradient(120deg,#cfe8c0,#f0e4b8 40%,#e8c0c0);" +
-        "background-size:3400px 100%;background-repeat:no-repeat}",
-    comments:[
-      {n:"Dad", d:"4h ago", t:"Deb your page goes sideways"},
-      {n:"Aunt Deb", d:"4h ago", t:"I know Rick"}
-    ]
-  },
-  {
-    id:"marcus", name:"MARCUS_1987", ini:"M", col:"#5a86b5", friends:203, note:293,
-    tag:"keeping it real since 1987",
-    bio:"whats up friendspace. hit me up. i fixed my layout last night it looks way better now",
-    /* set display:inline on everything and never looked at it again */
-    css:"#profile *{display:inline!important}" +
-        "#profile{display:block!important;line-height:2.1}" +
-        "#profile .pic,#profile .t8 .av{width:40px!important;height:22px!important;" +
-        "line-height:22px!important;font-size:10px!important}",
-    comments:[
-      {n:"xXx_Nightshade_xXx", d:"4h ago", t:"bro what happened"},
-      {n:"MARCUS_1987", d:"4h ago", t:"looks fine on my end"}
-    ]
-  }
-];
+var PROFILES = FS.People;
 
 var T8 = ["BK","A","D","TH","M","XN","AD","KP"];
 var T8C = ["#7b91c4","#c47bb4","#6f8f6f","#b58f5a","#5a86b5","#4a4a55","#b56f6f","#8a7bc4"];

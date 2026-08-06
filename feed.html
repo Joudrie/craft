@@ -5,6 +5,7 @@
 <title>Untitled Document</title>
 <link rel="stylesheet" href="assets/friendspace.css">
 <script src="assets/trophies.js"></script>
+<script src="assets/people.js"></script>
 </head>
 <body>
 
@@ -130,45 +131,11 @@ var $ = function(s){ return document.querySelector(s); };
 /* ============================================================
    CAST
    ============================================================ */
-var PEOPLE = [
-  {n:"Brayden Kowalczyk", i:"BK", c:"#7b91c4"},
-  {n:"★·.·´¯`·.·★ Ashleigh ★·.·´¯`·.·★", i:"A", c:"#c47bb4"},
-  {n:"Dad", i:"D", c:"#6f8f6f"},
-  {n:"Terri from HR", i:"TH", c:"#b58f5a"},
-  {n:"MARCUS_1987", i:"M", c:"#5a86b5"},
-  {n:"xXx_Nightshade_xXx", i:"XN", c:"#4a4a55"},
-  {n:"Aunt Deb", i:"AD", c:"#b56f6f"},
-  {n:'Kyle "Big Kyle" Petersen', i:"KP", c:"#8a7bc4"},
-  {n:"Your Cousin's Wife", i:"CW", c:"#7bc4a8"},
-  {n:"Guy You Met At A Wedding In 2011", i:"GW", c:"#a8a85a"}
-];
-
-var POSTS = [
-  "Does anyone know a good plumber",
-  "Happy birthday to my beautiful daughter who does not have a Friendspace and will never see this",
-  "LIKE if you can spot the 7\n\n3333333333333333333\n3333333333733333333\n3333333333333333333",
-  "Just wanted to say thank you to everyone. You know why.",
-  "This is a test post. Please ignore.\n\nSent from my Friendspace",
-  "sorry everyone i was hacked. do not click the link i sent. also do not click this link",
-  "AMEN 🙏",
-  "Well, that's that.",
-  "Anyone else's Friendspace acting funny today or is it just mine",
-  "13 years ago today I posted this. Sharing it again so you can all experience it a second time.",
-  "I don't know how to use this yet, my grandson set it up. Testing 1 2 3.",
-  "PSA: if you can read this, my account is working. If you cannot read this, please let me know.",
-  "Not to be dramatic but I will be taking a break from Friendspace. See you all in about 40 minutes.",
-  "Who keeps moving me to slot 6",
-  "throwback to when this website worked",
-  "My condolences to the family. She was a wonderful car.",
-  "Update: found the plumber. He was in my Top 8 the whole time.",
-  "does anybody know how to delete an account. asking for me",
-  "Reminder that the annual potluck is either this Saturday or last Saturday.",
-  "I have read the Terms of Service. All 30,000 words. Ask me anything.",
-  "why is the scrollbar doing that",
-  "Congratulations to my nephew on his graduation from the thing he graduated from!!!",
-  "Selling: one (1) couch. Free. Must take today. Also I've moved.",
-  "Just liked a post and it took 11 seconds. Living the dream."
-];
+/* the feed draws from the same roster as the profiles, so every post in
+   here belongs to an account you can actually go and visit. */
+var PEOPLE = FS.People.map(function(p){
+  return {n:p.name, i:p.ini, c:p.col, id:p.id, posts:p.posts};
+});
 
 var ADS = [
   {t:"Doctors HATE him. Local man discovers one weird trick.", s:"#ff9a3c"},
@@ -230,8 +197,10 @@ function randomPost(){
     var a = ADS[Math.floor(Math.random()*ADS.length)];
     return makePost({ad:true, text:a.t, photo:a.s + "," + a.s + "88"});
   }
+  var who = person();
   return makePost({
-    text: POSTS[Math.floor(Math.random()*POSTS.length)],
+    person: who,
+    text: who.posts[Math.floor(Math.random()*who.posts.length)],
     photo: Math.random() < 0.25 ? "#b9c3d8,#7f8fb0" : null
   });
 }

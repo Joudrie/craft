@@ -70,20 +70,38 @@ Plus the slingshot volume control, the backwards-only calendar, the 68-key keybo
 that reshuffles after every press, 700ms-per-character email, the fleeing checkbox
 (catch it with Tab + Space), and an eight-second hold-still submit.
 
-## Profiles
+## The membership
 
-Friendspace lets members paste raw CSS into their profile and does not validate it —
-historically accurate, and structurally useful: **every profile is broken a different
-way, in canon.**
+`assets/people.js` holds **25 accounts**, shared by the feed and the profiles — so
+every post in the feed belongs to somebody you can go and visit, and everything they
+say is in character. Verified: 69 sampled posts, zero authorship mismatches.
+
+Most are trash by *content*. Nine are trash by *stylesheet*, because Friendspace lets
+members paste raw CSS into their profile and does not validate it — historically
+accurate, and structurally useful: **every broken profile is broken in canon.**
 
 | Profile | What they did to it |
 |---|---|
 | **Terri from HR** | Never customised anything. The only readable page here. |
-| **xXx_Nightshade_xXx** | Set the text one shade off the background. Measured 1.10:1 contrast — WCAG requires 4.5:1. Also Papyrus. |
-| **Ashleigh** | Hot pink, Comic Sans, glitter tiling, rotated headings, `text-shadow` on every element. |
+| **xXx_Nightshade_xXx** | Text one shade off the background. Measured 1.10:1 — WCAG requires 4.5:1. Also Papyrus. |
+| **Ashleigh** | Hot pink, Comic Sans, glitter tiling, rotated headings, `text-shadow` on everything. |
 | **Dad** | Pasted the stylesheet into the About Me box instead of the CSS box. Page is fine. Bio is a stylesheet, ending "Susan is this right". |
-| **Aunt Deb** | Background at full camera resolution. Profile is 3,400px wide and the page scrolls sideways. She does not know why. |
-| **MARCUS_1987** | `* { display: inline }`. The entire profile is now one paragraph. His comment: "looks fine on my end". |
+| **Aunt Deb** | Background at full camera resolution. Profile is 3,400px wide, page scrolls sideways. She does not know why. |
+| **MARCUS_1987** | `* { display: inline }`. Entire profile is one paragraph. His comment: "looks fine on my end". |
+| **MoonRiver Wellness ✨** | Brush Script, everything forced lowercase, 2.4 line-height. "not an mlm. an opportunity." |
+| **BIG SAVINGS DAILY!!!** | Impact, all caps, pure yellow, pulsing headline. "ONLY 2 LEFT!!! (posted 2013)" |
+| **Rick's Small Engine Repair** | Logo stretched to 230×60, `letter-spacing:-2px`, everything centred. Closed since 2011. Still posting. |
+| **Gen. Marcus Steele** | Blurred profile photo, text unselectable. "I am unable to video call due to military regulations." |
+| **SEVERED CIRCUIT** | Metalcore band page. New EP out now on MySpace. Shows: none. Last updated 2009. |
+
+Plus: **Dad (2)** ("sorry everyone i got hacked this is my new account"), **Jessica
+Williams ✔** (4 friends, the checkmark is part of her display name), **Braydon |
+Financial Freedom 📈**, **Gerald Pruitt** (posts "google" and "weather tomorrow" as
+statuses), **Marlene Hodge** (comments "Beautiful!" on a post about a flood),
+**Walter Kessler** (posted his password as a status; when told, changed it to
+`Buick1975!`), **@tyler.builds** (automated cross-poster, every link expired),
+**Coach Danny R.** (only posts final scores), **Patricia Nunn** ("So sorry for your
+loss ♥" on a photo of a couch), and **Sharon Whitaker** (minions).
 
 **The comment wall is genuinely unbalanced HTML, not a simulation of one.** A comment
 from 3/11/2009 opens a `<marquee>` and never closes it; another opens a `<font
