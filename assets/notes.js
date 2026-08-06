@@ -184,11 +184,17 @@
       real:"Amazon internally named its Prime cancellation flow the 'Iliad Flow', after Homer's epic. The FTC sued in 2023; it ended in a $2.5 billion settlement — the largest of its kind." },
 
     /* ---------------- site-wide ---------------- */
-    { screen:"Everywhere", sel:"#fs-grav",
-      crime:"The native scrollbar is replaced with one that has mass. Left alone it sags to the bottom of the page; thrown, it carries momentum and bounces off the end stops. On a phone it follows whichever way you tilt.",
+    { screen:"Everywhere", sel:"#fs-sb",
+      crime:"The native scrollbar is replaced, and each stratum gets a different broken one: it has mass on the feed, squirts out from under the cursor in Legal, retracts like a tape measure on sign-up, lags in eight staggered segments on Profiles, is 3px wide with both arrows reversed in Settings, and sits on the wrong side of the window in Awards.",
       law:"WCAG 2.2.2 (Pause, Stop, Hide): content that moves automatically for more than five seconds needs a way to stop it. Also user control — Nielsen #3.",
-      fix:"Use the platform scrollbar. It is one of the few controls every user already knows how to operate.",
+      fix:"Use the platform scrollbar. It is one of the few controls every single user already knows how to operate, and rebuilding it is almost never worth it.",
       real:"No company has shipped literally this — but scroll hijacking, where a marketing site overrides your wheel to run its own animation, is extremely real and reliably the most-complained-about thing on any site that does it." },
+
+    { screen:"Everywhere", sel:"#postBtn",
+      crime:"Every button on the site has a personality, assigned by hashing its identity: it dodges your cursor once, or demands confirmation, or wants a 450ms hold, or shrinks each time you hover, or drifts around its container, or waits 700ms before acting. Roughly one in seven is honest.",
+      law:"Consistency and standards — Nielsen #4. Fitts's Law for the ones that move or shrink. And the Doherty Threshold for the ones that stall.",
+      fix:"A button should do its thing, once, immediately, where you clicked it.",
+      real:"Each of these is real somewhere: confirm-on-everything dialogs, buttons that shift as late content loads (the single most common cause of misclicks on the web), and unresponsive controls that give no feedback while working. Assembling them onto one page is the only invention here." },
 
     { screen:"Everywhere", sel:"#fs-nowplaying",
       crime:"A song plays at you from the moment you interact with the page. There is no mute here. The only volume control on the entire website is a slingshot on the sign-up form.",

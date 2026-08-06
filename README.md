@@ -30,7 +30,8 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
 | `assets/people.js` | The membership. 25 accounts, shared by the feed and the profiles. |
 | `assets/notes.js` | Design Notes — 30 annotations naming the principle each crime breaks. |
-| `assets/gravity.js` | The scrollbar, which has mass. |
+| `assets/scrollbars.js` | Six broken scrollbars, one per stratum. |
+| `assets/buttons.js` | Every button, given its own personality. |
 | `assets/ambient.js` | The profile song you cannot mute from here. |
 | `build.py` | Bundles all six screens into one self-contained `friendspace.html`. |
 
@@ -179,9 +180,23 @@ resets. Buried in the text: a clause claiming your immortal soul, one granting v
 power over your children's names, and Clause 15.3, which states that the account
 deletion facility "is provided for illustrative purposes and does not delete accounts."
 
-## The scrollbar has gravity
+## Six broken scrollbars
 
-The native scrollbar is gone. The replacement has mass:
+The native scrollbar is gone everywhere, and **each stratum gets its own defect**:
+
+| Screen | Scrollbar | What it does |
+|---|---|---|
+| Feed | **gravity** | Has mass. Sags when idle, carries momentum, bounces off the end stops. |
+| Legal | **soap** | Squirts out from under the cursor. Drag fast and you miss by 724px; drag slowly and you miss by 246px. Patience pays. |
+| Sign-up | **tape** | A retracting tape measure. Let go and it snaps back to the top. |
+| Profiles | **centipede** | Eight segments with staggered lag; the page follows the laziest one. |
+| Settings | **win95** | 3px wide, with arrow buttons at both ends. **▲ scrolls down. ▼ scrolls up.** Verified in both directions. |
+| Awards | **wrongside** | On the left. In rainbow. For no reason. |
+
+The wheel, keyboard and touch always scroll normally — the bars only misbehave when
+you use *them*. That's the whole toy/wall line.
+
+### The gravity one in detail
 
 - **Leave it alone and it sags** toward the bottom of the page, accelerating gently.
 - **Throw it** and it carries momentum, overshoots, and **bounces off the end stops**
@@ -195,6 +210,29 @@ unaffected and only inattention is punished. Opening Design Notes pauses it enti
 
 **🏆 Escape Velocity** — throw the thumb from the bottom and reach the top on momentum
 alone. You have to release below the 25% mark, so dragging there by hand doesn't count.
+
+## Every button is bad
+
+Each button's personality is assigned by **hashing its identity**, so a given button
+behaves the same way every time you meet it — and all "Comment" buttons behave alike.
+Randomising per click would just read as breakage; consistency makes it learnable.
+
+| Personality | Behaviour |
+|---|---|
+| **flinch** | Dodges your cursor — once. Then it gives up, so it's always catchable. |
+| **confirm** | Becomes "Are you sure?" on the first click, fires on the second. |
+| **hold** | Wants 450ms of commitment, with a fill to show progress. |
+| **shrink** | Gets smaller every time you hover, down to a floor of 62%. |
+| **drift** | Wanders around its container, capped at ±11px so it stays reachable. |
+| **lag** | Shows "…" and acts 700ms later. |
+| **honest** | Roughly one in seven. Left completely alone. |
+
+**Nothing here can stop you doing the thing** — only delay or embarrass you. Exempt:
+the Design Notes panel, the 68-key password keyboard, and anything that already
+carries its own hostile behaviour and would conflict (the Like button's 1.2s hold, the
+hold-to-submit, the calendar's auto-repeat, and the phone slider's zoom escape hatch).
+
+**🏆 Patience** — successfully operate all six kinds.
 
 ## The song you cannot turn off
 

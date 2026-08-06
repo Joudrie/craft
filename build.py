@@ -76,7 +76,8 @@ def main():
     trophies   = read("assets/trophies.js")
     people     = read("assets/people.js")
     notes      = read("assets/notes.js")
-    gravity    = read("assets/gravity.js")
+    gravity    = read("assets/scrollbars.js")
+    buttons    = read("assets/buttons.js")
     ambient    = read("assets/ambient.js")
 
     styles, bodies, scripts, ids = [], [], {}, {}
@@ -125,6 +126,9 @@ def main():
 </script>
 <script>
 {gravity}
+</script>
+<script>
+{buttons}
 </script>
 <script>
 {ambient}
