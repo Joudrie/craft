@@ -76,6 +76,8 @@ def main():
     trophies   = read("assets/trophies.js")
     people     = read("assets/people.js")
     notes      = read("assets/notes.js")
+    gravity    = read("assets/gravity.js")
+    ambient    = read("assets/ambient.js")
 
     styles, bodies, scripts, ids = [], [], {}, {}
     for key, fname, _label in PAGES:
@@ -120,6 +122,12 @@ def main():
 </script>
 <script>
 {notes}
+</script>
+<script>
+{gravity}
+</script>
+<script>
+{ambient}
 </script>
 
 <div class="fs-header"><div class="fs-header-in">

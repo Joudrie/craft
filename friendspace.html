@@ -618,6 +618,7 @@ a:visited{color:#5a4b8a}
     { id: "climber",      name: "Social Climber", desc: "Reach position #1 in someone's Top 8.",              where: "Profiles" },
     { id: "rubbernecker", name: "Rubbernecker",   desc: "Visit every profile. Look at what they've done.",    where: "Profiles" },
     { id: "silence",      name: "Silence",        desc: "Stop all six profile songs at once.",               where: "Profiles" },
+    { id: "escapevelocity", name:"Escape Velocity", desc:"Fling the scrollbar from the bottom to the top in one throw.", where:"Anywhere" },
     { id: "critic",       name: "Critic",         desc: "Find the Design Notes. Learn why all of this is wrong.", where: "Anywhere" },
     // the lie
     { id: "ghost",        name: "Ghost",          desc: "Successfully delete your account.",                  where: "Settings", impossible: true }
@@ -1305,6 +1306,19 @@ a:visited{color:#5a4b8a}
       fix:"Cancellation should take no more steps than signing up did. This is now law in several jurisdictions.",
       real:"Amazon internally named its Prime cancellation flow the 'Iliad Flow', after Homer's epic. The FTC sued in 2023; it ended in a $2.5 billion settlement — the largest of its kind." },
 
+    /* ---------------- site-wide ---------------- */
+    { screen:"Everywhere", sel:"#fs-grav",
+      crime:"The native scrollbar is replaced with one that has mass. Left alone it sags to the bottom of the page; thrown, it carries momentum and bounces off the end stops. On a phone it follows whichever way you tilt.",
+      law:"WCAG 2.2.2 (Pause, Stop, Hide): content that moves automatically for more than five seconds needs a way to stop it. Also user control — Nielsen #3.",
+      fix:"Use the platform scrollbar. It is one of the few controls every user already knows how to operate.",
+      real:"No company has shipped literally this — but scroll hijacking, where a marketing site overrides your wheel to run its own animation, is extremely real and reliably the most-complained-about thing on any site that does it." },
+
+    { screen:"Everywhere", sel:"#fs-nowplaying",
+      crime:"A song plays at you from the moment you interact with the page. There is no mute here. The only volume control on the entire website is a slingshot on the sign-up form.",
+      law:"WCAG 1.4.2 (Audio Control): audio that plays automatically for more than three seconds must have a mechanism to pause, stop, or control its volume independently.",
+      fix:"Don't autoplay audio. If you must, put the control next to the sound, not on another page.",
+      real:"MySpace profile songs autoplayed and stacked when you opened several profiles in tabs. WCAG 1.4.2 exists in large part because of that era of the web." },
+
     /* ---------------- legal ---------------- */
     { screen:"Legal", sel:"#pane",
       crime:"28,778 words shown six lines at a time, with the scroll wheel inverted and a reset to the top every 14 seconds.",
@@ -1557,6 +1571,338 @@ a:visited{color:#5a4b8a}
 
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
   else boot();
+
+})(window);
+
+</script>
+<script>
+/* Friendspace — the scrollbar obeys gravity.
+ *
+ * The native scrollbar is replaced with one that has mass. Leave it alone and it
+ * sags toward the bottom of the page. Grab it and fling it and it carries
+ * momentum, overshoots, and bounces off the end stops. On a phone it uses
+ * DeviceOrientation, so whichever way you tilt the handset is downhill.
+ *
+ * Kept a toy rather than a wall by one rule: gravity only acts when you are not
+ * scrolling. Any wheel, key or touch scroll buys a grace period, so reading is
+ * unaffected and only inattention is punished. Design Notes pauses it entirely.
+ */
+(function (global) {
+  "use strict";
+
+  var GRAV     = 0.055,   /* px per frame^2 — a sag, not a plummet */
+      DAMP     = 0.994,
+      BOUNCE   = -0.34,
+      MAXV     = 26,
+      GRACE    = 1500;    /* ms of stillness before gravity takes hold again */
+
+  var vel = 0, grabbed = false, graceUntil = 0, tiltG = null;
+  var track, thumb, raf = null, flingFrom = null;
+
+  function docMax(){
+    return Math.max(0, document.documentElement.scrollHeight - global.innerHeight);
+  }
+
+  var CSS = [
+    /* the real one goes away */
+    "html{scrollbar-width:none;-ms-overflow-style:none}",
+    "html::-webkit-scrollbar{display:none}",
+
+    "#fs-grav{position:fixed;top:0;right:0;bottom:0;width:15px;z-index:9500;",
+      "background:linear-gradient(90deg,rgba(0,0,0,.05),rgba(0,0,0,.11));",
+      "border-left:1px solid rgba(0,0,0,.13)}",
+    "#fs-grav-thumb{position:absolute;left:2px;right:2px;border-radius:6px;",
+      "background:linear-gradient(180deg,#6d84b4,#3b5998 55%,#2b4278);",
+      "border:1px solid #29487d;box-shadow:inset 0 1px 0 rgba(255,255,255,.35);",
+      "cursor:grab;touch-action:none}",
+    "#fs-grav-thumb:active{cursor:grabbing}",
+    "#fs-grav-thumb.fast{background:linear-gradient(180deg,#e8b04b,#d6772b 60%,#b8541c);border-color:#8a3d12}",
+    "#fs-grav-tilt{position:fixed;right:19px;bottom:16px;z-index:9501;background:#22201d;color:#fff;",
+      "border:none;border-radius:7px;padding:8px 12px;font:600 12px system-ui,sans-serif;cursor:pointer}",
+    "@media (prefers-reduced-motion:reduce){#fs-grav{display:none}}"
+  ].join("");
+
+  function inject(){
+    if (document.getElementById("fs-grav-css")) return;
+    var s = document.createElement("style");
+    s.id = "fs-grav-css";
+    s.textContent = CSS;
+    (document.head || document.documentElement).appendChild(s);
+  }
+
+  function build(){
+    inject();
+    track = document.createElement("div");
+    track.id = "fs-grav";
+    thumb = document.createElement("div");
+    thumb.id = "fs-grav-thumb";
+    thumb.setAttribute("role", "scrollbar");
+    thumb.setAttribute("aria-label", "Scrollbar (subject to gravity)");
+    track.appendChild(thumb);
+    document.body.appendChild(track);
+
+    thumb.addEventListener("pointerdown", function(e){
+      grabbed = true;
+      vel = 0;
+      flingFrom = pct();
+      thumb.setPointerCapture(e.pointerId);
+      e.preventDefault();
+    });
+
+    thumb.addEventListener("pointermove", function(e){
+      if (!grabbed) return;
+      var r = track.getBoundingClientRect();
+      var th = thumb.offsetHeight;
+      var y  = e.clientY - r.top - th / 2;
+      var p  = Math.max(0, Math.min(1, y / (r.height - th)));
+      var target = p * docMax();
+      vel = (target - global.scrollY) * 0.42;      /* carried into the fling */
+      global.scrollTo(0, target);
+    });
+
+    ["pointerup","pointercancel"].forEach(function(ev){
+      thumb.addEventListener(ev, function(){
+        if (!grabbed) return;
+        grabbed = false;
+        vel = Math.max(-MAXV, Math.min(MAXV, vel));
+        /* a throw from the bottom that reaches the top is worth something */
+        if (flingFrom > 0.7 && vel < -6 && pct() > 0.25) watchEscape();
+        flingFrom = null;
+      });
+    });
+
+    /* ordinary scrolling buys you peace */
+    ["wheel","keydown","touchmove"].forEach(function(ev){
+      global.addEventListener(ev, function(){
+        graceUntil = Date.now() + GRACE;
+        if (!grabbed) vel = 0;
+      }, { passive:true });
+    });
+
+    global.addEventListener("resize", layout);
+    layout();
+    tick();
+  }
+
+  function pct(){
+    var m = docMax();
+    return m <= 0 ? 0 : global.scrollY / m;
+  }
+
+  function layout(){
+    if (!track) return;
+    var h = track.clientHeight;
+    var ratio = global.innerHeight / Math.max(1, document.documentElement.scrollHeight);
+    var th = Math.max(32, Math.round(h * Math.min(1, ratio)));
+    thumb.style.height = th + "px";
+    thumb.style.top = Math.round(pct() * (h - th)) + "px";
+  }
+
+  function watchEscape(){
+    var t0 = Date.now();
+    (function look(){
+      if (pct() < 0.05){
+        if (global.FS && FS.Trophies) FS.Trophies.unlock("escapevelocity");
+        return;
+      }
+      if (Date.now() - t0 < 3400) requestAnimationFrame(look);
+    })();
+  }
+
+  function notesOpen(){
+    return !!(global.FS && FS.Notes && FS.Notes.isOn && FS.Notes.isOn());
+  }
+
+  function tick(){
+    var max = docMax();
+    if (max > 0 && !grabbed && Date.now() > graceUntil && !notesOpen()){
+      var g = (tiltG === null) ? GRAV : tiltG;
+      vel = Math.max(-MAXV, Math.min(MAXV, (vel + g) * DAMP));
+      var next = global.scrollY + vel;
+      if (next <= 0){ next = 0; vel *= BOUNCE; }
+      else if (next >= max){ next = max; vel *= BOUNCE; }
+      if (Math.abs(vel) > 0.05) global.scrollTo(0, next);
+    }
+    if (thumb){
+      thumb.classList.toggle("fast", Math.abs(vel) > 9);
+      layout();
+    }
+    raf = requestAnimationFrame(tick);
+  }
+
+  /* ---- phones: whichever way you tilt is downhill ---- */
+  function onTilt(e){
+    if (e.beta === null || e.beta === undefined) return;
+    /* beta is front-to-back tilt in degrees; upright is ~90 */
+    var lean = Math.sin((e.beta - 90) * Math.PI / 180);
+    tiltG = lean * 0.34;
+  }
+
+  function offerTilt(){
+    var DOE = global.DeviceOrientationEvent;
+    if (!DOE) return;
+    if (typeof DOE.requestPermission === "function"){
+      /* iOS needs a gesture; offer a button rather than nagging */
+      inject();
+      var b = document.createElement("button");
+      b.id = "fs-grav-tilt";
+      b.textContent = "Enable tilt scrolling";
+      b.onclick = function(){
+        DOE.requestPermission().then(function(res){
+          if (res === "granted") global.addEventListener("deviceorientation", onTilt);
+          b.remove();
+        }).catch(function(){ b.remove(); });
+      };
+      document.body.appendChild(b);
+    } else {
+      global.addEventListener("deviceorientation", onTilt);
+    }
+  }
+
+  function boot(){
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    build();
+    if (matchMedia("(pointer: coarse)").matches) offerTilt();
+  }
+
+  global.FS = global.FS || {};
+  global.FS.Gravity = {
+    stop: function(){ cancelAnimationFrame(raf); if (track) track.remove(); },
+    velocity: function(){ return vel; },
+    grace: function(ms){ graceUntil = Date.now() + (ms || GRACE); }
+  };
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
+
+})(window);
+
+</script>
+<script>
+/* Friendspace — the profile song that plays whether you like it or not.
+ *
+ * A tinny sequenced loop, synthesised rather than shipped as an asset. It exists
+ * to be the setup: the site plays music at you, and the only volume control on
+ * the entire website is a slingshot on the sign-up form. One joke with a setup
+ * and a punchline, rather than two separate annoyances.
+ *
+ * The level you landed with the slingshot is stored in localStorage and honoured
+ * here — the only setting on this website that is.
+ */
+(function (global) {
+  "use strict";
+
+  var CAP = 0.085;                 /* irritating, not harmful */
+  var actx = null, master = null, timer = null, started = false, step = 0;
+
+  /* a deliberately cheap little motif, in semitones from A3 */
+  var LEAD = [0, 4, 7, 12, 7, 4, 0, -5, 0, 4, 7, 11, 7, 4, 0, 2];
+  var BASS = [0, null, -5, null, -3, null, -5, null];
+  var BPM  = 104, STEP = 60 / BPM / 2;      /* eighth notes */
+
+  function hz(semi){ return 220 * Math.pow(2, semi / 12); }
+
+  function level(){
+    var v = parseInt(localStorage.getItem("fs_volume"), 10);
+    if (isNaN(v)) v = 55;                    /* nobody has aimed yet */
+    return CAP * (v / 100);
+  }
+
+  function blip(freq, at, dur, type, gain){
+    var o = actx.createOscillator(), g = actx.createGain();
+    o.type = type;
+    o.frequency.setValueAtTime(freq, at);
+    g.gain.setValueAtTime(0.0001, at);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0002, gain), at + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, at + dur);
+    o.connect(g); g.connect(master);
+    o.start(at); o.stop(at + dur + 0.02);
+  }
+
+  function schedule(){
+    var at = actx.currentTime + 0.06;
+    var lead = LEAD[step % LEAD.length];
+    blip(hz(lead + 12), at, STEP * 0.85, "square", 0.5);
+    var bass = BASS[step % BASS.length];
+    if (bass !== null) blip(hz(bass - 12), at, STEP * 1.7, "triangle", 0.75);
+    if (step % 4 === 0) blip(hz(lead + 24), at, STEP * 0.3, "square", 0.14);
+    step++;
+    master.gain.setTargetAtTime(level(), actx.currentTime, 0.25);
+  }
+
+  function start(){
+    if (started) return;
+    started = true;
+    try {
+      actx = new (global.AudioContext || global.webkitAudioContext)();
+      master = actx.createGain();
+      master.gain.value = level();
+      master.connect(actx.destination);
+      timer = setInterval(schedule, STEP * 1000);
+      schedule();
+      indicator();
+    } catch (e) { /* no audio available; the site is otherwise unaffected */ }
+  }
+
+  /* A signpost, not a mute button. It tells you where the volume control is,
+     which keeps the joke a toy: the control exists and is reachable. */
+  function indicator(){
+    if (document.getElementById("fs-nowplaying")) return;
+    var s = document.createElement("style");
+    s.textContent =
+      "#fs-nowplaying{position:fixed;left:11px;bottom:11px;z-index:9400;background:#1a1a22;" +
+      "color:#d8d8e4;border:2px outset #55556a;padding:6px 10px;font:11px Verdana,Geneva,sans-serif;" +
+      "display:flex;align-items:center;gap:8px;max-width:70vw}" +
+      "#fs-nowplaying b{color:#ffd34d}" +
+      "#fs-nowplaying a{color:#8fb4ff}" +
+      "#fs-nowplaying .eq{display:inline-flex;gap:2px;align-items:flex-end;height:12px}" +
+      "#fs-nowplaying .eq i{width:3px;background:#7ab648;animation:fsEq .62s ease-in-out infinite alternate}" +
+      "#fs-nowplaying .eq i:nth-child(2){animation-delay:.16s}" +
+      "#fs-nowplaying .eq i:nth-child(3){animation-delay:.32s}" +
+      "@keyframes fsEq{from{height:3px}to{height:12px}}";
+    document.head.appendChild(s);
+
+    var d = document.createElement("div");
+    d.id = "fs-nowplaying";
+    d.innerHTML =
+      '<span class="eq"><i></i><i></i><i></i></span>' +
+      '<span><b>Now playing:</b> profile song ' +
+      '<span id="fs-vol"></span><br>' +
+      '<a href="' + link() + '">Adjust volume during sign-up</a></span>';
+    document.body.appendChild(d);
+    refresh();
+    setInterval(refresh, 900);
+  }
+
+  function link(){
+    /* works both as separate pages and inside the single-file bundle */
+    return document.getElementById("screen-signup") ? "#signup" : "index.html";
+  }
+
+  function refresh(){
+    var el = document.getElementById("fs-vol");
+    if (!el) return;
+    var v = parseInt(localStorage.getItem("fs_volume"), 10);
+    el.textContent = isNaN(v) ? "(volume never set)" : "(volume " + v + ")";
+    if (master && actx) master.gain.setTargetAtTime(level(), actx.currentTime, 0.2);
+  }
+
+  /* browsers require a gesture before audio; the first click is the gesture */
+  ["pointerdown", "keydown"].forEach(function (ev) {
+    document.addEventListener(ev, start, { once: true });
+  });
+
+  global.FS = global.FS || {};
+  global.FS.Ambient = {
+    stop: function () {
+      clearInterval(timer);
+      if (actx) { try { actx.close(); } catch (e) {} }
+      var n = document.getElementById("fs-nowplaying");
+      if (n) n.remove();
+      started = false;
+    },
+    level: level
+  };
 
 })(window);
 

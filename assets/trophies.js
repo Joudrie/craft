@@ -38,6 +38,7 @@
     { id: "climber",      name: "Social Climber", desc: "Reach position #1 in someone's Top 8.",              where: "Profiles" },
     { id: "rubbernecker", name: "Rubbernecker",   desc: "Visit every profile. Look at what they've done.",    where: "Profiles" },
     { id: "silence",      name: "Silence",        desc: "Stop all six profile songs at once.",               where: "Profiles" },
+    { id: "escapevelocity", name:"Escape Velocity", desc:"Fling the scrollbar from the bottom to the top in one throw.", where:"Anywhere" },
     { id: "critic",       name: "Critic",         desc: "Find the Design Notes. Learn why all of this is wrong.", where: "Anywhere" },
     // the lie
     { id: "ghost",        name: "Ghost",          desc: "Successfully delete your account.",                  where: "Settings", impossible: true }

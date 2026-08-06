@@ -183,6 +183,19 @@
       fix:"Cancellation should take no more steps than signing up did. This is now law in several jurisdictions.",
       real:"Amazon internally named its Prime cancellation flow the 'Iliad Flow', after Homer's epic. The FTC sued in 2023; it ended in a $2.5 billion settlement — the largest of its kind." },
 
+    /* ---------------- site-wide ---------------- */
+    { screen:"Everywhere", sel:"#fs-grav",
+      crime:"The native scrollbar is replaced with one that has mass. Left alone it sags to the bottom of the page; thrown, it carries momentum and bounces off the end stops. On a phone it follows whichever way you tilt.",
+      law:"WCAG 2.2.2 (Pause, Stop, Hide): content that moves automatically for more than five seconds needs a way to stop it. Also user control — Nielsen #3.",
+      fix:"Use the platform scrollbar. It is one of the few controls every user already knows how to operate.",
+      real:"No company has shipped literally this — but scroll hijacking, where a marketing site overrides your wheel to run its own animation, is extremely real and reliably the most-complained-about thing on any site that does it." },
+
+    { screen:"Everywhere", sel:"#fs-nowplaying",
+      crime:"A song plays at you from the moment you interact with the page. There is no mute here. The only volume control on the entire website is a slingshot on the sign-up form.",
+      law:"WCAG 1.4.2 (Audio Control): audio that plays automatically for more than three seconds must have a mechanism to pause, stop, or control its volume independently.",
+      fix:"Don't autoplay audio. If you must, put the control next to the sound, not on another page.",
+      real:"MySpace profile songs autoplayed and stacked when you opened several profiles in tabs. WCAG 1.4.2 exists in large part because of that era of the web." },
+
     /* ---------------- legal ---------------- */
     { screen:"Legal", sel:"#pane",
       crime:"28,778 words shown six lines at a time, with the scroll wheel inverted and a reset to the top every 14 seconds.",

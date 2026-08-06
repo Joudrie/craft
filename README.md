@@ -29,7 +29,9 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
 | `assets/people.js` | The membership. 25 accounts, shared by the feed and the profiles. |
-| `assets/notes.js` | Design Notes — 28 annotations naming the principle each crime breaks. |
+| `assets/notes.js` | Design Notes — 30 annotations naming the principle each crime breaks. |
+| `assets/gravity.js` | The scrollbar, which has mass. |
+| `assets/ambient.js` | The profile song you cannot mute from here. |
 | `build.py` | Bundles all six screens into one self-contained `friendspace.html`. |
 
 ## Feed crimes
@@ -176,6 +178,34 @@ everything is inverted, **`Home` jumps to the bottom.** The page tells you after
 resets. Buried in the text: a clause claiming your immortal soul, one granting veto
 power over your children's names, and Clause 15.3, which states that the account
 deletion facility "is provided for illustrative purposes and does not delete accounts."
+
+## The scrollbar has gravity
+
+The native scrollbar is gone. The replacement has mass:
+
+- **Leave it alone and it sags** toward the bottom of the page, accelerating gently.
+- **Throw it** and it carries momentum, overshoots, and **bounces off the end stops**
+  (measured: +1.73 fall inverting to −0.65 rebound). Past 9px/frame the thumb turns orange.
+- **On a phone**, `DeviceOrientationEvent` decides which way is downhill — tilt the
+  handset and the page follows. iOS needs permission, so it asks with a button.
+
+Kept a toy rather than a wall by one rule: **gravity only acts when you are not
+scrolling.** Any wheel, key or touch buys a 1.5-second grace period, so reading is
+unaffected and only inattention is punished. Opening Design Notes pauses it entirely.
+
+**🏆 Escape Velocity** — throw the thumb from the bottom and reach the top on momentum
+alone. You have to release below the 25% mark, so dragging there by hand doesn't count.
+
+## The song you cannot turn off
+
+A sequenced loop starts on your first click — synthesised, not shipped as an asset.
+There is no mute on the page. **The only volume control on the entire website is the
+slingshot on the sign-up form**, and the level you land is honoured here. That makes
+the slingshot one joke with a setup and a punchline rather than two annoyances.
+
+A "now playing" indicator signposts where the control lives, which is what keeps it a
+toy: the control exists and is reachable. Land the slingshot on 0 and the gain really
+does go to zero.
 
 ## Design Notes — the "why"
 
