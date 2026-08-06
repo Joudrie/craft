@@ -1,556 +1,602 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Craft — Create your account</title>
+<title>Untitled Document</title>
+<link rel="stylesheet" href="assets/friendspace.css">
 <script src="assets/trophies.js"></script>
 <style>
-  :root{
-    --bg:#f4f5f7; --card:#fff; --ink:#1a1d21; --muted:#6b7280;
-    --line:#e2e5e9; --accent:#2563eb; --ok:#16a34a; --bad:#dc2626;
-  }
-  *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--bg); color:var(--ink);
-    font:15px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    padding:40px 20px 120px;
-  }
-  .wrap{max-width:680px;margin:0 auto}
-  header{text-align:center;margin-bottom:32px}
-  .logo{
-    width:44px;height:44px;border-radius:10px;background:var(--accent);
-    margin:0 auto 14px;display:grid;place-items:center;color:#fff;font-weight:700;font-size:20px;
-  }
-  h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
-  header p{margin:0;color:var(--muted);font-size:14px}
+body{min-width:0;background:#e9ebee}
+.wrap{max-width:660px;margin:22px auto 120px;padding:0 12px}
 
-  .card{
-    background:var(--card);border:1px solid var(--line);border-radius:12px;
-    padding:26px;margin-bottom:16px;
-  }
-  .field-head{display:flex;align-items:center;gap:8px;margin-bottom:4px}
-  label{font-weight:600;font-size:14px}
-  .hint{color:var(--muted);font-size:13px;margin:0 0 14px}
-  .check{color:var(--ok);font-weight:700;opacity:0;transition:opacity .2s}
-  .check.on{opacity:1}
+.wiz{background:#fff;border:1px solid #dddfe2;border-radius:3px}
+.wiz-h{
+  background:linear-gradient(#4c69ba,#3b55a0);color:#fff;padding:9px 13px;
+  font:bold 14px Helvetica,Arial,sans-serif;display:flex;align-items:center;gap:9px;
+}
+.wiz-h .of{margin-left:auto;font-weight:normal;font-size:11px;color:#dfe3ee}
 
-  input[type=text],input[type=email]{
-    width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:8px;
-    font:inherit;background:#fff;
-  }
-  input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
-  .readout{
-    font:600 22px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-    letter-spacing:.06em;padding:10px 0;
-  }
-  button{font:inherit;cursor:pointer}
-  .btn{
-    padding:8px 14px;border:1px solid var(--line);border-radius:8px;
-    background:#fff;color:var(--ink);
-  }
-  .btn:hover{background:#f9fafb}
-  .btn:disabled{opacity:.4;cursor:not-allowed}
+/* the progress bar goes the wrong way */
+.bar{height:9px;background:#e4e6eb;border-bottom:1px solid #dddfe2;position:relative;overflow:hidden}
+.bar i{
+  position:absolute;left:0;top:0;bottom:0;background:linear-gradient(#7ab648,#5d9c33);
+  width:62%;transition:width .55s cubic-bezier(.3,1.4,.4,1);
+}
 
-  /* ---------- volume slingshot ---------- */
-  #sling{
-    display:block;width:100%;max-width:600px;margin:0 auto;
-    border:1px solid var(--line);border-radius:8px;background:#fbfcfd;
-    touch-action:none;cursor:grab;
-  }
-  #sling.dragging{cursor:grabbing}
-  .volbar{
-    display:flex;align-items:center;gap:12px;justify-content:center;
-    margin-top:12px;font-size:13px;color:var(--muted);
-  }
-  .volnum{font:700 20px/1 ui-monospace,Menlo,monospace;color:var(--ink)}
+.step{padding:20px 22px 24px;display:none}
+.step.on{display:block;animation:fadeUp .3s both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
-  /* ---------- phone slider ---------- */
-  input[type=range]{width:100%;margin:6px 0}
-  .ticks{display:flex;justify-content:space-between;color:var(--muted);font-size:11px}
+.step h2{margin:0 0 3px;font:bold 17px Helvetica,Arial,sans-serif;color:#1d2129}
+.step .hint{margin:0 0 16px;color:#90949c;font-size:12px}
 
-  /* ---------- calendar ---------- */
-  .cal{border:1px solid var(--line);border-radius:8px;overflow:hidden}
-  .cal-head{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:8px 10px;background:#f9fafb;border-bottom:1px solid var(--line);
-  }
-  .cal-month{font-weight:600;font-size:14px}
-  .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:var(--line)}
-  .cal-grid div{background:#fff;text-align:center;padding:7px 0;font-size:13px}
-  .cal-grid .dow{background:#f9fafb;color:var(--muted);font-size:11px;font-weight:600}
-  .cal-grid .day{cursor:pointer}
-  .cal-grid .day:hover{background:#eff6ff}
-  .cal-grid .sel{background:var(--accent);color:#fff}
-  .cal-grid .pad{background:#fcfcfd}
+.tf{width:100%;padding:8px 10px;border:1px solid #ccd0d5;border-radius:2px;font:14px Helvetica,Arial,sans-serif}
+.tf:focus{outline:2px solid #4c69ba;outline-offset:-1px}
 
-  /* ---------- keyboard ---------- */
-  .kb{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
-  .kb button{
-    width:38px;height:36px;border:1px solid var(--line);border-radius:6px;
-    background:#fff;font-size:13px;transition:none;
-  }
-  .kb button:hover{background:#eff6ff}
-  .kb .wide{width:auto;padding:0 12px}
+.foot{
+  padding:11px 22px 16px;border-top:1px solid #eceef0;display:flex;align-items:center;gap:9px;
+}
+.foot .msg{font-size:11px;color:#90949c;margin-left:auto;text-align:right;max-width:290px}
+.back{opacity:.4;cursor:not-allowed}
 
-  /* ---------- terms ---------- */
-  .termsbox{position:relative;height:74px;border:1px dashed var(--line);border-radius:8px}
-  .termsbox input{position:absolute;width:19px;height:19px;left:12px;top:27px;cursor:pointer}
-  .termsbox span{position:absolute;left:42px;top:26px;font-size:14px;color:var(--muted)}
+/* ---- phone: 1 .. 100,000,000 ---- */
+.phone-read{
+  font:bold 27px/1 ui-monospace,"Courier New",monospace;letter-spacing:.05em;
+  text-align:center;padding:12px 0 6px;color:#1d2129;
+}
+.zoomrow{display:flex;align-items:center;gap:7px;margin:10px 0 4px}
+.zoomrow .lvl{font-size:11px;color:#90949c;margin-left:auto;text-align:right}
+input[type=range]{width:100%}
+.ticks{display:flex;justify-content:space-between;font-size:10px;color:#90949c;margin-top:2px}
+.flash{animation:fl .4s}
+@keyframes fl{0%{background:#fff9d6}100%{background:transparent}}
 
-  /* ---------- cookie banner ---------- */
-  #cookie{
-    position:fixed;left:0;right:0;bottom:0;background:#fff;
-    border-top:1px solid var(--line);box-shadow:0 -6px 24px rgba(0,0,0,.09);
-    padding:16px 20px;z-index:50;max-height:52vh;overflow:auto;
-  }
-  #cookie h3{margin:0 0 4px;font-size:15px}
-  #cookie p{margin:0 0 12px;color:var(--muted);font-size:13px}
-  .toggles{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:7px;margin-bottom:14px}
-  .tog{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
-  .tog input{width:14px;height:14px;flex:none}
-  .cookie-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
-  .cookie-count{font-size:12px;color:var(--muted);margin-left:auto}
+/* ---- calendar ---- */
+.cal{border:1px solid #dddfe2;border-radius:2px}
+.cal-h{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:#f6f7f9;border-bottom:1px solid #dddfe2}
+.cal-m{font-weight:bold;font-size:13px}
+.cal-g{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;background:#e4e6eb}
+.cal-g div{background:#fff;text-align:center;padding:6px 0;font-size:12px}
+.cal-g .dow{background:#f6f7f9;color:#90949c;font-size:10px;font-weight:bold}
+.cal-g .day{cursor:pointer}
+.cal-g .day:hover{background:#eef2fa}
+.cal-g .sel{background:#3b5998;color:#fff}
+.cal-g .pad{background:#fbfcfd}
 
-  /* ---------- submit ---------- */
-  #submit{
-    width:100%;padding:14px;border:none;border-radius:9px;background:var(--accent);
-    color:#fff;font-weight:600;font-size:15px;position:relative;overflow:hidden;
-  }
-  #submit .fill{
-    position:absolute;inset:0;background:rgba(255,255,255,.26);
-    width:0%;transition:width .05s linear;
-  }
-  #submit span{position:relative}
-  .status{text-align:center;color:var(--muted);font-size:13px;margin-top:10px;min-height:20px}
+/* ---- keyboard ---- */
+.kb{display:flex;flex-wrap:wrap;gap:4px;margin-top:9px}
+.kb button{width:34px;height:32px;border:1px solid #ccd0d5;border-radius:2px;background:#fff;font-size:12px;cursor:pointer}
+.kb button:hover{background:#eef2fa}
+.kb .wide{width:auto;padding:0 10px}
 
-  #done{display:none;text-align:center;padding:50px 20px}
-  #done h2{font-size:24px;margin:0 0 12px}
-  #done pre{
-    text-align:left;background:#fff;border:1px solid var(--line);border-radius:8px;
-    padding:16px;font-size:13px;overflow:auto;
-  }
+/* ---- terms ---- */
+.termsbox{position:relative;height:70px;border:1px dashed #ccd0d5;border-radius:2px}
+.termsbox input{position:absolute;width:18px;height:18px;left:12px;top:26px;cursor:pointer}
+.termsbox span{position:absolute;left:40px;top:25px;font-size:13px;color:#4b4f56}
+
+/* ---- submit ---- */
+.hold{
+  width:100%;padding:12px;border:1px solid #29487d;border-radius:2px;
+  background:linear-gradient(#4c69ba,#3b55a0);color:#fff;font:bold 14px Helvetica,Arial,sans-serif;
+  position:relative;overflow:hidden;cursor:pointer;
+}
+.hold .fill{position:absolute;inset:0;background:rgba(255,255,255,.3);width:0;transition:width .05s linear}
+.hold span{position:relative}
+
+/* ---- cookies ---- */
+#cookie{
+  position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:3px solid #3b5998;
+  box-shadow:0 -6px 24px rgba(0,0,0,.16);padding:13px 18px;z-index:60;max-height:56vh;overflow:auto;
+}
+#cookie h3{margin:0 0 3px;font:bold 14px Helvetica,Arial,sans-serif}
+#cookie p{margin:0 0 10px;color:#90949c;font-size:12px}
+.plist{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:5px;margin-bottom:11px}
+.p{display:flex;align-items:center;gap:7px;font-size:12px;padding:3px 5px;border:1px solid #eceef0;border-radius:2px}
+.p.off{opacity:.45;background:#f6f7f9}
+.p .n{color:#90949c;font:bold 10px monospace;width:17px;flex:none}
+.cact{display:flex;gap:7px;align-items:center;flex-wrap:wrap}
+.cact .left{font-size:11px;color:#90949c;margin-left:auto}
+
+/* ---- done ---- */
+#done{display:none}
+.recpt{background:#fff;border:1px solid #dddfe2;border-radius:3px;padding:0;overflow:hidden}
+.recpt table{width:100%;border-collapse:collapse;font-size:13px}
+.recpt td{padding:7px 12px;border-bottom:1px solid #f0f1f3;vertical-align:top}
+.recpt td.k{color:#90949c;width:150px}
+.recpt td.v{font-family:ui-monospace,"Courier New",monospace}
+.strike{color:#c0392b;text-decoration:line-through;font-size:11px;display:block}
 </style>
 </head>
 <body>
 
-<div class="wrap" id="form">
-  <header>
-    <div class="logo">C</div>
-    <h1>Create your account</h1>
-    <p>It takes less than a minute.</p>
-  </header>
+<div class="fs-header"><div class="fs-header-in" style="max-width:660px">
+  <div class="fs-logo">Friendspace<span>BETA</span></div>
+  <div class="fs-nav"><a href="feed.html">Feed</a><a href="awards.html">Awards</a></div>
+</div></div>
 
-  <!-- 1. NAME — the only honest field on the entire page -->
-  <div class="card">
-    <div class="field-head"><label for="name">Full name</label><span class="check" id="ck-name">✓</span></div>
-    <p class="hint">Your legal name, as it appears on your ID.</p>
-    <input type="text" id="name" autocomplete="off" placeholder="Jane Doe">
-  </div>
-
-  <!-- 2. VOLUME — angry birds -->
-  <div class="card">
-    <div class="field-head"><label>Notification volume</label><span class="check" id="ck-vol">✓</span></div>
-    <p class="hint">Pull the speaker back into the sling and release. Where it lands sets your level.</p>
-    <canvas id="sling" width="600" height="270"></canvas>
-    <div class="volbar">
-      <span>Current level:</span><span class="volnum" id="volnum">—</span>
-      <span id="volnote"></span>
+<div class="wrap" id="wrap">
+  <div class="wiz">
+    <div class="wiz-h">
+      <span id="stepTitle">Create your account</span>
+      <span class="of" id="stepOf">Step 1 of 4</span>
     </div>
-  </div>
+    <div class="bar"><i id="bar"></i></div>
 
-  <!-- 3. PHONE — the million-value slider -->
-  <div class="card">
-    <div class="field-head"><label>Phone number</label><span class="check" id="ck-phone">✓</span></div>
-    <p class="hint">Select your area code, then scroll to your subscriber number.</p>
+    <!-- 1 NAME -->
+    <div class="step on" data-step="0">
+      <h2>What should we call you?</h2>
+      <p class="hint">Your legal name, exactly as it appears on your ID.</p>
+      <input class="tf" id="name" autocomplete="off" placeholder="Jane Doe">
+    </div>
 
-    <select id="area" style="width:100%;padding:10px;border:1px solid var(--line);border-radius:8px;font:inherit;margin-bottom:18px">
-      <option value="">Select area code…</option>
-    </select>
-
-    <div class="readout" id="phone-read">(———) 000-0001</div>
-    <input type="range" id="phone" min="1" max="1000000" step="1" value="1">
-    <div class="ticks"><span>1</span><span>500,000</span><span>1,000,000</span></div>
-    <p class="hint" style="margin-top:10px">Tip: arrow keys adjust by exactly 1.</p>
-  </div>
-
-  <!-- 4. DOB — one month at a time, backwards only -->
-  <div class="card">
-    <div class="field-head"><label>Date of birth</label><span class="check" id="ck-dob">✓</span></div>
-    <p class="hint">Navigate to the month you were born and select the day.</p>
-    <div class="cal">
-      <div class="cal-head">
-        <button class="btn" id="prev">◀ Previous month</button>
-        <span class="cal-month" id="calm"></span>
-        <button class="btn" id="next" disabled>Next month ▶</button>
+    <!-- 2 PHONE -->
+    <div class="step" data-step="1">
+      <h2>Phone number</h2>
+      <p class="hint">Scroll to your number. The selector covers 1 to 100,000,000.</p>
+      <div class="phone-read" id="phoneRead">(000) 000-0001</div>
+      <input type="range" id="phone" min="1" max="100000000" step="1" value="1">
+      <div class="ticks"><span id="tkLo">1</span><span id="tkHi">100,000,000</span></div>
+      <div class="zoomrow">
+        <button class="fs-btn ghost" id="zoomIn">🔍 Zoom in</button>
+        <button class="fs-btn ghost" id="zoomOut">Zoom out</button>
+        <span class="lvl" id="lvl"></span>
       </div>
-      <div class="cal-grid" id="calg"></div>
+      <p class="hint" style="margin:8px 0 0">Arrow keys adjust by exactly 1.</p>
+    </div>
+
+    <!-- 3 DOB -->
+    <div class="step" data-step="2">
+      <h2>Date of birth</h2>
+      <p class="hint">Navigate to the month you were born, then choose the day.</p>
+      <div class="cal">
+        <div class="cal-h">
+          <button class="fs-btn ghost" id="prev">◀ Previous month</button>
+          <span class="cal-m" id="calm"></span>
+          <button class="fs-btn ghost" id="next" disabled>Next month ▶</button>
+        </div>
+        <div class="cal-g" id="calg"></div>
+      </div>
+    </div>
+
+    <!-- 4 PASSWORD -->
+    <div class="step" data-step="3">
+      <h2>Choose a password</h2>
+      <p class="hint">Minimum 8 characters. For your security, please use the on-screen keyboard.</p>
+      <input class="tf" id="pw" readonly placeholder="Use the keys below">
+      <div class="kb" id="kb"></div>
+    </div>
+
+    <!-- 5 EMAIL -->
+    <div class="step" data-step="4">
+      <h2>Email address</h2>
+      <p class="hint">Each character is verified with our servers before it appears.</p>
+      <input class="tf" id="email" autocomplete="off" placeholder="you@example.com">
+      <p class="hint" id="emailNote" style="margin:8px 0 0;min-height:16px"></p>
+    </div>
+
+    <!-- 6 VOLUME -->
+    <div class="step" data-step="5">
+      <h2>Notification volume</h2>
+      <p class="hint">Pull the speaker back into the sling and release. Where it lands is your level.</p>
+      <canvas id="sling" width="600" height="260" style="width:100%;border:1px solid #dddfe2;border-radius:2px;background:#fbfcfd;touch-action:none;cursor:grab"></canvas>
+      <div style="text-align:center;margin-top:9px;font-size:12px;color:#90949c">
+        Level: <b id="volnum" style="font:bold 18px ui-monospace,monospace;color:#1d2129">—</b>
+        <span id="volnote"></span>
+      </div>
+    </div>
+
+    <!-- 7 TERMS -->
+    <div class="step" data-step="6">
+      <h2>Terms of Service</h2>
+      <p class="hint">Please confirm that you have read and agree to all 30,000 words.</p>
+      <div class="termsbox" id="termsbox">
+        <input type="checkbox" id="terms">
+        <span>I agree to the Friendspace Terms of Service</span>
+      </div>
+    </div>
+
+    <!-- 8 SUBMIT -->
+    <div class="step" data-step="7">
+      <h2>Almost there</h2>
+      <p class="hint">Press and hold to create your account. Do not move the pointer.</p>
+      <button class="hold" id="hold"><div class="fill" id="fill"></div><span>Hold to create account</span></button>
+    </div>
+
+    <div class="foot">
+      <button class="fs-btn ghost back" id="back" title="You cannot go back.">◀ Back</button>
+      <button class="fs-btn" id="nextBtn">Continue</button>
+      <span class="msg" id="msg"></span>
     </div>
   </div>
+</div>
 
-  <!-- 5. PASSWORD — shuffling on-screen keyboard -->
-  <div class="card">
-    <div class="field-head"><label>Password</label><span class="check" id="ck-pw">✓</span></div>
-    <p class="hint">Minimum 8 characters. For your security, use the on-screen keyboard.</p>
-    <input type="text" id="pw" readonly placeholder="Click the keys below">
-    <div class="kb" id="kb"></div>
-  </div>
-
-  <!-- 6. EMAIL — 700ms per character -->
-  <div class="card">
-    <div class="field-head"><label for="email">Email address</label><span class="check" id="ck-email">✓</span></div>
-    <p class="hint">Each character is validated against our servers before it appears.</p>
-    <input type="email" id="email" autocomplete="off" placeholder="you@example.com">
-    <p class="hint" id="emailnote" style="margin:8px 0 0;min-height:18px"></p>
-  </div>
-
-  <!-- 7. TERMS — flees the cursor -->
-  <div class="card">
-    <div class="field-head"><label>Terms of service</label><span class="check" id="ck-terms">✓</span></div>
-    <p class="hint">Please confirm you have read and agree to the terms.</p>
-    <div class="termsbox" id="termsbox">
-      <input type="checkbox" id="terms">
-      <span>I agree to the Terms of Service</span>
+<!-- ===================== DONE ===================== -->
+<div class="wrap" id="done">
+  <div class="wiz">
+    <div class="wiz-h">Welcome to Friendspace</div>
+    <div class="step on">
+      <h2>Your account has been created.</h2>
+      <p class="hint">Thank you for taking the time. Here is what we recorded.</p>
+      <div class="recpt"><table id="receipt"></table></div>
+      <p style="font-size:12px;color:#90949c;margin:14px 0 0">
+        Some entries were corrected automatically for your convenience.
+      </p>
+      <p class="fs-whisper" style="margin:3px 0 0">It never mattered what you put in.</p>
+      <div style="margin-top:18px">
+        <a class="fs-btn" href="feed.html" style="display:inline-block;text-decoration:none">Continue to Friendspace →</a>
+      </div>
     </div>
   </div>
-
-  <button id="submit"><div class="fill" id="fill"></div><span>Hold to create account</span></button>
-  <div class="status" id="status"></div>
 </div>
 
-<div id="done" class="wrap">
-  <header><div class="logo">C</div><h1>Account created</h1></header>
-  <pre id="dump"></pre>
-  <p style="color:var(--muted);font-size:13px">Your information has been discarded. Please try again.</p>
-</div>
-
-<!-- COOKIES -->
+<!-- ===================== COOKIES ===================== -->
 <div id="cookie">
   <h3>We value your privacy</h3>
-  <p>Disable any non-essential partners you do not wish to share your data with, then continue.</p>
-  <div class="toggles" id="toggles"></div>
-  <div class="cookie-actions">
-    <button class="btn" id="acceptAll">Accept all</button>
-    <button class="btn" id="rejectAll">Reject all</button>
-    <button class="btn" id="continueBtn">Continue</button>
-    <span class="cookie-count" id="cookieCount"></span>
+  <p>Switch off any partners you would prefer not to share your data with, then continue.
+     <span style="color:#c0392b">Partners are processed in order.</span></p>
+  <div class="plist" id="plist"></div>
+  <div class="cact">
+    <button class="fs-btn ghost" id="acceptAll">Accept all</button>
+    <button class="fs-btn ghost" id="rejectAll">Reject all</button>
+    <button class="fs-btn" id="contBtn">Continue</button>
+    <span class="left" id="left"></span>
   </div>
 </div>
 
 <script>
 "use strict";
-const $ = s => document.querySelector(s);
-const state = { name:"", vol:null, area:"", phone:1, dob:null, pw:"", email:"", terms:false };
-const mark = (id, ok) => $(id).classList.toggle("on", !!ok);
+var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
+var S = { name:"", phone:1, dob:null, pw:"", email:"", vol:null, terms:false };
 
-/* ===================== 1. NAME (works perfectly) ===================== */
-$("#name").addEventListener("input", e => {
-  state.name = e.target.value.trim();
-  mark("#ck-name", state.name.length > 0);
+/* ============================================================
+   WIZARD — the progress bar shrinks and the step count grows
+   ============================================================ */
+var step = 0, STEPS = 8;
+var TITLES = ["Create your account","Contact details","About you","Security",
+              "Contact details","Preferences","Legal","Finish"];
+/* "of N" keeps getting worse the further you go */
+var OF = [4, 6, 6, 9, 9, 11, 11, 8];
+
+function showStep(n){
+  step = n;
+  [].forEach.call(document.querySelectorAll(".step[data-step]"), function(el){
+    el.classList.toggle("on", +el.dataset.step === n);
+  });
+  $("#stepTitle").textContent = TITLES[n];
+  $("#stepOf").textContent = "Step " + (n+1) + " of " + OF[n];
+  /* the bar runs backwards, then snaps to full at the end */
+  $("#bar").style.width = (n === STEPS-1 ? 100 : Math.max(5, 62 - n*7)) + "%";
+  $("#nextBtn").style.display = (n === STEPS-1) ? "none" : "";
+  $("#msg").textContent = "";
+}
+
+$("#back").addEventListener("click", function(){
+  $("#msg").textContent = "You cannot go back. Everything you have entered is final.";
 });
 
-/* ===================== AUDIO ===================== */
-let actx = null, osc = null, gain = null;
-const MAX_GAIN = 0.11; // capped — annoying, not harmful
-function startTone(){
-  if (actx) return;
-  try {
-    actx = new (window.AudioContext || window.webkitAudioContext)();
-    osc = actx.createOscillator();
-    gain = actx.createGain();
-    const lfo = actx.createOscillator(), lfoGain = actx.createGain();
-    osc.type = "sawtooth"; osc.frequency.value = 442;
-    lfo.frequency.value = 5.5; lfoGain.gain.value = 7;
-    lfo.connect(lfoGain); lfoGain.connect(osc.frequency);
-    gain.gain.value = state.vol === null ? MAX_GAIN * 0.55 : MAX_GAIN * state.vol / 100;
-    osc.connect(gain); gain.connect(actx.destination);
-    osc.start(); lfo.start();
-  } catch(e){ /* audio unavailable — page still works */ }
-}
-function applyVolume(v){
-  if (gain && actx) gain.gain.setTargetAtTime(MAX_GAIN * v / 100, actx.currentTime, 0.05);
-}
-document.addEventListener("pointerdown", startTone, { once:true });
+$("#nextBtn").addEventListener("click", function(){
+  if (step < STEPS-1) showStep(step+1);
+});
 
-/* ===================== 2. SLINGSHOT VOLUME ===================== */
-const cv = $("#sling"), cx = cv.getContext("2d");
-const ANCHOR = {x:96, y:150}, MAXPULL = 74, GROUND = 224;
-const SCALE = {x0:210, x1:566};
-let pouch = {x:ANCHOR.x, y:ANCHOR.y}, dragging = false, proj = null, trail = [];
+/* ============================================================
+   1. NAME — works perfectly. The only one that does.
+   ============================================================ */
+$("#name").addEventListener("input", function(){ S.name = this.value.trim(); });
 
-function toCanvas(e){
-  const r = cv.getBoundingClientRect();
-  return { x:(e.clientX - r.left) * (cv.width / r.width), y:(e.clientY - r.top) * (cv.height / r.height) };
+/* ============================================================
+   2. PHONE — one slider, 1 to 100,000,000.
+   At full range that is ~167,000 values per pixel, so dragging
+   alone cannot land an exact number. The zoom narrows the range
+   10x at a time: seven zooms takes you from 100M to a window of
+   ten, where the arrow keys finish the job. Tedium becomes a
+   mechanic you can learn — a toy, not a wall.
+   ============================================================ */
+var lo = 1, hi = 100000000, sl = $("#phone");
+
+function fmtPhone(v){
+  var s = String(v).padStart(10, "0");
+  return "(" + s.slice(0,3) + ") " + s.slice(3,6) + "-" + s.slice(6);
 }
-cv.addEventListener("pointerdown", e => {
-  if (proj) return;
-  const p = toCanvas(e);
-  if (Math.hypot(p.x - pouch.x, p.y - pouch.y) < 46){
-    dragging = true; cv.classList.add("dragging"); cv.setPointerCapture(e.pointerId);
+function commas(n){ return n.toLocaleString("en-US"); }
+
+function drawPhone(){
+  sl.min = lo; sl.max = hi; sl.value = S.phone;
+  $("#phoneRead").textContent = fmtPhone(S.phone);
+  $("#tkLo").textContent = commas(lo);
+  $("#tkHi").textContent = commas(hi);
+  var span = hi - lo;
+  var perPx = Math.max(1, Math.round(span/600));
+  $("#lvl").innerHTML = "range " + commas(span) + " wide<br>" +
+    "≈ " + commas(perPx) + (perPx === 1 ? " number" : " numbers") + " per pixel";
+  $("#zoomOut").disabled = (span >= 100000000);
+  $("#zoomIn").disabled  = (span <= 10);
+}
+sl.addEventListener("input", function(){ S.phone = +this.value; drawPhone(); });
+
+$("#zoomIn").addEventListener("click", function(){
+  var span = Math.max(10, Math.round((hi - lo) / 10));
+  lo = Math.max(1, S.phone - Math.round(span/2));
+  hi = Math.min(100000000, lo + span);
+  lo = Math.max(1, hi - span);
+  drawPhone();
+  $("#phoneRead").classList.remove("flash"); void $("#phoneRead").offsetWidth;
+  $("#phoneRead").classList.add("flash");
+  if (hi - lo <= 10) T.unlock("precision");
+});
+$("#zoomOut").addEventListener("click", function(){
+  var span = Math.min(100000000 - 1, (hi - lo) * 10);
+  lo = Math.max(1, S.phone - Math.round(span/2));
+  hi = Math.min(100000000, lo + span);
+  lo = Math.max(1, hi - span);
+  drawPhone();
+});
+drawPhone();
+
+/* ============================================================
+   3. DATE OF BIRTH — backwards only
+   ============================================================ */
+var MON = ["January","February","March","April","May","June","July",
+           "August","September","October","November","December"];
+var view = new Date(); view.setDate(1);
+var monthsBack = 0;
+
+function renderCal(){
+  $("#calm").textContent = MON[view.getMonth()] + " " + view.getFullYear();
+  var g = $("#calg"); g.innerHTML = "";
+  ["S","M","T","W","T","F","S"].forEach(function(d){
+    var e = document.createElement("div"); e.className = "dow"; e.textContent = d; g.appendChild(e);
+  });
+  var first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
+  var days = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
+  for (var i=0;i<first;i++){ var p=document.createElement("div"); p.className="pad"; g.appendChild(p); }
+  for (var d=1; d<=days; d++){
+    (function(d){
+      var e = document.createElement("div");
+      e.className = "day"; e.textContent = d;
+      if (S.dob && S.dob.getFullYear()===view.getFullYear() &&
+          S.dob.getMonth()===view.getMonth() && S.dob.getDate()===d) e.classList.add("sel");
+      e.onclick = function(){ S.dob = new Date(view.getFullYear(), view.getMonth(), d); renderCal(); };
+      g.appendChild(e);
+    })(d);
   }
-});
-cv.addEventListener("pointermove", e => {
-  if (!dragging) return;
-  const p = toCanvas(e);
-  let dx = p.x - ANCHOR.x, dy = p.y - ANCHOR.y;
-  const d = Math.hypot(dx, dy);
-  if (d > MAXPULL){ dx = dx / d * MAXPULL; dy = dy / d * MAXPULL; }
-  pouch = { x:ANCHOR.x + dx, y:ANCHOR.y + dy };
-});
-cv.addEventListener("pointerup", () => {
-  if (!dragging) return;
-  dragging = false; cv.classList.remove("dragging");
-  const vx = (ANCHOR.x - pouch.x) * 0.235, vy = (ANCHOR.y - pouch.y) * 0.235;
-  if (Math.hypot(vx, vy) < 0.6){ pouch = {...ANCHOR}; return; }
-  proj = { x:pouch.x, y:pouch.y, vx, vy };
-  trail = []; pouch = {...ANCHOR};
-});
-
-function land(x){
-  let v;
-  if (x < SCALE.x0) v = 0;
-  else if (x > SCALE.x1) v = 100;
-  else v = Math.round((x - SCALE.x0) / (SCALE.x1 - SCALE.x0) * 100);
-  state.vol = v; applyVolume(v);
-  $("#volnum").textContent = v;
-  $("#volnote").textContent = v === 0 ? "(silent — nice shot)" : v === 100 ? "(MAXIMUM)" : "";
-  mark("#ck-vol", true);
-  if (v === 0) FS.Trophies.unlock("marksman");
-  setTimeout(() => { proj = null; trail = []; }, 1100);
 }
+function stepBack(){
+  view.setMonth(view.getMonth()-1); renderCal();
+  if (++monthsBack >= 300) T.unlock("longway");
+}
+var ht=null, hi2=null;
+$("#prev").addEventListener("pointerdown", function(){
+  stepBack();
+  ht = setTimeout(function(){ hi2 = setInterval(stepBack, 340); }, 550);
+});
+["pointerup","pointerleave","pointercancel"].forEach(function(ev){
+  $("#prev").addEventListener(ev, function(){ clearTimeout(ht); clearInterval(hi2); });
+});
+renderCal();
 
-function drawSling(){
+/* ============================================================
+   4. PASSWORD — 68 keys, reshuffled after every press
+   ============================================================ */
+var KEYS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*".split("");
+function renderKb(){
+  var a = KEYS.slice();
+  for (var i=a.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; }
+  var kb = $("#kb"); kb.innerHTML = "";
+  a.forEach(function(k){
+    var b = document.createElement("button");
+    b.type="button"; b.textContent = k;
+    b.onclick = function(){ S.pw += k; $("#pw").value = "•".repeat(S.pw.length); renderKb(); };
+    kb.appendChild(b);
+  });
+  var d = document.createElement("button");
+  d.type="button"; d.className="wide"; d.textContent="⌫ Delete";
+  d.onclick = function(){ S.pw = S.pw.slice(0,-1); $("#pw").value = "•".repeat(S.pw.length); renderKb(); };
+  kb.appendChild(d);
+}
+renderKb();
+
+/* ============================================================
+   5. EMAIL — 700ms per character
+   ============================================================ */
+var pending = false;
+$("#email").addEventListener("keydown", function(e){
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key.length !== 1 && e.key !== "Backspace") return;
+  e.preventDefault();
+  if (pending){ $("#emailNote").textContent = "Too fast — that character was discarded."; return; }
+  pending = true; $("#emailNote").textContent = "Verifying…";
+  var k = e.key, el = this;
+  setTimeout(function(){
+    S.email = (k === "Backspace") ? S.email.slice(0,-1) : S.email + k;
+    el.value = S.email; pending = false; $("#emailNote").textContent = "";
+  }, 700);
+});
+$("#email").addEventListener("paste", function(e){
+  e.preventDefault(); $("#emailNote").textContent = "Pasting is disabled for your security.";
+});
+
+/* ============================================================
+   6. VOLUME — the slingshot
+   ============================================================ */
+var cv = $("#sling"), cx = cv.getContext("2d");
+var ANCHOR = {x:96,y:146}, MAXPULL = 74, GROUND = 216, SC = {x0:210, x1:566};
+var pouch = {x:ANCHOR.x,y:ANCHOR.y}, dragging = false, proj = null, trail = [];
+
+function toCv(e){
+  var r = cv.getBoundingClientRect();
+  return { x:(e.clientX-r.left)*(cv.width/r.width), y:(e.clientY-r.top)*(cv.height/r.height) };
+}
+cv.addEventListener("pointerdown", function(e){
+  if (proj) return;
+  var p = toCv(e);
+  if (Math.hypot(p.x-pouch.x, p.y-pouch.y) < 46){ dragging = true; cv.setPointerCapture(e.pointerId); }
+});
+cv.addEventListener("pointermove", function(e){
+  if (!dragging) return;
+  var p = toCv(e), dx = p.x-ANCHOR.x, dy = p.y-ANCHOR.y, d = Math.hypot(dx,dy);
+  if (d > MAXPULL){ dx = dx/d*MAXPULL; dy = dy/d*MAXPULL; }
+  pouch = {x:ANCHOR.x+dx, y:ANCHOR.y+dy};
+});
+cv.addEventListener("pointerup", function(){
+  if (!dragging) return;
+  dragging = false;
+  var vx = (ANCHOR.x-pouch.x)*0.235, vy = (ANCHOR.y-pouch.y)*0.235;
+  if (Math.hypot(vx,vy) < 0.6){ pouch = {x:ANCHOR.x,y:ANCHOR.y}; return; }
+  proj = {x:pouch.x, y:pouch.y, vx:vx, vy:vy};
+  trail = []; pouch = {x:ANCHOR.x,y:ANCHOR.y};
+});
+function land(x){
+  var v = x < SC.x0 ? 0 : x > SC.x1 ? 100 :
+          Math.round((x-SC.x0)/(SC.x1-SC.x0)*100);
+  S.vol = v;
+  $("#volnum").textContent = v;
+  $("#volnote").textContent = v===0 ? "(silent — nice shot)" : v===100 ? "(MAXIMUM)" : "";
+  if (v === 0) T.unlock("marksman");
+  setTimeout(function(){ proj = null; trail = []; }, 1100);
+}
+function draw(){
   cx.clearRect(0,0,cv.width,cv.height);
-  // ground + scale
   cx.strokeStyle="#d7dbe0"; cx.lineWidth=1;
   cx.beginPath(); cx.moveTo(0,GROUND+16); cx.lineTo(cv.width,GROUND+16); cx.stroke();
-  cx.fillStyle="#9aa2ad"; cx.font="10px system-ui"; cx.textAlign="center";
-  for (let v=0; v<=100; v+=10){
-    const x = SCALE.x0 + (SCALE.x1-SCALE.x0)*v/100;
+  cx.fillStyle="#9aa2ad"; cx.font="10px Helvetica"; cx.textAlign="center";
+  for (var v=0; v<=100; v+=10){
+    var x = SC.x0 + (SC.x1-SC.x0)*v/100;
     cx.strokeStyle = v%50===0 ? "#9aa2ad" : "#dfe3e8";
     cx.beginPath(); cx.moveTo(x,GROUND+16); cx.lineTo(x,GROUND+(v%50===0?27:22)); cx.stroke();
-    if (v%50===0) cx.fillText(v, x, GROUND+40);
+    if (v%50===0) cx.fillText(v, x, GROUND+39);
   }
   cx.textAlign="left";
-  // slingshot
   cx.strokeStyle="#8b5e3c"; cx.lineWidth=7; cx.lineCap="round";
-  cx.beginPath(); cx.moveTo(ANCHOR.x, GROUND+16); cx.lineTo(ANCHOR.x, ANCHOR.y+6); cx.stroke();
+  cx.beginPath(); cx.moveTo(ANCHOR.x,GROUND+16); cx.lineTo(ANCHOR.x,ANCHOR.y+6); cx.stroke();
   cx.lineWidth=6;
-  cx.beginPath(); cx.moveTo(ANCHOR.x, ANCHOR.y+8); cx.lineTo(ANCHOR.x-19, ANCHOR.y-24); cx.stroke();
-  cx.beginPath(); cx.moveTo(ANCHOR.x, ANCHOR.y+8); cx.lineTo(ANCHOR.x+19, ANCHOR.y-24); cx.stroke();
-  // bands
+  cx.beginPath(); cx.moveTo(ANCHOR.x,ANCHOR.y+8); cx.lineTo(ANCHOR.x-19,ANCHOR.y-24); cx.stroke();
+  cx.beginPath(); cx.moveTo(ANCHOR.x,ANCHOR.y+8); cx.lineTo(ANCHOR.x+19,ANCHOR.y-24); cx.stroke();
   if (!proj){
     cx.strokeStyle="#3d3d3d"; cx.lineWidth=4;
-    cx.beginPath(); cx.moveTo(ANCHOR.x-19, ANCHOR.y-24); cx.lineTo(pouch.x, pouch.y); cx.stroke();
-    cx.beginPath(); cx.moveTo(ANCHOR.x+19, ANCHOR.y-24); cx.lineTo(pouch.x, pouch.y); cx.stroke();
+    cx.beginPath(); cx.moveTo(ANCHOR.x-19,ANCHOR.y-24); cx.lineTo(pouch.x,pouch.y); cx.stroke();
+    cx.beginPath(); cx.moveTo(ANCHOR.x+19,ANCHOR.y-24); cx.lineTo(pouch.x,pouch.y); cx.stroke();
   }
-  // trail
   cx.fillStyle="#c9ced6";
-  trail.forEach(t => { cx.beginPath(); cx.arc(t.x,t.y,2,0,7); cx.fill(); });
-  // projectile
-  const b = proj || pouch;
-  cx.fillStyle="#2563eb"; cx.beginPath(); cx.arc(b.x,b.y,15,0,7); cx.fill();
-  cx.fillStyle="#fff"; cx.font="15px system-ui"; cx.textAlign="center"; cx.textBaseline="middle";
+  trail.forEach(function(t){ cx.beginPath(); cx.arc(t.x,t.y,2,0,7); cx.fill(); });
+  var b = proj || pouch;
+  cx.fillStyle="#3b5998"; cx.beginPath(); cx.arc(b.x,b.y,15,0,7); cx.fill();
+  cx.fillStyle="#fff"; cx.font="15px Helvetica"; cx.textAlign="center"; cx.textBaseline="middle";
   cx.fillText("♪", b.x, b.y+1);
   cx.textAlign="left"; cx.textBaseline="alphabetic";
 }
 function tick(){
   if (proj){
-    proj.vx *= 0.9995; proj.vy += 0.34;
-    proj.x += proj.vx; proj.y += proj.vy;
-    if (trail.length === 0 || Math.hypot(proj.x-trail[trail.length-1].x, proj.y-trail[trail.length-1].y) > 13)
-      trail.push({x:proj.x, y:proj.y});
-    if (proj.y >= GROUND){ proj.y = GROUND; const x = proj.x; proj = {x, y:GROUND, vx:0, vy:0}; land(x); }
+    proj.vy += 0.34; proj.x += proj.vx; proj.y += proj.vy;
+    if (!trail.length || Math.hypot(proj.x-trail[trail.length-1].x, proj.y-trail[trail.length-1].y) > 13)
+      trail.push({x:proj.x,y:proj.y});
+    if (proj.y >= GROUND){ var x = proj.x; proj = {x:x,y:GROUND,vx:0,vy:0}; land(x); }
   }
-  drawSling(); requestAnimationFrame(tick);
+  draw(); requestAnimationFrame(tick);
 }
 tick();
 
-/* ===================== 3. PHONE ===================== */
-const AREAS = [212,213,214,215,216,217,218,219,224,225,228,229,231,234,239,240,248,251,252,253,254,256,260,262,267,269,270,276,281,301,302,303,304,305,307,308,309,310,312,313,314,315,316,317,318,319,320,321,323,325,330,331,334,336,337,339,347,351,352,360,361,386,401,402,404,405,406,407,408,409,410,412,413,414,415,417,419,423,425,430,432,434,435,440,443,458,469,470,475,478,479,480,484,501,502,503,504,505,507,508,509,510,512,513,515,516,517,518,520,530,540,541,551,559,561,562,563,567,570,571,573,574,575,580,585,586,601,602,603,605,606,607,608,609,610,612,614,615,616,617,618,619,620,623,626,630,631,636,641,646,650,651,660,661,662,667,678,682,701,702,703,704,706,707,708,712,713,714,715,716,717,718,719,720,724,727,731,732,734,737,740,754,757,760,762,763,765,769,770,772,773,774,775,779,781,785,786,801,802,803,804,805,806,808,810,812,813,814,815,816,817,818,828,830,831,832,843,845,847,848,850,856,857,858,859,860,862,863,864,865,870,872,878,901,903,904,906,907,908,909,910,912,913,914,915,916,917,918,919,920,925,928,929,931,936,937,940,941,947,949,951,952,954,956,970,971,972,973,978,979,980,984,985,989];
-const areaSel = $("#area");
-function shuffleAreas(){
-  const arr = AREAS.slice();
-  for (let i = arr.length - 1; i > 0; i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]] = [arr[j],arr[i]]; }
-  const cur = areaSel.value;
-  areaSel.innerHTML = '<option value="">Select area code…</option>' + arr.map(a=>`<option value="${a}">${a}</option>`).join("");
-  areaSel.value = cur;
-}
-shuffleAreas();
-areaSel.addEventListener("mousedown", shuffleAreas);   // re-randomise every time it opens
-areaSel.addEventListener("change", e => { state.area = e.target.value; renderPhone(); });
-
-const phoneSlider = $("#phone");
-function renderPhone(){
-  const s = String(state.phone).padStart(7,"0");
-  $("#phone-read").textContent = `(${state.area || "———"}) ${s.slice(0,3)}-${s.slice(3)}`;
-  mark("#ck-phone", !!state.area && state.phone > 1);
-}
-phoneSlider.addEventListener("input", e => { state.phone = +e.target.value; renderPhone(); });
-renderPhone();
-
-/* ===================== 4. DATE OF BIRTH ===================== */
-const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-let view = new Date(); view.setDate(1);
-function renderCal(){
-  $("#calm").textContent = `${MONTHS[view.getMonth()]} ${view.getFullYear()}`;
-  const g = $("#calg"); g.innerHTML = "";
-  ["S","M","T","W","T","F","S"].forEach(d => { const el = document.createElement("div"); el.className="dow"; el.textContent=d; g.appendChild(el); });
-  const first = new Date(view.getFullYear(), view.getMonth(), 1).getDay();
-  const days = new Date(view.getFullYear(), view.getMonth()+1, 0).getDate();
-  for (let i=0;i<first;i++){ const el=document.createElement("div"); el.className="pad"; g.appendChild(el); }
-  for (let d=1; d<=days; d++){
-    const el = document.createElement("div");
-    el.className = "day"; el.textContent = d;
-    if (state.dob && state.dob.getFullYear()===view.getFullYear() && state.dob.getMonth()===view.getMonth() && state.dob.getDate()===d)
-      el.classList.add("sel");
-    el.onclick = () => { state.dob = new Date(view.getFullYear(), view.getMonth(), d); mark("#ck-dob", true); renderCal(); };
-    g.appendChild(el);
-  }
-}
-let monthsBack = 0;
-function stepBack(){
-  view.setMonth(view.getMonth()-1); renderCal();
-  if (++monthsBack >= 300) FS.Trophies.unlock("longway");
-}
-let holdTimer = null, holdInt = null;
-$("#prev").addEventListener("pointerdown", () => {
-  stepBack();
-  holdTimer = setTimeout(() => { holdInt = setInterval(stepBack, 380); }, 600); // merciful auto-repeat
-});
-["pointerup","pointerleave","pointercancel"].forEach(ev =>
-  $("#prev").addEventListener(ev, () => { clearTimeout(holdTimer); clearInterval(holdInt); }));
-renderCal();
-
-/* ===================== 5. PASSWORD KEYBOARD ===================== */
-const KEYS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*".split("");
-function renderKb(){
-  const arr = KEYS.slice();
-  for (let i = arr.length-1; i>0; i--){ const j = Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; }
-  const kb = $("#kb"); kb.innerHTML = "";
-  arr.forEach(k => {
-    const b = document.createElement("button");
-    b.textContent = k; b.type = "button";
-    b.onclick = () => { state.pw += k; $("#pw").value = "•".repeat(state.pw.length); mark("#ck-pw", state.pw.length>=8); renderKb(); };
-    kb.appendChild(b);
-  });
-  const del = document.createElement("button");
-  del.className = "wide"; del.type = "button"; del.textContent = "⌫ Delete";
-  del.onclick = () => { state.pw = state.pw.slice(0,-1); $("#pw").value = "•".repeat(state.pw.length); mark("#ck-pw", state.pw.length>=8); renderKb(); };
-  kb.appendChild(del);
-}
-renderKb();
-
-/* ===================== 6. EMAIL (700ms per char) ===================== */
-const emailEl = $("#email"), emailNote = $("#emailnote");
-let pending = false;
-emailEl.addEventListener("keydown", e => {
-  if (e.metaKey || e.ctrlKey || e.altKey) return;
-  if (e.key.length !== 1 && e.key !== "Backspace") return;
-  e.preventDefault();
-  if (pending){ emailNote.textContent = "Too fast — character discarded."; return; }
-  pending = true; emailNote.textContent = "Validating…";
-  const key = e.key;
-  setTimeout(() => {
-    state.email = key === "Backspace" ? state.email.slice(0,-1) : state.email + key;
-    emailEl.value = state.email;
-    pending = false; emailNote.textContent = "";
-    mark("#ck-email", /.+@.+\..+/.test(state.email));
-  }, 700);
-});
-emailEl.addEventListener("paste", e => { e.preventDefault(); emailNote.textContent = "Pasting is disabled for security."; });
-
-/* ===================== 7. FLEEING CHECKBOX ===================== */
-const box = $("#termsbox"), cb = $("#terms");
-box.addEventListener("mousemove", e => {
+/* ============================================================
+   7. TERMS — flees the mouse, cannot flee the keyboard
+   ============================================================ */
+var box = $("#termsbox"), cb = $("#terms");
+box.addEventListener("mousemove", function(e){
   if (cb.checked) return;
-  const r = box.getBoundingClientRect(), c = cb.getBoundingClientRect();
-  const dist = Math.hypot(e.clientX - (c.left+c.width/2), e.clientY - (c.top+c.height/2));
-  if (dist < 62){
-    cb.style.left = Math.random() * (r.width - 34) + "px";
-    cb.style.top  = Math.random() * (r.height - 34) + "px";
+  var r = box.getBoundingClientRect(), c = cb.getBoundingClientRect();
+  if (Math.hypot(e.clientX-(c.left+c.width/2), e.clientY-(c.top+c.height/2)) < 60){
+    cb.style.left = Math.random()*(r.width-34) + "px";
+    cb.style.top  = Math.random()*(r.height-34) + "px";
   }
 });
-cb.addEventListener("change", () => {
-  state.terms = cb.checked; mark("#ck-terms", cb.checked);
-  if (cb.checked) FS.Trophies.unlock("escape");
+cb.addEventListener("change", function(){
+  S.terms = cb.checked;
+  if (cb.checked) T.unlock("escape");
 });
-// escape hatch: Tab to it and press Space. It cannot run from the keyboard.
 
-/* ===================== COOKIES ===================== */
-const PARTNERS = ["AdMesh","Trackr","PixelDrift","Nomatic","Beaconly","Segmentum","Clickwell","DataFlume","Optivo","Rezonate","Adnexus","Cohortly","Trailhead","Pingback","Vantage","Lumenad","Statsig","Wavelength","Corvid","Bidstream","Tapestry","Northstar","Adverse","Quantly"];
-const togWrap = $("#toggles");
-PARTNERS.forEach((p,i) => {
-  const l = document.createElement("label");
-  l.className = "tog";
-  l.innerHTML = `<input type="checkbox" checked data-p="${i}"><span>${p}</span>`;
-  togWrap.appendChild(l);
+/* ============================================================
+   8. SUBMIT — hold still for eight seconds
+   ============================================================ */
+var HOLD = 8000, raf = null, t0 = 0, origin = null;
+function cancel(m){ cancelAnimationFrame(raf); raf = null; $("#fill").style.width = "0%"; if (m) $("#msg").textContent = m; }
+$("#hold").addEventListener("pointerdown", function(e){
+  origin = {x:e.clientX,y:e.clientY}; t0 = performance.now();
+  $("#msg").textContent = "Hold still…";
+  (function loop(){
+    var p = Math.min(1, (performance.now()-t0)/HOLD);
+    $("#fill").style.width = (p*100) + "%";
+    if (p >= 1){ cancel(""); finish(); return; }
+    raf = requestAnimationFrame(loop);
+  })();
 });
-const allTogs = () => [...togWrap.querySelectorAll("input")];
-function countOn(){
-  const n = allTogs().filter(t=>t.checked).length;
-  $("#cookieCount").textContent = `${n} of ${PARTNERS.length} partners still enabled`;
-  return n;
-}
-togWrap.addEventListener("change", countOn);
-$("#acceptAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(); };
-$("#rejectAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(); }; // identical. of course.
-$("#continueBtn").onclick = () => {
-  if (countOn() > 0){ $("#cookieCount").style.color = "var(--bad)"; return; }
-  FS.Trophies.unlock("completionist");
-  $("#cookie").remove();
-};
-countOn();
+window.addEventListener("pointermove", function(e){
+  if (!raf || !origin) return;
+  if (Math.hypot(e.clientX-origin.x, e.clientY-origin.y) > 4) cancel("You moved. Start again.");
+});
+window.addEventListener("pointerup", function(){ if (raf) cancel("Released too early."); });
 
-/* ===================== SUBMIT (hold still for 8s) ===================== */
-const HOLD = 8000;
-let holdStart = 0, holdRAF = null, origin = null;
-const fill = $("#fill"), status = $("#status");
-function cancelHold(msg){
-  cancelAnimationFrame(holdRAF); holdRAF = null; fill.style.width = "0%";
-  if (msg) status.textContent = msg;
-}
-$("#submit").addEventListener("pointerdown", e => {
-  origin = {x:e.clientX, y:e.clientY}; holdStart = performance.now();
-  status.textContent = "Hold still…";
-  const step = () => {
-    const pct = Math.min(1, (performance.now()-holdStart)/HOLD);
-    fill.style.width = (pct*100) + "%";
-    if (pct >= 1){ cancelHold(""); finish(); return; }
-    holdRAF = requestAnimationFrame(step);
-  };
-  holdRAF = requestAnimationFrame(step);
-});
-window.addEventListener("pointermove", e => {
-  if (!holdRAF || !origin) return;
-  if (Math.hypot(e.clientX-origin.x, e.clientY-origin.y) > 4) cancelHold("You moved. Start again.");
-});
-window.addEventListener("pointerup", () => { if (holdRAF) cancelHold("Released too early."); });
-
+/* ============================================================
+   THE PAYOFF — it never mattered what you put in
+   ============================================================ */
 function finish(){
-  const missing = [];
-  if (!state.name) missing.push("full name");
-  if (state.vol === null) missing.push("notification volume");
-  if (!state.area || state.phone <= 1) missing.push("phone number");
-  if (!state.dob) missing.push("date of birth");
-  if (state.pw.length < 8) missing.push("password (8+ characters)");
-  if (!/.+@.+\..+/.test(state.email)) missing.push("email address");
-  if (!state.terms) missing.push("agreement to the terms");
-  if (missing.length){ status.textContent = "Missing: " + missing.join(", ") + "."; return; }
-
-  $("#form").style.display = "none";
+  var rows = [
+    ["Name",     S.name || "(not provided)", null],
+    ["Phone",    "(555) 010-0100",           fmtPhone(S.phone)],
+    ["Date of birth", new Date().toDateString(), S.dob ? S.dob.toDateString() : null],
+    ["Email",    "user847@friendspace.example", S.email || null],
+    ["Password", "stored in plain text",     S.pw ? "•".repeat(S.pw.length) : null],
+    ["Notification volume", "100 (default)", S.vol === null ? null : String(S.vol)]
+  ];
+  $("#receipt").innerHTML = rows.map(function(r){
+    return "<tr><td class='k'>" + r[0] + "</td><td class='v'>" + r[1] +
+      (r[2] ? "<span class='strike'>you entered: " + r[2] + "</span>" : "") + "</td></tr>";
+  }).join("");
+  $("#wrap").style.display = "none";
   $("#done").style.display = "block";
-  $("#dump").textContent = JSON.stringify({
-    name: state.name,
-    email: state.email,
-    phone: `(${state.area}) ${String(state.phone).padStart(7,"0").slice(0,3)}-${String(state.phone).padStart(7,"0").slice(3)}`,
-    dateOfBirth: state.dob.toDateString(),
-    password: "•".repeat(state.pw.length),
-    notificationVolume: state.vol
-  }, null, 2);
-  if (osc){ try { osc.stop(); } catch(e){} }
   window.scrollTo(0,0);
 }
+
+/* ============================================================
+   COOKIES — a hydra. Switching a partner off switches two
+   earlier ones back on, so working top-down never converges.
+   Start from the bottom and it falls in twelve clicks.
+   The banner tells you: "Partners are processed in order."
+   ============================================================ */
+var PARTNERS = ["AdMesh","Trackr","PixelDrift","Nomatic","Beaconly","Segmentum",
+                "Clickwell","DataFlume","Optivo","Rezonate","Cohortly","Bidstream"];
+var spawns = PARTNERS.map(function(_, i){
+  var pool = [], out = [];
+  for (var j=0;j<i;j++) pool.push(j);
+  for (var k=0;k<2 && pool.length;k++) out.push(pool.splice(Math.floor(Math.random()*pool.length),1)[0]);
+  return out;
+});
+var on = PARTNERS.map(function(){ return true; });
+
+function drawPartners(){
+  var host = $("#plist"); host.innerHTML = "";
+  PARTNERS.forEach(function(name, i){
+    var d = document.createElement("label");
+    d.className = "p" + (on[i] ? "" : " off");
+    d.innerHTML = "<span class='n'>" + String(i+1).padStart(2,"0") + "</span>" +
+      "<input type='checkbox'" + (on[i] ? " checked" : "") + "><span>" + name + "</span>";
+    d.querySelector("input").onchange = function(){
+      on[i] = this.checked;
+      if (!this.checked) spawns[i].forEach(function(j){ on[j] = true; });
+      drawPartners();
+    };
+    host.appendChild(d);
+  });
+  var n = on.filter(Boolean).length;
+  $("#left").textContent = n + " of " + PARTNERS.length + " partners still enabled";
+  $("#left").style.color = n ? "#90949c" : "#2e7d32";
+}
+$("#acceptAll").onclick = function(){ on = on.map(function(){ return true; }); drawPartners(); };
+$("#rejectAll").onclick = function(){ on = on.map(function(){ return true; }); drawPartners(); };
+$("#contBtn").onclick = function(){
+  if (on.filter(Boolean).length){ $("#left").style.color = "#c0392b"; return; }
+  T.unlock("completionist"); T.unlock("hydra");
+  $("#cookie").remove();
+};
+drawPartners();
+
+showStep(0);
 </script>
 </body>
 </html>

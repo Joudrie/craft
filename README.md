@@ -21,7 +21,7 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | File | What it is |
 |---|---|
 | `feed.html` | The feed. 2013 stratum. Twelve crimes, most of them original to this project. |
-| `index.html` | The sign-up form. Slingshot volume, million-value phone slider, fleeing checkbox. |
+| `index.html` | Onboarding. Eight-step wizard, and none of it counts. |
 | `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
@@ -45,6 +45,29 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 
 The infinite scroll has a 900ms debounce. **Outrun it and you reach the footer** —
 a skill-based escape hatch, and a trophy.
+
+## Onboarding
+
+Eight steps, and **it does not matter what you put in.** The confirmation screen shows
+what Friendspace recorded next to a struck-through copy of what you actually entered.
+They never match. The phone number you spent two minutes selecting is filed as
+`(555) 010-0100`.
+
+- **Phone number** — one slider, 1 to 100,000,000. At full range that is ~167,000
+  values per pixel, so dragging cannot land an exact number. Zoom narrows the range
+  10× at a time; seven zooms takes you from 100,000,000 down to a window of ten,
+  where the arrow keys finish the job. Tedium converted into a mechanic you can learn.
+- **Progress** — the step counter reads *1 of 4 → 2 of 6 → 4 of 9 → 6 of 11 → 8 of 8*,
+  while the bar shrinks from 62% to 20% before snapping to full.
+- **Back** — "You cannot go back. Everything you have entered is final."
+- **Cookie banner** — a hydra. Switching a partner off switches two earlier ones back
+  on, so working top-down never converges. Start from the bottom and it falls in
+  twelve clicks. The banner tells you: *"Partners are processed in order."*
+  Both "Accept all" and "Reject all" enable everything.
+
+Plus the slingshot volume control, the backwards-only calendar, the 68-key keyboard
+that reshuffles after every press, 700ms-per-character email, the fleeing checkbox
+(catch it with Tab + Space), and an eight-second hold-still submit.
 
 ## Trophies
 

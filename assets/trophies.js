@@ -16,6 +16,8 @@
     { id: "escape",       name: "Escape Artist",  desc: "Catch the fleeing checkbox.",                        where: "Sign-up" },
     { id: "completionist",name: "Completionist",  desc: "Disable every one of our valued partners.",          where: "Sign-up" },
     { id: "longway",      name: "The Long Way",   desc: "Travel 300 months into the past.",                   where: "Sign-up" },
+    { id: "precision",    name: "Precision",      desc: "Zoom the number selector all the way in.",           where: "Sign-up" },
+    { id: "hydra",        name: "Hydra",          desc: "Work out which end of the partner list to start at.", where: "Sign-up" },
     // feed
     { id: "persistence",  name: "Persistence",    desc: "Successfully like a post.",                          where: "Feed" },
     { id: "regret",       name: "Regret",         desc: "Attempt to un-like a post.",                         where: "Feed" },
