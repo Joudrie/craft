@@ -30,6 +30,8 @@
     { id: "archaeologist",name: "Archaeologist",  desc: "Reach the 2002 stratum.",                            where: "Settings" },
     { id: "readit",       name: "Actually Read It",desc: "Scroll the Privacy Policy to the very bottom.",     where: "Legal" },
     { id: "climber",      name: "Social Climber", desc: "Reach position #1 in someone's Top 8.",              where: "Profiles" },
+    { id: "rubbernecker", name: "Rubbernecker",   desc: "Visit every profile. Look at what they've done.",    where: "Profiles" },
+    { id: "silence",      name: "Silence",        desc: "Stop all six profile songs at once.",               where: "Profiles" },
     // the lie
     { id: "ghost",        name: "Ghost",          desc: "Successfully delete your account.",                  where: "Settings", impossible: true }
   ];

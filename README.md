@@ -22,6 +22,7 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 |---|---|
 | `feed.html` | The feed. 2013 stratum. Twelve crimes, most of them original to this project. |
 | `index.html` | Onboarding. Eight-step wizard, and none of it counts. |
+| `profile.html` | Six profiles. 2007 stratum. Each one ruined a different way, by its owner. |
 | `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
@@ -68,6 +69,38 @@ They never match. The phone number you spent two minutes selecting is filed as
 Plus the slingshot volume control, the backwards-only calendar, the 68-key keyboard
 that reshuffles after every press, 700ms-per-character email, the fleeing checkbox
 (catch it with Tab + Space), and an eight-second hold-still submit.
+
+## Profiles
+
+Friendspace lets members paste raw CSS into their profile and does not validate it —
+historically accurate, and structurally useful: **every profile is broken a different
+way, in canon.**
+
+| Profile | What they did to it |
+|---|---|
+| **Terri from HR** | Never customised anything. The only readable page here. |
+| **xXx_Nightshade_xXx** | Set the text one shade off the background. Measured 1.10:1 contrast — WCAG requires 4.5:1. Also Papyrus. |
+| **Ashleigh** | Hot pink, Comic Sans, glitter tiling, rotated headings, `text-shadow` on every element. |
+| **Dad** | Pasted the stylesheet into the About Me box instead of the CSS box. Page is fine. Bio is a stylesheet, ending "Susan is this right". |
+| **Aunt Deb** | Background at full camera resolution. Profile is 3,400px wide and the page scrolls sideways. She does not know why. |
+| **MARCUS_1987** | `* { display: inline }`. The entire profile is now one paragraph. His comment: "looks fine on my end". |
+
+**The comment wall is genuinely unbalanced HTML, not a simulation of one.** A comment
+from 3/11/2009 opens a `<marquee>` and never closes it; another opens a `<font
+size=7 color=red>` and never closes that. Every comment posted after them has been
+inside those tags ever since. Verified in the DOM: one `<marquee>` element that
+contains all subsequent comments.
+
+**Top 8 is a climbing game.** You start at slot 8 and click yourself upward, but every
+2.6 seconds the list "reorders nightly" and pushes you back down one. Out-click the
+decay to reach #1.
+
+**Profile songs stack.** Visiting six profiles leaves six tones running at once. The
+volume level you landed with the slingshot during sign-up governs them — the only
+setting on this website that is actually honoured.
+
+The header and friend rail live outside the profile container, so no matter what a
+member has done to their page, you can always leave. That's the escape hatch.
 
 ## Trophies
 

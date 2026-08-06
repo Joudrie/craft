@@ -448,6 +448,9 @@ function land(x){
   var v = x < SC.x0 ? 0 : x > SC.x1 ? 100 :
           Math.round((x-SC.x0)/(SC.x1-SC.x0)*100);
   S.vol = v;
+  /* the level you land governs profile songs later. it is the only setting
+     on this entire website that is actually honoured. */
+  try { localStorage.setItem("fs_volume", v); } catch (e) {}
   $("#volnum").textContent = v;
   $("#volnote").textContent = v===0 ? "(silent — nice shot)" : v===100 ? "(MAXIMUM)" : "";
   if (v === 0) T.unlock("marksman");

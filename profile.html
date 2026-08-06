@@ -1,0 +1,367 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<link rel="stylesheet" href="assets/friendspace.css">
+<script src="assets/trophies.js"></script>
+<style>
+/* Chrome that lives OUTSIDE #profile, so that no matter what a user has
+   pasted into their stylesheet, you can always leave. This is the escape
+   hatch: the profile can be destroyed, the exit cannot. */
+body{min-width:0;background:#e9ebee}
+.page{max-width:1000px;margin:9px auto;padding:0 8px 60px;display:grid;
+      grid-template-columns:190px 1fr;gap:11px;align-items:start}
+.rail{position:sticky;top:52px;z-index:10}
+.rail .fs-card-b{padding:6px}
+.who{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:2px;cursor:pointer;font-size:12px}
+.who:hover{background:#eef2fa}
+.who.cur{background:#3b5998;color:#fff}
+.who.cur .sm{color:#cdd8ef}
+.who .av{width:26px;height:26px;flex:none;border-radius:2px;color:#fff;
+         font:bold 10px/26px Helvetica;text-align:center}
+.who .nm{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who .sm{display:block;font-size:10px;color:#90949c}
+
+.songbar{
+  position:fixed;right:12px;bottom:12px;z-index:70;background:#222;color:#ddd;
+  border:2px outset #666;padding:7px 10px;font:11px Verdana,sans-serif;
+}
+.songbar b{color:#ffd34d}
+.songbar button{
+  background:#444;color:#fff;border:1px outset #888;font:11px Verdana;
+  padding:2px 7px;cursor:pointer;margin-left:6px;
+}
+
+/* ---------- the profile shell (before the user gets at it) ---------- */
+#profile{background:#fff;border:1px solid #dddfe2;border-radius:3px;padding:14px;overflow:visible}
+#profile h1{margin:0 0 2px;font:bold 21px Helvetica,Arial,sans-serif}
+#profile .tag{color:#90949c;font-size:12px;margin-bottom:12px}
+#profile .sec{margin:15px 0 5px;font:bold 13px Helvetica;border-bottom:2px solid #3b5998;padding-bottom:2px}
+#profile .bio{font-size:13px;line-height:1.5;white-space:pre-wrap}
+#profile .hero{display:flex;gap:13px;align-items:flex-start}
+#profile .pic{width:104px;height:104px;flex:none;color:#fff;font:bold 30px/104px Helvetica;text-align:center}
+#profile .stats{font-size:12px;color:#4b4f56;margin-top:7px}
+
+.t8{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:6px}
+.t8 .s{position:relative;text-align:center;font-size:10px;cursor:pointer}
+.t8 .s .av{height:52px;color:#fff;font:bold 15px/52px Helvetica;border-radius:2px}
+.t8 .s .rk{position:absolute;top:-4px;left:-4px;background:#f33;color:#fff;
+           font:bold 10px/16px Verdana;width:16px;height:16px;border-radius:8px}
+.t8 .s.me .av{outline:3px solid #ffd34d}
+.t8 .s.me .rk{background:#ffd34d;color:#000}
+
+.wall .c{border-bottom:1px solid #eceef0;padding:8px 2px;font-size:12px}
+.wall .c .cn{font-weight:bold;color:#3b5998}
+.wall .c .cd{color:#90949c;font-size:10px}
+
+.note{background:#fff9d6;border:1px solid #e8d98a;padding:6px 9px;font-size:11px;
+      color:#7a6a1e;margin-bottom:9px;border-radius:2px}
+</style>
+</head>
+<body>
+
+<div class="fs-header"><div class="fs-header-in">
+  <div class="fs-logo">Friendspace<span>BETA</span></div>
+  <div class="fs-nav">
+    <a href="feed.html">Feed</a><a href="profile.html">Profile</a>
+    <a href="awards.html">Awards</a><a href="index.html">Sign&nbsp;Up</a>
+  </div>
+</div></div>
+
+<div class="page">
+  <div class="rail">
+    <div class="fs-rail-title">Friends</div>
+    <div class="fs-card"><div class="fs-card-b" id="friends"></div></div>
+    <div class="fs-rail-title">Profile Editor</div>
+    <div class="fs-card"><div class="fs-card-b" style="font-size:11px;color:#90949c;line-height:1.5">
+      Paste custom CSS to personalise your profile.<br><br>
+      <span style="color:#c0392b">We do not validate this.</span>
+    </div></div>
+  </div>
+
+  <!-- everything below can be, and has been, destroyed by its owner -->
+  <div id="profile"></div>
+</div>
+
+<style id="userCSS"></style>
+
+<div class="songbar">
+  ♫ <b id="songCount">0</b> profile songs playing
+  <button id="mute">Stop</button>
+</div>
+
+<script>
+"use strict";
+var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
+
+/* ============================================================
+   THE CAST — each profile carries the CSS its owner pasted in
+   around 2007. Scoped to #profile so the navigation survives;
+   everything inside it is fair game.
+   ============================================================ */
+var PROFILES = [
+  {
+    id:"terri", name:"Terri from HR", ini:"TH", col:"#b58f5a", friends:41, note:440,
+    tag:"Human Resources Business Partner II",
+    bio:"Hello! I use Friendspace to stay connected with colleagues.\n\nPlease direct all " +
+        "workplace concerns to the appropriate channel and not to this profile.\n\nGo team!",
+    css:"",  /* never customised anything. the only readable page here. */
+    comments:[
+      {n:"Brayden Kowalczyk", d:"4h ago", t:"happy work anniversary!!"},
+      {n:"Dad", d:"4h ago", t:"Is this the Terri from the thing"}
+    ]
+  },
+  {
+    id:"nightshade", name:"xXx_Nightshade_xXx", ini:"XN", col:"#2a2a33", friends:666, note:311,
+    tag:"the darkness is my only friend",
+    bio:"dont bother reading this you cant see it anyway\n\nthats the point",
+    /* set the text colour one shade off the background. a real thing people did. */
+    css:"#profile{background:#0a0a0e;color:#16161c}" +
+        "#profile a{color:#131319}" +
+        "#profile *{font-family:Papyrus,fantasy!important;cursor:crosshair}" +
+        "#profile .sec{border-bottom-color:#1a1a22;color:#17171e}" +
+        "#profile .tag{color:#141419}" +
+        "#profile .wall .c{border-bottom-color:#111118}" +
+        "#profile .wall .c .cn{color:#181820}",
+    comments:[
+      {n:"Aunt Deb", d:"4h ago", t:"Honey I cant read any of this"},
+      {n:"MARCUS_1987", d:"4h ago", t:"sick layout bro"}
+    ]
+  },
+  {
+    id:"ashleigh", name:"★·.·´¯`·.·★ Ashleigh ★·.·´¯`·.·★", ini:"A", col:"#c47bb4", friends:1204, note:523,
+    tag:"~*~ liVe LaUgH lOvE ~*~",
+    bio:"hey everyone!!! welcome 2 my page!!! ♥♥♥\n\nplz sign my wall!!! ♥",
+    css:"#profile{background:#ff66cc;color:#5a005a;" +
+        "background-image:radial-gradient(2px 2px at 12px 18px,#fff,transparent)," +
+        "radial-gradient(2px 2px at 60px 44px,#ffff66,transparent);background-size:74px 74px}" +
+        "#profile *{font-family:'Comic Sans MS',cursive!important;text-shadow:2px 2px 0 #ff00ff;" +
+        "letter-spacing:2px}" +
+        "#profile h1{transform:rotate(-3deg);color:#fff}" +
+        "#profile .sec{border-bottom:3px dashed #ffff00;color:#fff}" +
+        "#profile .bio{background:rgba(255,255,255,.35);padding:8px;transform:rotate(1deg)}" +
+        "#profile .wall .c{border-bottom:2px dotted #ffff66}",
+    comments:[
+      {n:"Brayden Kowalczyk", d:"4h ago", t:"signed ur wall ♥ sign mine back"},
+      {n:"Terri from HR", d:"4h ago", t:"Ashleigh could you please make this readable for the newsletter"}
+    ]
+  },
+  {
+    id:"dad", name:"Dad", ini:"D", col:"#6f8f6f", friends:12, note:392,
+    tag:"Retired",
+    /* pasted the stylesheet into the About Me box instead of the CSS box.
+       the page is fine. the bio is a stylesheet. */
+    bio:"body { background-color: blue; }\n" +
+        "font { font-family: Arial; size: 3; }\n" +
+        ".profile { width: 100%; }\n" +
+        "TABLE.friendSpace { border: 1px solid; }\n" +
+        "/* paste this in the box */\n" +
+        "H1 { color: #000080; }\n" +
+        "marquee { speed: fast; }\n" +
+        "\nSusan is this right",
+    css:"",
+    comments:[
+      {n:"Your Cousin's Wife", d:"4h ago", t:"Uncle Rick that goes in the OTHER box"},
+      {n:"Dad", d:"4h ago", t:"Testing"},
+      {n:"Dad", d:"4h ago", t:"Testing 2"}
+    ]
+  },
+  {
+    id:"deb", name:"Aunt Deb", ini:"AD", col:"#b56f6f", friends:88, note:349,
+    tag:"Blessed 🙏",
+    bio:"Welcome to my page! I love my family, my garden, and my grandbabies.\n\n" +
+        "I do not know why the page is so wide. I did not do that.",
+    /* uploaded a background at full camera resolution and set it to not repeat */
+    css:"#profile{min-width:3400px;" +
+        "background:linear-gradient(120deg,#cfe8c0,#f0e4b8 40%,#e8c0c0);" +
+        "background-size:3400px 100%;background-repeat:no-repeat}",
+    comments:[
+      {n:"Dad", d:"4h ago", t:"Deb your page goes sideways"},
+      {n:"Aunt Deb", d:"4h ago", t:"I know Rick"}
+    ]
+  },
+  {
+    id:"marcus", name:"MARCUS_1987", ini:"M", col:"#5a86b5", friends:203, note:293,
+    tag:"keeping it real since 1987",
+    bio:"whats up friendspace. hit me up. i fixed my layout last night it looks way better now",
+    /* set display:inline on everything and never looked at it again */
+    css:"#profile *{display:inline!important}" +
+        "#profile{display:block!important;line-height:2.1}" +
+        "#profile .pic,#profile .t8 .av{width:40px!important;height:22px!important;" +
+        "line-height:22px!important;font-size:10px!important}",
+    comments:[
+      {n:"xXx_Nightshade_xXx", d:"4h ago", t:"bro what happened"},
+      {n:"MARCUS_1987", d:"4h ago", t:"looks fine on my end"}
+    ]
+  }
+];
+
+var T8 = ["BK","A","D","TH","M","XN","AD","KP"];
+var T8C = ["#7b91c4","#c47bb4","#6f8f6f","#b58f5a","#5a86b5","#4a4a55","#b56f6f","#8a7bc4"];
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+var cur = null, visited = {}, myRank = 7, decayTimer = null;
+
+function renderFriends(){
+  var host = $("#friends"); host.innerHTML = "";
+  PROFILES.forEach(function(p){
+    var d = document.createElement("div");
+    d.className = "who" + (cur && cur.id === p.id ? " cur" : "");
+    d.innerHTML = "<div class='av' style='background:" + p.col + "'>" + p.ini + "</div>" +
+      "<div class='nm'>" + p.name + "<span class='sm'>" + p.friends + " friends</span></div>";
+    d.onclick = function(){ show(p.id); };
+    host.appendChild(d);
+  });
+}
+
+/* CRIME: comments are written straight into innerHTML. In 2009 somebody left
+   a <marquee> open and a <font> unclosed. Every comment after theirs has been
+   inside those tags ever since. This is not simulated — the tags really are
+   unbalanced and the browser really does the rest. */
+function wallHTML(list){
+  var out = "<div class='wall'>";
+  list.forEach(function(c){
+    out += "<div class='c'><span class='cn'>" + c.n + "</span> " +
+           "<span class='cd'>" + c.d + "</span><br>" + c.t + "</div>";
+  });
+  out += "<div class='c'><span class='cn'>Kyle \"Big Kyle\" Petersen</span> " +
+         "<span class='cd'>posted 3/11/2009</span><br>" +
+         "check out my band <marquee>";      /* never closed */
+  out += "<div class='c'><span class='cn'>Guy You Met At A Wedding In 2011</span> " +
+         "<span class='cd'>4h ago</span><br>hey is your wall ok</div>";
+  out += "<div class='c'><span class='cn'>Brayden Kowalczyk</span> " +
+         "<span class='cd'>4h ago</span><br>" +
+         "HAPPY BIRTHDAY<font size='7' color='#cc0000'>";   /* also never closed */
+  out += "<div class='c'><span class='cn'>Aunt Deb</span> " +
+         "<span class='cd'>4h ago</span><br>Why is everything so big now</div>";
+  out += "</div>";
+  return out;
+}
+
+function show(id){
+  var p = PROFILES.filter(function(x){ return x.id === id; })[0];
+  if (!p) p = PROFILES[0];
+  cur = p;
+  visited[p.id] = true;
+  if (Object.keys(visited).length === PROFILES.length) T.unlock("rubbernecker");
+
+  myRank = 7;
+  clearInterval(decayTimer);
+
+  /* the owner's stylesheet, applied without validation */
+  $("#userCSS").textContent = p.css;
+
+  $("#profile").innerHTML =
+    (p.css ? "<div class='note'>This member has customised their profile.</div>" : "") +
+    "<div class='hero'>" +
+      "<div class='pic' style='background:" + p.col + "'>" + p.ini + "</div>" +
+      "<div><h1>" + p.name + "</h1>" +
+      "<div class='tag'>" + p.tag + "</div>" +
+      "<div class='stats'><b id='fcount'>" + p.friends + "</b> friends &nbsp;·&nbsp; " +
+      "member since 2004 &nbsp;·&nbsp; last online <b>4h ago</b></div></div>" +
+    "</div>" +
+    "<div class='sec'>About Me</div><div class='bio'>" + p.bio + "</div>" +
+    "<div class='sec'>" + p.name.split(" ")[0] + "'s Top 8</div>" +
+    "<div class='t8' id='t8'></div>" +
+    "<div style='font-size:10px;color:#90949c;margin-top:5px'>" +
+      "Reordered nightly. Everyone is notified.</div>" +
+    "<div class='sec'>Comment Wall</div>" + wallHTML(p.comments);
+
+  renderT8();
+  renderFriends();
+  startSong(p);
+  friendDecay = p.friends;
+
+  /* CRIME: the Top 8 slides you back down while you climb it. */
+  decayTimer = setInterval(function(){
+    if (myRank >= 7 || myRank === 0) return;
+    myRank++;
+    renderT8();
+  }, 2600);
+}
+
+function renderT8(){
+  var host = $("#t8"); if (!host) return;
+  host.innerHTML = "";
+  var order = [];
+  for (var i=0;i<8;i++) order.push(i);
+  for (var i=0;i<8;i++){
+    var isMe = (i === myRank);
+    var d = document.createElement("div");
+    d.className = "s" + (isMe ? " me" : "");
+    var ini = isMe ? "YOU" : T8[i], col = isMe ? "#3b5998" : T8C[i];
+    d.innerHTML = "<span class='rk'>" + (i+1) + "</span>" +
+      "<div class='av' style='background:" + col + "'>" + ini + "</div>";
+    if (isMe) d.onclick = climb;
+    host.appendChild(d);
+  }
+}
+
+function climb(){
+  if (myRank === 0) return;
+  myRank--;
+  renderT8();
+  if (myRank === 0){
+    clearInterval(decayTimer);
+    T.unlock("climber");
+  }
+}
+
+/* CRIME: the friend count drops as you read the page. */
+var friendDecay = 0;
+window.addEventListener("scroll", function(){
+  var fc = $("#fcount"); if (!fc || friendDecay <= 0) return;
+  if (window.scrollY % 3 === 0){
+    friendDecay--;
+    fc.textContent = friendDecay;
+  }
+});
+
+/* ============================================================
+   CRIME: profile songs autoplay and STACK. Visiting six profiles
+   leaves six songs running at once. The level you landed with
+   the slingshot during sign-up governs the volume — the only
+   setting on this website that is actually honoured.
+   ============================================================ */
+var actx = null, voices = {};
+function vol(){
+  var v = parseInt(localStorage.getItem("fs_volume"), 10);
+  return isNaN(v) ? 35 : v;
+}
+function startSong(p){
+  if (voices[p.id]) return;
+  try {
+    actx = actx || new (window.AudioContext || window.webkitAudioContext)();
+    var o = actx.createOscillator(), g = actx.createGain(), lfo = actx.createOscillator(), lg = actx.createGain();
+    o.type = "triangle"; o.frequency.value = p.note;
+    lfo.frequency.value = 4.2; lg.gain.value = 3;
+    lfo.connect(lg); lg.connect(o.frequency);
+    g.gain.value = 0.05 * vol() / 100;      /* capped, and stacking-aware */
+    o.connect(g); g.connect(actx.destination);
+    o.start(); lfo.start();
+    voices[p.id] = {o:o, lfo:lfo, g:g};
+  } catch(e){}
+  updateSongs();
+}
+function updateSongs(){
+  $("#songCount").textContent = Object.keys(voices).length;
+}
+$("#mute").addEventListener("click", function(){
+  var n = Object.keys(voices).length;
+  Object.keys(voices).forEach(function(k){
+    try { voices[k].o.stop(); voices[k].lfo.stop(); } catch(e){}
+    delete voices[k];
+  });
+  updateSongs();
+  if (n >= 6) T.unlock("silence");
+});
+
+/* go */
+renderFriends();
+show((location.hash || "#terri").slice(1));
+window.addEventListener("hashchange", function(){ show(location.hash.slice(1)); });
+</script>
+</body>
+</html>
