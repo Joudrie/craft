@@ -23,7 +23,7 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `feed.html` | The feed. 2013 stratum. Twelve crimes, most of them original to this project. |
 | `index.html` | Onboarding. Eight-step wizard, and none of it counts. |
 | `profile.html` | Six profiles. 2007 stratum. Each one ruined a different way, by its owner. |
-| `settings.html` | Settings. 2002 stratum — frames, teal, and the roach motel. |
+| `settings.html` | Settings. Ten sections, 43 controls, every one of them wrong. |
 | `privacy.html` | The Privacy Policy. 28,778 words, and the scroll runs backwards. |
 | `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
@@ -144,6 +144,29 @@ setting on this website that is actually honoured.
 
 The header and friend rail live outside the profile container, so no matter what a
 member has done to their page, you can always leave. That's the escape hatch.
+
+## Settings — the study
+
+The centrepiece. Ten sections and **43 controls**, covering the full inventory a real
+product has, where **every single one commits a specific, named offence**. Turn on
+Design Notes and each row explains itself inline.
+
+These are not invented annoyances. They are the complaints everybody actually has:
+
+| Section | The offence |
+|---|---|
+| **Search** | Returns **zero results for terms that are on the page**, then suggests three unrelated settings. The real cause is always the same: the index is built from internal keys, not visible words. |
+| Account | Display name disabled with no reason. Username "managed by your administrator" — you are the administrator. Email appears twice and **the two copies disagree**. Password shown in plain text. |
+| Account | Language list written **in the language you already speak** — so if you can't read the current one, you can't find yours. Time zones sorted by **numeric offset**, not by place. |
+| Appearance | **Dark mode applies to one panel.** Text-size slider with no numbers, units or preview. **"Reduce motion" is inverted** — ON enables motion, which is the most harmful defect here. "Optimise your experience" does something nobody can name. |
+| Appearance | High contrast **contradicts** Dark mode, and nothing says which wins. |
+| Notifications | Eighteen switches, **no master off**. "Product news and offers" is *"a transactional email and cannot be disabled."* Digest frequency is a **dropdown with one option**. |
+| Content | Autoplay and Data saver **both on, both contradicting**, one silently ignored. Muted words need the Save bar at the very bottom — and navigating away **discards them without warning**. Feed sort **reverts every visit**. |
+| Security | 2FA "unavailable in your region" — no region named. Login-alert toggle **stalls two seconds** before committing, so you click again and undo it. **"Sign out of all devices" signs you out of one.** Active sessions lists unknown device, unknown location, unknown time. |
+| Accessibility | Screen reader support locked by the nonexistent administrator. **Focus indicators off by default** — WCAG 2.4.7, and a genuine failure rather than a joke. |
+| Advanced | The fix for the feed's scroll-jumping is **buried here and off by default**. **"Clear cache" is destructive and fires instantly with no confirmation**, while harmless "Download your data" asks twice. |
+
+Confirmation should scale with consequence. Here it is exactly inverted.
 
 ## The basement (2002 stratum)
 

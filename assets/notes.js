@@ -165,6 +165,18 @@
       real:"Historically accurate: this is precisely what MySpace shipped, and precisely what happened." },
 
     /* ---------------- settings ---------------- */
+    { screen:"Settings", sel:"#nav",
+      crime:"Ten sections and around fifty controls, every one of which commits a specific, named offence. Turn Design Notes on and each row explains itself inline.",
+      law:"All of them. This screen is the study: settings are where products accumulate their worst interface decisions, because nobody demos the settings screen.",
+      fix:"Read the inline notes. Each one names what went wrong and what the correct version is.",
+      real:"Every complaint in here is one people actually have: search that cannot find settings, toggles nobody can interpret, 'managed by your administrator' when you are the administrator, and 'sign out of all devices' signing you out of one." },
+
+    { screen:"Settings", sel:"#setSearch",
+      crime:"Settings search returns zero results for terms that appear on this very page, then suggests three unrelated settings you did not ask for.",
+      law:"Match between system and the real world — Nielsen #2. A search index built from internal keys instead of visible words cannot match what the user reads.",
+      fix:"Index the words actually shown on screen, including synonyms, and deep-link to the control.",
+      real:"The most common complaint about every large settings screen shipped in the last decade. The cause is nearly always the same." },
+
     { screen:"Settings", sel:"table.tg",
       crime:"Ten privacy settings, each negated an arbitrary number of times. 'Do not disallow non-restricted sharing.' Ticking every box leaves half of them sharing.",
       law:"Trick Questions — Brignull (2010). GDPR requires consent to be specific, informed and unambiguous.",
@@ -272,6 +284,8 @@
       "border:none;padding:9px 13px;border-radius:7px 0 0 7px;cursor:pointer;",
       "font:600 12px ui-sans-serif,system-ui,sans-serif;box-shadow:-2px 2px 10px rgba(0,0,0,.28)}",
     "#fs-notes-tab:focus-visible{outline:2px solid #fff;outline-offset:-4px}",
+    /* on a wide screen, make room rather than covering the thing being explained */
+    "@media (min-width:1100px){body.fs-notes-on{padding-right:392px}}",
     "@media (prefers-reduced-motion:reduce){#fs-notes{transition:none}}"
   ].join("");
 
@@ -388,6 +402,7 @@
       build();
       on = true;
       render();
+      document.body.classList.add("fs-notes-on");
       requestAnimationFrame(function(){ panel.classList.add("open"); });
       try { localStorage.setItem(KEY, "1"); } catch(e){}
       if (global.FS && FS.Trophies) FS.Trophies.unlock("critic");
@@ -397,6 +412,7 @@
 
     disable: function(){
       on = false;
+      document.body.classList.remove("fs-notes-on");
       clear();
       if (panel) panel.classList.remove("open");
       try { localStorage.removeItem(KEY); } catch(e){}

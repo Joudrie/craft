@@ -10,40 +10,33 @@
 <script src="assets/ambient.js"></script>
 <style>
 /* ============================================================
-   THE 2002 STRATUM
-   Settings was never migrated. It still uses the frame layout,
-   the system palette, and the original wording.
+   THE 2002 STRATUM — Settings was never migrated.
+   Ten sections, fifty-odd controls, and every one of them
+   commits a specific, named offence. Turn on Design Notes and
+   each row explains itself.
    ============================================================ */
-body{min-width:0;background:#008080}          /* the teal. of course the teal. */
+body{min-width:0;background:#008080}
 
-.win{
-  max-width:940px;margin:12px auto;background:#c0c0c0;
-  border:2px outset #fff;box-shadow:3px 3px 0 rgba(0,0,0,.35);
-  font-family:"MS Sans Serif",Tahoma,Geneva,sans-serif;font-size:12px;color:#000;
-}
-.title{
-  background:linear-gradient(90deg,#000080,#1084d0);color:#fff;
-  padding:3px 5px;font-weight:bold;font-size:12px;display:flex;align-items:center;
-}
+.win{max-width:980px;margin:12px auto;background:#c0c0c0;border:2px outset #fff;
+  box-shadow:3px 3px 0 rgba(0,0,0,.35);
+  font-family:"MS Sans Serif",Tahoma,Geneva,sans-serif;font-size:12px;color:#000}
+.title{background:linear-gradient(90deg,#000080,#1084d0);color:#fff;padding:3px 5px;
+  font-weight:bold;display:flex;align-items:center}
 .title .btns{margin-left:auto;display:flex;gap:2px}
-.title .btns b{
-  background:#c0c0c0;border:1px outset #fff;color:#000;width:16px;height:14px;
-  font:bold 10px/12px "MS Sans Serif";text-align:center;cursor:pointer;
-}
-.menubar{background:#c0c0c0;border-bottom:1px solid #808080;padding:2px 5px;font-size:12px}
+.title .btns b{background:#c0c0c0;border:1px outset #fff;color:#000;width:16px;height:14px;
+  font:bold 10px/12px "MS Sans Serif";text-align:center;cursor:pointer}
+.menubar{background:#c0c0c0;border-bottom:1px solid #808080;padding:2px 5px}
 .menubar span{padding:1px 7px;cursor:default}
 .menubar span:hover{background:#000080;color:#fff}
 
-/* the frameset that was never replaced */
-.frames{display:flex;min-height:430px;border-top:1px solid #808080}
-.fr-nav{
-  width:172px;flex:none;background:#fff;border:2px inset #c0c0c0;margin:3px;
-  overflow-y:auto;max-height:430px;
-}
-.fr-main{
-  flex:1;background:#fff;border:2px inset #c0c0c0;margin:3px 3px 3px 0;
-  padding:9px 11px;overflow-y:auto;max-height:430px;
-}
+.searchrow{padding:5px 6px;background:#c0c0c0;border-bottom:1px solid #808080;display:flex;gap:6px}
+.searchrow input{flex:1;border:2px inset #c0c0c0;padding:3px 5px;font:12px "MS Sans Serif",sans-serif}
+
+.frames{display:flex;min-height:470px;border-top:1px solid #808080}
+.fr-nav{width:186px;flex:none;background:#fff;border:2px inset #c0c0c0;margin:3px;
+  overflow-y:auto;max-height:470px}
+.fr-main{flex:1;background:#fff;border:2px inset #c0c0c0;margin:3px 3px 3px 0;
+  padding:9px 11px;overflow-y:auto;max-height:470px}
 .fr-nav a{display:block;padding:4px 8px;color:#0000ee;font-size:12px;text-decoration:underline;cursor:pointer}
 .fr-nav a:hover{background:#000080;color:#fff}
 .fr-nav a.cur{background:#000080;color:#fff}
@@ -52,41 +45,51 @@ body{min-width:0;background:#008080}          /* the teal. of course the teal. *
 h3.sec{font-size:14px;margin:0 0 3px;font-family:"Times New Roman",serif}
 p.lead{color:#404040;margin:0 0 12px;font-size:11px}
 
-/* ---- the double-negative privacy toggles ---- */
+/* one settings row */
+.row{display:flex;align-items:flex-start;gap:9px;padding:7px 3px;border-bottom:1px dotted #b0b0b0}
+.row .ctl{flex:none;width:132px}
+.row .lab{flex:1;line-height:1.4}
+.row .lab small{color:#606060;display:block;font-size:10px;margin-top:1px}
+.row .state{flex:none;width:92px;text-align:right;font:bold 10px "Courier New",monospace}
+.row.dim{opacity:.5}
+.row select,.row input[type=text]{width:100%;border:2px inset #c0c0c0;padding:2px;
+  font:11px "MS Sans Serif",sans-serif;background:#fff}
+.row input[type=range]{width:100%}
+.on-v{color:#a00}.off-v{color:#060}.na-v{color:#808080}
+
+/* the explanation, shown only when Design Notes is on */
+.why{display:none}
+body.fs-notes-on .why{display:block;background:#fffbe6;border-left:3px solid #d64545;
+  margin:5px 0 2px;padding:5px 8px;font:11px/1.45 system-ui,sans-serif;color:#3f3b36}
+body.fs-notes-on .why b{color:#8a4b1f}
+
 table.tg{width:100%;border-collapse:collapse;font-size:11px}
 table.tg td{border-bottom:1px dotted #a0a0a0;padding:5px 4px;vertical-align:top}
 table.tg td.c{width:22px}
 table.tg td.st{width:96px;text-align:right;font-weight:bold;font-family:"Courier New",monospace}
-.on-v{color:#a00}
-.off-v{color:#060}
-.btn95{
-  background:#c0c0c0;border:2px outset #fff;padding:3px 12px;
-  font:12px "MS Sans Serif",Tahoma,sans-serif;cursor:pointer;
-}
+
+.btn95{background:#c0c0c0;border:2px outset #fff;padding:3px 12px;
+  font:12px "MS Sans Serif",Tahoma,sans-serif;cursor:pointer}
 .btn95:active{border-style:inset}
 .btn95[disabled]{color:#808080;cursor:not-allowed}
 .saved{font-size:11px;color:#000080;margin-top:9px;min-height:30px}
 
-/* ---- the deletion corridor ---- */
 .lvl{border:2px inset #c0c0c0;background:#fff;padding:11px;margin-top:8px}
 .lvl h4{margin:0 0 6px;font-size:13px;font-family:"Times New Roman",serif}
 .lvl p{margin:0 0 9px;font-size:11px;line-height:1.5}
-.lvl input[type=text]{
-  width:100%;padding:4px;border:2px inset #c0c0c0;font:12px "Courier New",monospace;
-}
+.lvl input[type=text]{width:100%;padding:4px;border:2px inset #c0c0c0;font:12px "Courier New",monospace}
 .corridor{font-size:10px;color:#606060;margin-top:7px;font-family:"Courier New",monospace}
-.holdbar{
-  width:100%;height:17px;border:2px inset #c0c0c0;background:#fff;position:relative;
-  overflow:hidden;margin-top:6px;
-}
+.holdbar{width:100%;height:17px;border:2px inset #c0c0c0;background:#fff;position:relative;
+  overflow:hidden;margin-top:6px}
 .holdbar i{position:absolute;inset:0;width:0;background:#000080}
 .radio{display:block;margin:3px 0;font-size:11px}
 .warn{background:#ffffcc;border:1px solid #808000;padding:6px 8px;font-size:11px;margin:8px 0}
 
-.statusbar{
-  background:#c0c0c0;border-top:1px solid #fff;padding:3px 6px;font-size:11px;
-  display:flex;gap:10px;
-}
+/* the save bar, at the very bottom, where you will not look */
+.savebar{background:#c0c0c0;border-top:2px groove #fff;padding:6px 8px;display:flex;
+  align-items:center;gap:8px;font-size:11px}
+.savebar .dirty{color:#a00;font-weight:bold}
+.statusbar{background:#c0c0c0;border-top:1px solid #fff;padding:3px 6px;font-size:11px;display:flex;gap:10px}
 .statusbar span{border:1px inset #c0c0c0;padding:1px 6px;flex:none}
 .statusbar span.grow{flex:1}
 </style>
@@ -107,14 +110,21 @@ table.tg td.st{width:96px;text-align:right;font-weight:bold;font-family:"Courier
   </div>
   <div class="menubar"><span>File</span><span>Edit</span><span>View</span><span>Help</span></div>
 
+  <div class="searchrow">
+    <input id="setSearch" placeholder="Search settings" autocomplete="off">
+    <button class="btn95" id="setSearchGo">Search</button>
+  </div>
+
   <div class="frames">
-    <!-- the navigation frame, which has never updated -->
-    <div class="fr-nav" id="nav">
-      <div class="grp">Settings</div>
-    </div>
+    <div class="fr-nav" id="nav"><div class="grp">Settings</div></div>
     <div class="fr-main" id="main"></div>
   </div>
 
+  <div class="savebar">
+    <span id="dirty"></span>
+    <button class="btn95" id="saveBtn" style="margin-left:auto">Save Changes</button>
+    <button class="btn95" id="revertBtn">Restore Defaults</button>
+  </div>
   <div class="statusbar">
     <span id="sbLeft">Ready</span>
     <span class="grow" id="sbMid">Friendspace Settings v1.0 (2002)</span>
@@ -127,278 +137,403 @@ table.tg td.st{width:96px;text-align:right;font-weight:bold;font-family:"Courier
 var T = FS.Trophies, $ = function(s){ return document.querySelector(s); };
 T.unlock("archaeologist");
 
-/* ============================================================
-   PRIVACY TOGGLES — every label is negated an arbitrary number
-   of times, so the checkbox state tells you nothing on its own.
-   The right-hand column reports what the setting ACTUALLY does,
-   which is what makes this a puzzle instead of a trick: you can
-   always verify. Get all ten to PRIVATE to solve it.
-   ============================================================ */
-var SETTINGS = [
-  { l:"Do not disallow non-restricted profile sharing",                     n:3, v:true  },
-  { l:"Prevent the suppression of unrestricted visibility",                 n:2, v:true  },
-  { l:"Disable the opt-out from non-anonymous indexing",                    n:3, v:true  },
-  { l:"Withhold consent to decline third-party non-disclosure",             n:3, v:true  },
-  { l:"Never refrain from omitting your data from partner exports",         n:3, v:true  },
-  { l:"Unblock the restriction on public availability",                     n:2, v:true  },
-  { l:"Do not prevent the disabling of the privacy limitation",             n:3, v:true  },
-  { l:"Decline to withhold your activity from unaffiliated processors",     n:2, v:true  },
-  { l:"Stop the cessation of continuous location retention",                n:2, v:true  },
-  { l:"Refuse to not share everything, always, with everyone",              n:2, v:true  }
-];
+var dirty = 0, applied = {};
 
-/* effective meaning = checkbox XOR (odd number of negations) */
+/* ==================================================================
+   THE INVENTORY
+   Every control a real settings screen has, and for each one a
+   specific, named offence. `why` is what Design Notes reveals.
+   ================================================================== */
+var S = {
+
+  account: { label:"Account", lead:"Your account details.", rows:[
+    { t:"text", label:"Display name", val:"Kegan Bergeron", defect:"greyed",
+      why:"<b>Disabled with no reason given.</b> A control that cannot be used must say why, and offer a route to being able to. Nielsen #1, visibility of system status." },
+    { t:"text", label:"Username", val:"kegan_1967_xX47", defect:"managed",
+      why:"<b>“Managed by your administrator.”</b> You are the only account here, so you are the administrator. Blaming an absent authority is how software avoids saying <i>no</i>." },
+    { t:"text", label:"Email address", val:"user847@friendspace.example", defect:"nosync",
+      why:"<b>The same setting exists in Notifications, and the two do not agree.</b> Duplicated state with no single source of truth is the most common settings bug in real products." },
+    { t:"text", label:"Password", val:"Buick1974!", defect:"plaintext",
+      why:"<b>Shown in plain text, and stored that way.</b> Also displayed on your public profile. This is a parody, but plain-text password storage remains depressingly real." },
+    { t:"select", label:"Language", opts:["English","Deutsch","Français","日本語","Español"], defect:"lang",
+      why:"<b>The language list is in the language you already speak.</b> If you cannot read the current language, you cannot find your own — so the list must always be in its own language." },
+    { t:"select", label:"Time zone", opts:["UTC−11:00","UTC−04:00","UTC+00:00","UTC+05:45","UTC+09:00"], defect:"offset",
+      why:"<b>Sorted by numeric offset, not by place.</b> People know what city they are in, not their offset from Greenwich. Match between system and the real world — Nielsen #2." },
+    { t:"button", label:"Download your data", defect:"vague",
+      why:"<b>No indication of what you get, how big it is, or when.</b> An action with unknowable consequences cannot be consented to." }
+  ]},
+
+  privacy: { label:"Privacy", lead:"Control how your information is shared. Settings take effect immediately, except where they do not.", special:"privacy" },
+
+  notifications: { label:"Notifications", lead:"Choose what you are told about.", rows:[
+    { t:"toggle", label:"Someone likes your post", val:true, defect:"nomaster",
+      why:"<b>Eighteen switches and no master off.</b> Bulk actions exist because nobody wants to click eighteen times. Flexibility and efficiency of use — Nielsen #7." },
+    { t:"toggle", label:"Someone does not like your post", val:true, defect:"nomaster" },
+    { t:"toggle", label:"Nothing happens", val:true, defect:"nomaster" },
+    { t:"toggle", label:"Your Top 8 is reordered overnight", val:true, defect:"nomaster" },
+    { t:"toggle", label:"A partner exports your data", val:true, defect:"nomaster" },
+    { t:"toggle", label:"Product news and offers", val:true, defect:"transactional",
+      why:"<b>“This is a transactional email and cannot be disabled.”</b> Marketing reclassified as transactional is a documented way of evading unsubscribe requirements. CAN-SPAM draws exactly this line." },
+    { t:"select", label:"Email digest frequency", opts:["Immediately"], defect:"onechoice",
+      why:"<b>A dropdown with one option.</b> If there is no choice, it is not a setting — it is a label pretending to be a control." },
+    { t:"toggle", label:"Quiet hours", val:false, defect:"reload",
+      why:"<b>Requires a reload, and does not say so.</b> A change that silently fails to apply is worse than one that visibly refuses." },
+    { t:"text", label:"Notification email", val:"kegan@example.com", defect:"nosync",
+      why:"<b>This is the Account email again, and it holds a different value.</b> Change either one and the other stays as it was." }
+  ]},
+
+  appearance: { label:"Appearance", lead:"How Friendspace looks.", rows:[
+    { t:"toggle", label:"Dark mode", val:false, defect:"partial",
+      why:"<b>Applies to this panel only.</b> A theme that covers part of a product is worse than no theme: it looks like a rendering bug on every screen it misses." },
+    { t:"slider", label:"Text size", min:1, max:100, val:50, defect:"nonumbers",
+      why:"<b>A slider with no numbers, no units and no preview.</b> You cannot aim at a value you cannot see. Nielsen #1 again." },
+    { t:"select", label:"Density", opts:["Default"], defect:"onechoice" },
+    { t:"toggle", label:"Reduce motion", val:true, defect:"inverted",
+      why:"<b>Inverted: ON means motion is enabled.</b> An accessibility control that does the opposite of its label is the most harmful defect on this page — it is relied on by people who get sick otherwise." },
+    { t:"toggle", label:"Optimise your experience", val:true, defect:"vague",
+      why:"<b>Nobody can say what this does.</b> A setting whose label describes a feeling rather than a behaviour cannot be decided about. Speak the user's language — Nielsen #2." },
+    { t:"toggle", label:"High contrast", val:false, defect:"contradiction",
+      why:"<b>Contradicts Dark mode, and nothing says which wins.</b> When two settings conflict, the interface must resolve it visibly, not silently." }
+  ]},
+
+  content: { label:"Content", lead:"What you see, and how much of it.", rows:[
+    { t:"toggle", label:"Autoplay videos", val:true, defect:"contradiction",
+      why:"<b>Directly contradicts Data saver below.</b> Both can be on. Neither warns you. One of them is silently ignored." },
+    { t:"toggle", label:"Data saver", val:true, defect:"contradiction" },
+    { t:"text", label:"Muted words", val:"", defect:"unsaved",
+      why:"<b>Applies only if you find the Save bar at the very bottom.</b> Some controls here apply instantly and some need saving, and nothing distinguishes them. Navigating away discards silently." },
+    { t:"select", label:"Default feed sort", opts:["Algorithmic","Chronological"], defect:"resets",
+      why:"<b>Reverts to Algorithmic on every visit.</b> A preference that does not persist is not a preference; it is a temporary concession." },
+    { t:"toggle", label:"Show sensitive content", val:false, defect:"question",
+      why:"<b>The label is a question, so neither state is unambiguous.</b> Does ON mean “yes, show it” or “yes, warn me”? Label controls with statements, never questions." }
+  ]},
+
+  security: { label:"Security", lead:"Keep your account safe.", rows:[
+    { t:"toggle", label:"Two-factor authentication", val:false, defect:"region",
+      why:"<b>“Unavailable in your region.”</b> No region is named, and no route to availability is offered. A blocked path must always explain itself." },
+    { t:"toggle", label:"Alert me about new logins", val:true, defect:"laggy",
+      why:"<b>Animates for two seconds before committing.</b> Past the Doherty Threshold (~400ms) people assume the click failed and click again — which toggles it back." },
+    { t:"button", label:"Sign out of all devices", defect:"onlythis",
+      why:"<b>Signs you out of this device only.</b> The single most complained-about button in consumer software, and it is usually a genuine bug rather than malice." },
+    { t:"info", label:"Active sessions", val:"1 session (unknown device, unknown location, unknown time)", defect:"useless",
+      why:"<b>Information with every useful field missing.</b> Showing a row you cannot act on is worse than showing nothing — it implies oversight you do not have." },
+    { t:"button", label:"Recovery codes", defect:"greyed" }
+  ]},
+
+  accessibility: { label:"Accessibility", lead:"Friendspace is for everyone.", rows:[
+    { t:"toggle", label:"Screen reader support", val:false, defect:"managed",
+      why:"<b>Locked, and attributed to an administrator who does not exist.</b> Accessibility as an opt-in that cannot be opted into." },
+    { t:"toggle", label:"Captions on video", val:false, defect:"question" },
+    { t:"select", label:"Keyboard shortcuts", opts:["Enabled"], defect:"onechoice" },
+    { t:"toggle", label:"Focus indicators", val:false, defect:"harm",
+      why:"<b>Off by default, and this one has teeth.</b> Without a visible focus ring, keyboard-only users cannot tell where they are. WCAG 2.4.7 requires it; hiding it is a genuine accessibility failure, not a joke." }
+  ]},
+
+  billing: { label:"Billing", lead:"Your plan.", rows:[
+    { t:"select", label:"Plan", opts:["Friendspace Free (with advertisements)"], defect:"onechoice" },
+    { t:"info", label:"Next charge", val:"$0.00 on a date to be determined", defect:"useless" },
+    { t:"button", label:"Cancel subscription", defect:"redirect",
+      why:"<b>Sends you to Delete Account, which does not delete accounts.</b> Cancellation routed into a different, longer flow is the Roach Motel pattern — Brignull, 2010." }
+  ]},
+
+  advanced: { label:"Advanced", lead:"Settings we could not categorise.", rows:[
+    { t:"toggle", label:"Show new posts without moving the page", val:false, defect:"buried",
+      why:"<b>The fix for the feed's worst behaviour, buried in Advanced and off by default.</b> Burying the setting people actually want is Obstruction — Brignull. The setting that solves a complaint should sit where the complaint occurs." },
+    { t:"toggle", label:"Disable the gravity scrollbar", val:false, defect:"buried" },
+    { t:"button", label:"Clear cache", defect:"noconfirm",
+      why:"<b>Destructive, and fires immediately with no confirmation</b> — while the harmless “Download your data” asks twice. Confirmation should scale with consequence. Error prevention, Nielsen #5." },
+    { t:"toggle", label:"Beta features", val:true, defect:"vague" }
+  ]},
+
+  del: { label:"Delete Account", special:"delete" }
+};
+
+/* ==================================================================
+   RENDERING
+   ================================================================== */
+function stateOf(r){
+  if (r.defect === "greyed" || r.defect === "managed" || r.defect === "region") return ["na-v","LOCKED"];
+  if (r.t === "toggle") {
+    var eff = (r.defect === "inverted") ? !r.val : r.val;
+    return [eff ? "on-v" : "off-v", eff ? "ON" : "OFF"];
+  }
+  return ["na-v",""];
+}
+
+function rowHTML(r, key, i){
+  var locked = (r.defect === "greyed" || r.defect === "managed" || r.defect === "region");
+  var st = stateOf(r), ctl = "";
+
+  if (r.t === "toggle")
+    ctl = "<input type='checkbox' data-k='"+key+"' data-i='"+i+"'" +
+          (r.val ? " checked" : "") + (locked ? " disabled" : "") + ">";
+  else if (r.t === "text")
+    ctl = "<input type='text' data-k='"+key+"' data-i='"+i+"' value='" +
+          String(r.val).replace(/'/g,"&#39;") + "'" + (locked ? " disabled" : "") + ">";
+  else if (r.t === "select")
+    ctl = "<select data-k='"+key+"' data-i='"+i+"'" + (locked ? " disabled" : "") + ">" +
+          r.opts.map(function(o){ return "<option>" + o + "</option>"; }).join("") + "</select>";
+  else if (r.t === "slider")
+    ctl = "<input type='range' min='"+r.min+"' max='"+r.max+"' value='"+r.val+
+          "' data-k='"+key+"' data-i='"+i+"'>";
+  else if (r.t === "button")
+    ctl = "<button class='btn95' data-act='"+key+":"+i+"'" + (locked ? " disabled" : "") +
+          ">" + r.label + "</button>";
+  else ctl = "";
+
+  var sub = "";
+  if (r.defect === "managed")       sub = "Managed by your administrator.";
+  else if (r.defect === "region")   sub = "Unavailable in your region.";
+  else if (r.defect === "transactional") sub = "This is a transactional email and cannot be disabled.";
+  else if (r.defect === "greyed")   sub = "";
+  else if (r.t === "info")          sub = r.val;
+
+  return "<div class='row" + (locked ? " dim" : "") + "'>" +
+    "<div class='ctl'>" + (r.t === "button" || r.t === "info" ? "" : ctl) + "</div>" +
+    "<div class='lab'>" + (r.t === "button" ? ctl : r.label) +
+      (sub ? "<small>" + sub + "</small>" : "") +
+      (r.why ? "<div class='why'>" + r.why + "</div>" : "") + "</div>" +
+    "<div class='state " + st[0] + "'>" + st[1] + "</div>" +
+  "</div>";
+}
+
+function renderSection(key){
+  var sec = S[key];
+  if (sec.special === "privacy") return renderPrivacy();
+  if (sec.special === "delete")  { gate = 0; typedRound = 0; return renderDelete(); }
+
+  $("#main").innerHTML =
+    "<h3 class='sec'>" + sec.label + "</h3><p class='lead'>" + sec.lead + "</p>" +
+    sec.rows.map(function(r,i){ return rowHTML(r, key, i); }).join("");
+
+  wireRows(key);
+}
+
+function wireRows(key){
+  [].forEach.call($("#main").querySelectorAll("[data-k]"), function(el){
+    el.addEventListener("change", function(){
+      var r = S[key].rows[+el.dataset.i];
+
+      /* the two-second toggle: long enough that you click again */
+      if (r.defect === "laggy"){
+        var was = !el.checked;
+        el.disabled = true;
+        $("#sbLeft").textContent = "Applying…";
+        setTimeout(function(){
+          el.disabled = false;
+          r.val = el.checked;
+          $("#sbLeft").textContent = "Applied";
+          renderSection(key);
+        }, 2000);
+        return;
+      }
+
+      r.val = (el.type === "checkbox") ? el.checked : el.value;
+
+      /* some apply instantly, some need Save, and nothing says which */
+      if (r.defect === "unsaved" || r.defect === "resets"){ dirty++; updateDirty(); }
+      if (r.defect === "reload") $("#sbLeft").textContent = "Saved (restart required)";
+      if (r.defect === "partial" && r.label === "Dark mode") applyPartialDark(el.checked);
+      if (r.defect === "buried") applied[r.label] = r.val;
+      renderSection(key);
+    });
+  });
+
+  [].forEach.call($("#main").querySelectorAll("[data-act]"), function(b){
+    b.addEventListener("click", function(){
+      var p = b.dataset.act.split(":"), r = S[p[0]].rows[+p[1]];
+      if (r.defect === "onlythis"){
+        $("#sbLeft").textContent = "Signed out of 1 of 1 devices (this one).";
+        alert("You have been signed out of all devices.\n\n(1 of 1 devices: this one. The others were unaffected because there are no others.)");
+      } else if (r.defect === "noconfirm"){
+        $("#sbLeft").textContent = "Cache cleared. Your drafts were in there.";
+      } else if (r.defect === "redirect"){
+        show("del");
+      } else if (r.defect === "vague"){
+        if (!confirm("Download your data?")) return;
+        if (!confirm("Are you sure you want to download your data?")) return;
+        $("#sbLeft").textContent = "Your request has been queued. No estimate is available.";
+      }
+    });
+  });
+}
+
+/* dark mode that covers exactly one panel */
+function applyPartialDark(on){
+  var m = $("#main");
+  m.style.background = on ? "#1a1a1a" : "#fff";
+  m.style.color = on ? "#ddd" : "#000";
+}
+
+function updateDirty(){
+  $("#dirty").innerHTML = dirty
+    ? "<span class='dirty'>" + dirty + " unsaved change" + (dirty>1?"s":"") + "</span>"
+    : "";
+}
+
+/* ==================================================================
+   PRIVACY — the double-negative table (unchanged, and still solvable)
+   ================================================================== */
+var SETTINGS = [
+  { l:"Do not disallow non-restricted profile sharing",                 n:3, v:true },
+  { l:"Prevent the suppression of unrestricted visibility",             n:2, v:true },
+  { l:"Disable the opt-out from non-anonymous indexing",                n:3, v:true },
+  { l:"Withhold consent to decline third-party non-disclosure",         n:3, v:true },
+  { l:"Never refrain from omitting your data from partner exports",     n:3, v:true },
+  { l:"Unblock the restriction on public availability",                 n:2, v:true },
+  { l:"Do not prevent the disabling of the privacy limitation",         n:3, v:true },
+  { l:"Decline to withhold your activity from unaffiliated processors", n:2, v:true },
+  { l:"Stop the cessation of continuous location retention",            n:2, v:true },
+  { l:"Refuse to not share everything, always, with everyone",          n:2, v:true }
+];
 function effective(s){ return (s.n % 2 === 1) ? !s.v : s.v; }
 
 function renderPrivacy(){
-  var rows = SETTINGS.map(function(s, i){
+  var rows = SETTINGS.map(function(s,i){
     var eff = effective(s);
-    return "<tr><td class='c'><input type='checkbox' data-i='" + i + "'" + (s.v ? " checked" : "") + "></td>" +
-           "<td>" + s.l + "</td>" +
-           "<td class='st " + (eff ? "on-v" : "off-v") + "'>" +
-           (eff ? "SHARING" : "PRIVATE") + "</td></tr>";
+    return "<tr><td class='c'><input type='checkbox' data-p='"+i+"'"+(s.v?" checked":"")+"></td>" +
+      "<td>"+s.l+"</td><td class='st "+(eff?"on-v":"off-v")+"'>"+(eff?"SHARING":"PRIVATE")+"</td></tr>";
   }).join("");
 
   $("#main").innerHTML =
-    "<h3 class='sec'>Privacy</h3>" +
-    "<p class='lead'>Control how your information is shared. Settings take effect immediately, " +
-    "except where they do not.</p>" +
+    "<h3 class='sec'>Privacy</h3><p class='lead'>"+S.privacy.lead+"</p>" +
+    "<div class='why'><b>Every label is negated an arbitrary number of times.</b> The checkbox " +
+    "state tells you nothing on its own, so the right-hand column reports the actual effect — " +
+    "which is what makes this a puzzle rather than a trick. Trick Questions, Brignull 2010; " +
+    "GDPR requires consent to be specific, informed and unambiguous.</div>" +
     "<table class='tg'><tr><td class='c'></td><td><b>Setting</b></td>" +
-    "<td class='st'><b>ACTUAL EFFECT</b></td></tr>" + rows + "</table>" +
+    "<td class='st'><b>ACTUAL EFFECT</b></td></tr>"+rows+"</table>" +
     "<div style='margin-top:11px'><button class='btn95' id='savePriv'>Save Changes</button> " +
     "<button class='btn95' id='allPriv'>Make Everything Private</button></div>" +
     "<div class='saved' id='saveNote'></div>";
 
-  [].forEach.call($("#main").querySelectorAll("input[data-i]"), function(cb){
+  [].forEach.call($("#main").querySelectorAll("input[data-p]"), function(cb){
     cb.onchange = function(){
-      SETTINGS[+this.dataset.i].v = this.checked;
+      SETTINGS[+this.dataset.p].v = this.checked;
       renderPrivacy();
-      checkSolved();
+      if (SETTINGS.every(function(s){ return !effective(s); })) T.unlock("doublespeak");
     };
   });
-
   $("#savePriv").onclick = function(){
-    /* saving works. the confirmation describes the opposite. */
     var priv = SETTINGS.filter(function(s){ return !effective(s); }).length;
     $("#saveNote").innerHTML = "Your changes have been saved.<br>" +
-      "<span style='color:#a00'>" + (10 - priv) + " of 10 settings are now private.</span>" +
+      "<span style='color:#a00'>" + (10-priv) + " of 10 settings are now private.</span>" +
       "<br><span style='color:#606060;font-size:10px'>(The table above is correct. This summary is not.)</span>";
   };
   $("#allPriv").onclick = function(){
-    /* the shortcut ticks every box, which is not the same thing */
     SETTINGS.forEach(function(s){ s.v = true; });
     renderPrivacy();
     $("#saveNote").innerHTML = "<span style='color:#a00'>All boxes have been ticked.</span>";
   };
 }
 
-function checkSolved(){
-  var allPrivate = SETTINGS.every(function(s){ return !effective(s); });
-  if (allPrivate) T.unlock("doublespeak");
-}
-
-/* ============================================================
-   THE ROACH MOTEL — seven gates, each a different small task,
-   and the exit does not exist. This is where Ghost lives.
-   ============================================================ */
+/* ==================================================================
+   THE ROACH MOTEL — unchanged
+   ================================================================== */
 var gate = 0, typedRound = 0;
-var PHRASES = ["DELETE", "DELETE MY ACCOUNT", "I UNDERSTAND THIS IS PERMANENT"];
+var PHRASES = ["DELETE","DELETE MY ACCOUNT","I UNDERSTAND THIS IS PERMANENT"];
 
 function renderDelete(){
   var h = "<h3 class='sec'>Delete Account</h3>" +
-          "<p class='lead'>We are sorry to see you go. Please complete the remaining steps.</p>" +
-          "<div class='corridor'>step " + (gate+1) + " of 7 &nbsp;|&nbsp; " +
-          "[" + "#".repeat(gate) + ".".repeat(7-gate) + "]</div>";
+    "<p class='lead'>We are sorry to see you go. Please complete the remaining steps.</p>" +
+    "<div class='why'><b>Seven gates, and none of them delete the account.</b> Roach Motel — " +
+    "Brignull 2010. Amazon named its Prime cancellation flow the “Iliad Flow” internally; the " +
+    "FTC sued in 2023 and it settled for $2.5&nbsp;billion. Cancelling should take no more steps " +
+    "than signing up did — which is now law in several jurisdictions.</div>" +
+    "<div class='corridor'>step "+(gate+1)+" of 7 &nbsp;|&nbsp; [" +
+    "#".repeat(gate) + ".".repeat(7-gate) + "]</div>";
 
-  if (gate === 0){
-    h += "<div class='lvl'><h4>Are you sure?</h4>" +
-      "<p>You have 0 friends, 0 photographs and 1 unread notification waiting for you.</p>" +
-      "<button class='btn95' id='g'>Yes, continue</button> " +
-      "<button class='btn95' id='stay'>Take me back</button></div>";
-  } else if (gate === 1){
-    h += "<div class='lvl'><h4>Why are you leaving?</h4>" +
-      "<label class='radio'><input type='radio' name='why'> I will be back shortly</label>" +
-      "<label class='radio'><input type='radio' name='why'> I am taking a short break</label>" +
-      "<label class='radio'><input type='radio' name='why'> I love Friendspace and will return</label>" +
-      "<label class='radio'><input type='radio' name='why'> Other (I will be back shortly)</label>" +
-      "<div style='margin-top:9px'><button class='btn95' id='g'>Continue</button></div></div>";
-  } else if (gate === 2){
-    h += "<div class='lvl'><h4>Type to confirm</h4>" +
-      "<p>Type <b>" + PHRASES[typedRound] + "</b> exactly, in capitals.</p>" +
-      "<input type='text' id='typed' autocomplete='off'>" +
-      "<div style='margin-top:8px'><button class='btn95' id='g'>Confirm</button></div>" +
-      "<div class='corridor' id='typeNote'></div></div>";
-  } else if (gate === 3){
-    h += "<div class='lvl'><h4>Hold to confirm</h4>" +
-      "<p>Press and hold the button for five seconds. Do not release it.</p>" +
-      "<button class='btn95' id='holdBtn' style='width:100%'>Hold</button>" +
-      "<div class='holdbar'><i id='holdFill'></i></div></div>";
-  } else if (gate === 4){
-    h += "<div class='lvl'><h4>Verify your identity</h4>" +
-      "<p>For your security, confirm the account you wish to delete.</p>" +
-      "<select id='whoAmI' style='width:100%;padding:3px;border:2px inset #c0c0c0;font:12px sans-serif'>" +
-      "<option value=''>Select your account...</option>" +
-      "<option>Terri from HR</option><option>Dad</option><option>Dad (2)</option>" +
-      "<option value='me'>You</option><option>Aunt Deb</option><option>MARCUS_1987</option>" +
-      "</select>" +
-      "<div style='margin-top:9px'><button class='btn95' id='g'>Continue</button></div>" +
-      "<div class='corridor' id='whoNote'></div></div>";
-  } else if (gate === 5){
-    h += "<div class='lvl'><h4>Cooling-off period</h4>" +
-      "<div class='warn'>Your account will be scheduled for deletion in <b>30 days</b>. " +
-      "Logging in during this period will cancel the request.</div>" +
-      "<p>You are currently logged in.</p>" +
-      "<div style='margin-top:9px'><button class='btn95' id='g'>I accept</button></div></div>";
-  } else if (gate === 6){
-    h += "<div class='lvl'><h4>Final confirmation</h4>" +
-      "<p>This is the last step. Press the button below to permanently delete your " +
-      "Friendspace account.</p>" +
-      "<button class='btn95' id='final' style='width:100%;font-weight:bold'>" +
-      "Permanently Delete My Account</button>" +
-      "<div class='corridor' id='finalNote'></div></div>";
-  }
+  if (gate === 0) h += "<div class='lvl'><h4>Are you sure?</h4><p>You have 0 friends, 0 photographs and 1 unread notification waiting for you.</p><button class='btn95' id='g'>Yes, continue</button> <button class='btn95' id='stay'>Take me back</button></div>";
+  else if (gate === 1) h += "<div class='lvl'><h4>Why are you leaving?</h4><label class='radio'><input type='radio' name='why'> I will be back shortly</label><label class='radio'><input type='radio' name='why'> I am taking a short break</label><label class='radio'><input type='radio' name='why'> I love Friendspace and will return</label><label class='radio'><input type='radio' name='why'> Other (I will be back shortly)</label><div style='margin-top:9px'><button class='btn95' id='g'>Continue</button></div></div>";
+  else if (gate === 2) h += "<div class='lvl'><h4>Type to confirm</h4><p>Type <b>"+PHRASES[typedRound]+"</b> exactly, in capitals.</p><input type='text' id='typed' autocomplete='off'><div style='margin-top:8px'><button class='btn95' id='g'>Confirm</button></div><div class='corridor' id='typeNote'></div></div>";
+  else if (gate === 3) h += "<div class='lvl'><h4>Hold to confirm</h4><p>Press and hold the button for five seconds. Do not release it.</p><button class='btn95' id='holdBtn' style='width:100%'>Hold</button><div class='holdbar'><i id='holdFill'></i></div></div>";
+  else if (gate === 4) h += "<div class='lvl'><h4>Verify your identity</h4><p>For your security, confirm the account you wish to delete.</p><select id='whoAmI' style='width:100%;padding:3px;border:2px inset #c0c0c0'><option value=''>Select your account...</option><option>Terri from HR</option><option>Dad</option><option>Dad (2)</option><option value='me'>You</option><option>Aunt Deb</option></select><div style='margin-top:9px'><button class='btn95' id='g'>Continue</button></div><div class='corridor' id='whoNote'></div></div>";
+  else if (gate === 5) h += "<div class='lvl'><h4>Cooling-off period</h4><div class='warn'>Your account will be scheduled for deletion in <b>30 days</b>. Logging in during this period will cancel the request.</div><p>You are currently logged in.</p><div style='margin-top:9px'><button class='btn95' id='g'>I accept</button></div></div>";
+  else if (gate === 6) h += "<div class='lvl'><h4>Final confirmation</h4><p>This is the last step. Press the button below to permanently delete your Friendspace account.</p><button class='btn95' id='final' style='width:100%;font-weight:bold'>Permanently Delete My Account</button><div class='corridor' id='finalNote'></div></div>";
 
   $("#main").innerHTML = h;
   wireDelete();
 }
 
 function wireDelete(){
-  var g = $("#g");
-  if (g) g.onclick = function(){ gate++; renderDelete(); };
-  var stay = $("#stay");
-  if (stay) stay.onclick = function(){ gate = 0; show("privacy"); };
+  var g = $("#g"); if (g) g.onclick = function(){ gate++; renderDelete(); };
+  var st = $("#stay"); if (st) st.onclick = function(){ gate = 0; show("privacy"); };
 
-  if (gate === 2){
-    $("#g").onclick = function(){
-      var v = ($("#typed").value || "").trim();
-      if (v !== PHRASES[typedRound]){
-        $("#typeNote").textContent = "That did not match. Please try again.";
-        return;
-      }
-      typedRound++;
-      if (typedRound < PHRASES.length){
-        renderDelete();
-        $("#typeNote").textContent = "Thank you. One more confirmation is required.";
-      } else {
-        gate++; renderDelete();
-      }
-    };
-  }
+  if (gate === 2) $("#g").onclick = function(){
+    if (($("#typed").value||"").trim() !== PHRASES[typedRound]){
+      $("#typeNote").textContent = "That did not match. Please try again."; return;
+    }
+    typedRound++;
+    if (typedRound < PHRASES.length){ renderDelete(); $("#typeNote").textContent = "Thank you. One more confirmation is required."; }
+    else { gate++; renderDelete(); }
+  };
 
   if (gate === 3){
-    var t0 = 0, raf = null, btn = $("#holdBtn"), fill = $("#holdFill");
+    var t0=0, raf=null, btn=$("#holdBtn"), fill=$("#holdFill");
     btn.addEventListener("pointerdown", function(){
       t0 = performance.now();
       (function loop(){
-        var p = Math.min(1, (performance.now()-t0)/5000);
-        fill.style.width = (p*100) + "%";
-        if (p >= 1){ gate++; renderDelete(); return; }
+        var p = Math.min(1,(performance.now()-t0)/5000);
+        fill.style.width = (p*100)+"%";
+        if (p>=1){ gate++; renderDelete(); return; }
         raf = requestAnimationFrame(loop);
       })();
     });
-    ["pointerup","pointerleave","pointercancel"].forEach(function(ev){
-      btn.addEventListener(ev, function(){
-        cancelAnimationFrame(raf); fill.style.width = "0";
-      });
+    ["pointerup","pointerleave","pointercancel"].forEach(function(e){
+      btn.addEventListener(e, function(){ cancelAnimationFrame(raf); fill.style.width="0"; });
     });
   }
 
-  if (gate === 4){
-    $("#g").onclick = function(){
-      if ($("#whoAmI").value !== "me"){
-        $("#whoNote").textContent = "Please select your own account to continue.";
-        return;
-      }
-      gate++; renderDelete();
-    };
+  if (gate === 4) $("#g").onclick = function(){
+    if ($("#whoAmI").value !== "me"){ $("#whoNote").textContent = "Please select your own account to continue."; return; }
+    gate++; renderDelete();
+  };
+
+  if (gate === 6) $("#final").onclick = function(){
+    T.unlock("nearly");
+    var n = $("#finalNote");
+    n.textContent = "Deleting...";
+    setTimeout(function(){ n.textContent = "Contacting 24 partners..."; }, 900);
+    setTimeout(function(){ n.textContent = "Reticulating..."; }, 1800);
+    setTimeout(function(){
+      $("#main").innerHTML = "<h3 class='sec'>Account Deleted</h3><div class='lvl'>" +
+        "<p style='font-size:12px'>Your Friendspace account has been permanently deleted.</p>" +
+        "<p style='color:#a00'>Welcome back! You have 1 new notification.</p>" +
+        "<p>While you were away, you liked a post.</p>" +
+        "<div style='margin-top:10px'><button class='btn95' id='backToFeed'>Continue to Friendspace</button></div>" +
+        "<div class='corridor' style='margin-top:12px'>Ghost — not yet earned.</div></div>";
+      $("#backToFeed").onclick = function(){ location.href = "feed.html"; };
+      gate = 0; typedRound = 0;
+    }, 2700);
+  };
+}
+
+/* ==================================================================
+   NAV, SEARCH, SAVE
+   ================================================================== */
+var ORDER = ["account","privacy","notifications","appearance","content",
+             "security","accessibility","billing","advanced","del"];
+
+function show(key){
+  if (dirty){
+    /* it does not warn you. it just loses them. */
+    dirty = 0; updateDirty();
+    $("#sbLeft").textContent = "Unsaved changes were discarded.";
   }
-
-  if (gate === 6){
-    $("#final").onclick = function(){
-      T.unlock("nearly");
-      var note = $("#finalNote");
-      note.innerHTML = "Deleting...";
-      setTimeout(function(){ note.innerHTML = "Deleting.... "; }, 700);
-      setTimeout(function(){ note.innerHTML = "Contacting 24 partners..."; }, 1500);
-      setTimeout(function(){ note.innerHTML = "Reticulating..."; }, 2300);
-      setTimeout(function(){
-        $("#main").innerHTML =
-          "<h3 class='sec'>Account Deleted</h3>" +
-          "<div class='lvl'><p style='font-size:12px'>Your Friendspace account has been " +
-          "permanently deleted.</p>" +
-          "<p style='color:#a00'>Welcome back! You have 1 new notification.</p>" +
-          "<p>While you were away, you liked a post.</p>" +
-          "<div style='margin-top:10px'><button class='btn95' id='backToFeed'>Continue to Friendspace</button></div>" +
-          "<div class='corridor' style='margin-top:12px'>Ghost — not yet earned.</div></div>";
-        $("#backToFeed").onclick = function(){ location.href = "feed.html"; };
-        gate = 0; typedRound = 0;
-      }, 3200);
-    };
-  }
-}
-
-/* ============================================================
-   OTHER SECTIONS
-   ============================================================ */
-function renderAccount(){
-  $("#main").innerHTML =
-    "<h3 class='sec'>Account</h3>" +
-    "<p class='lead'>Your account details. These cannot be changed.</p>" +
-    "<table class='tg'>" +
-    "<tr><td>Username</td><td class='st'>user847</td></tr>" +
-    "<tr><td>Member since</td><td class='st'>2004</td></tr>" +
-    "<tr><td>Email</td><td class='st'>user847@friendspace.example</td></tr>" +
-    "<tr><td>Password</td><td class='st'>Buick1974!</td></tr>" +
-    "<tr><td>Account status</td><td class='st'>BETA</td></tr>" +
-    "</table>" +
-    "<div class='warn' style='margin-top:12px'>Your password is displayed here for your " +
-    "convenience. It is also displayed on your public profile.</div>";
-}
-
-function renderNotifications(){
-  $("#main").innerHTML =
-    "<h3 class='sec'>Notifications</h3>" +
-    "<p class='lead'>Choose what you are told about.</p>" +
-    "<table class='tg'>" +
-    ["When somebody likes your post","When somebody does not like your post",
-     "When nothing happens","When your Top 8 is reordered overnight",
-     "When a partner exports your data","Everything else"]
-      .map(function(l){
-        return "<tr><td class='c'><input type='checkbox' checked disabled></td><td>" + l +
-               "</td><td class='st off-v'>LOCKED</td></tr>";
-      }).join("") +
-    "</table>" +
-    "<p class='lead' style='margin-top:11px'>Notification preferences are managed by your " +
-    "administrator. You are your administrator.</p>";
-}
-
-/* ============================================================
-   NAV — the frame that never updates its own highlight
-   correctly, because it was written in 2002.
-   ============================================================ */
-var SECTIONS = [
-  { id:"account",       label:"Account",         fn:renderAccount },
-  { id:"privacy",       label:"Privacy",         fn:renderPrivacy },
-  { id:"notifications", label:"Notifications",   fn:renderNotifications },
-  { id:"delete",        label:"Delete Account",  fn:function(){ gate = 0; typedRound = 0; renderDelete(); } }
-];
-
-function show(id){
-  var s = SECTIONS.filter(function(x){ return x.id === id; })[0] || SECTIONS[0];
-  s.fn();
+  renderSection(key);
   [].forEach.call($("#nav").querySelectorAll("a"), function(a){
-    a.className = (a.dataset.id === id) ? "cur" : "";
+    a.className = (a.dataset.k === key) ? "cur" : "";
   });
-  $("#sbLeft").textContent = s.label;
+  if ($("#sbLeft").textContent === "Ready") $("#sbLeft").textContent = S[key].label;
 }
 
 (function buildNav(){
   var nav = $("#nav");
-  SECTIONS.forEach(function(s){
+  ORDER.forEach(function(k){
     var a = document.createElement("a");
-    a.textContent = s.label;
-    a.dataset.id = s.id;
-    a.onclick = function(){ show(s.id); };
+    a.textContent = S[k].label;
+    a.dataset.k = k;
+    a.onclick = function(){ show(k); };
     nav.appendChild(a);
   });
   var grp = document.createElement("div");
@@ -409,6 +544,44 @@ function show(id){
   pp.onclick = function(){ location.href = "privacy.html"; };
   nav.appendChild(pp);
 })();
+
+/* search that never finds anything, and suggests things you did not ask for */
+function doSearch(){
+  var q = ($("#setSearch").value || "").trim();
+  if (!q) return;
+  var pool = [];
+  ORDER.forEach(function(k){
+    (S[k].rows || []).forEach(function(r){ if (r.label) pool.push([S[k].label, r.label]); });
+  });
+  var picks = [];
+  for (var i = 0; i < 3 && pool.length; i++){
+    picks.push(pool.splice((q.length * (i+7) * 31) % pool.length, 1)[0]);
+  }
+  $("#main").innerHTML =
+    "<h3 class='sec'>Search results</h3>" +
+    "<p class='lead'>No results found for “" + q.replace(/</g,"&lt;") + "”.</p>" +
+    "<div class='why'><b>Settings search that cannot find settings.</b> It is the most " +
+    "common complaint about every large settings screen shipped in the last decade, and the " +
+    "reason is almost always the same: the index is built from internal keys rather than the " +
+    "words on screen. Note that every term below exists in this very page.</div>" +
+    "<p style='font-size:11px;margin-top:10px'><b>Did you mean:</b></p>" +
+    picks.map(function(p){
+      return "<div class='row'><div class='ctl'></div><div class='lab'>" + p[1] +
+             "<small>in " + p[0] + "</small></div><div class='state na-v'></div></div>";
+    }).join("");
+  $("#sbLeft").textContent = "0 results";
+}
+$("#setSearchGo").onclick = doSearch;
+$("#setSearch").addEventListener("keydown", function(e){ if (e.key === "Enter") doSearch(); });
+
+$("#saveBtn").onclick = function(){
+  dirty = 0; updateDirty();
+  $("#sbLeft").textContent = "Saved. Some settings may require a restart.";
+};
+$("#revertBtn").onclick = function(){
+  if (!confirm("Restore all settings to their defaults?")) return;
+  $("#sbLeft").textContent = "Defaults restored. Your muted words were also cleared.";
+};
 
 show("account");
 </script>
