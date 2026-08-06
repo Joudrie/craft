@@ -75,6 +75,7 @@ def main():
     shared_css = read("assets/friendspace.css")
     trophies   = read("assets/trophies.js")
     people     = read("assets/people.js")
+    notes      = read("assets/notes.js")
 
     styles, bodies, scripts, ids = [], [], {}, {}
     for key, fname, _label in PAGES:
@@ -116,6 +117,9 @@ def main():
 </script>
 <script>
 {people}
+</script>
+<script>
+{notes}
 </script>
 
 <div class="fs-header"><div class="fs-header-in">

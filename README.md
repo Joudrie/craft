@@ -29,7 +29,8 @@ Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
 | `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
 | `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
 | `assets/people.js` | The membership. 25 accounts, shared by the feed and the profiles. |
-| `build.py` | Bundles all four screens into one self-contained `friendspace.html`. |
+| `assets/notes.js` | Design Notes — 28 annotations naming the principle each crime breaks. |
+| `build.py` | Bundles all six screens into one self-contained `friendspace.html`. |
 
 ## Feed crimes
 
@@ -175,6 +176,38 @@ everything is inverted, **`Home` jumps to the bottom.** The page tells you after
 resets. Buried in the text: a clause claiming your immortal soul, one granting veto
 power over your children's names, and Clause 15.3, which states that the account
 deletion facility "is provided for illustrative purposes and does not delete accounts."
+
+## Design Notes — the "why"
+
+Press **`?`** anywhere, or find the whisper-text link in a footer (it's there, at about
+1.06:1 contrast). Every annotated element gets a dashed outline and a numbered marker,
+and a panel opens listing **28 notes**. Each one carries four fields:
+
+- **Crime** — what the interface does
+- **Principle broken** — the named law: Nielsen's heuristics (1994), Fitts's Law (1954),
+  the Doherty Threshold (IBM, 1982), WCAG success criteria, Brignull's twelve deceptive
+  patterns (2010)
+- **What correct looks like** — the fix, in one sentence
+- **In the wild** — who actually shipped this, and what it cost them
+
+That last field is what turns the project from a funny bad website into an argument.
+Some of it:
+
+| Crime here | What it's a parody of |
+|---|---|
+| Seven-gate account deletion | Amazon named its Prime cancellation flow the **"Iliad Flow"** internally, after Homer's epic. FTC sued in 2023; **$2.5 billion settlement**. |
+| Permanent, confirm-shamed Like | **Epic Games** paid a record **$245M** to the FTC in 2023, partly for interfaces making charges easy to trigger and hard to reverse. |
+| The unreadable Privacy Policy | **GameStation's** 2010 April Fools terms claimed customers' immortal souls. Almost everyone accepted. |
+| Consent buried in a dropdown | **Ryanair** hid "No Travel Insurance Required" alphabetically in a country list, **between Latvia and Lithuania** (2010). |
+| Unescaped comment wall | **MySpace** allowed raw HTML/CSS in profiles. The **Samy worm** exploited it in 2005 and hit a million accounts in 20 hours. |
+| Top 8 | Real. Shipped to millions. Remembered mostly for the friendships it damaged. |
+| The hydra cookie banner | **GDPR** and the **EU Digital Services Act** both require refusal to be as easy as acceptance. |
+
+Two modes: **On this screen** (notes for what's visible) and **All**, which lists
+every note with off-screen ones dimmed.
+
+The panel is the only well-designed thing on the site. That is the joke, and it is
+deliberate — see `DESIGN.md` §4.
 
 ## Trophies
 
