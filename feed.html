@@ -1,0 +1,605 @@
+<!-- saved from Dreamweaver MX -->
+<html>
+<head>
+<meta charset="utf-8">
+<title>Untitled Document</title>
+<link rel="stylesheet" href="assets/friendspace.css">
+<script src="assets/trophies.js"></script>
+</head>
+<body>
+
+<div class="fs-header">
+  <div class="fs-header-in">
+    <div class="fs-logo">Friendspace<span>BETA</span></div>
+    <input class="fs-search" id="search" placeholder="Search Friendspace" autocomplete="off">
+    <div class="fs-nav">
+      <a href="#" id="homeLink">Home</a>
+      <a href="#" id="profLink">Profile</a>
+      <a href="awards.html">Awards</a>
+      <a href="#" id="bell">Notifications<span class="fs-badge-count" id="notif">47</span></a>
+      <a href="index.html">Sign&nbsp;Up</a>
+    </div>
+  </div>
+</div>
+
+<div class="fs-shell">
+
+  <!-- ============ LEFT RAIL ============ -->
+  <div class="fs-rail">
+    <div class="fs-card">
+      <div class="fs-card-b">
+        <div class="fs-person">
+          <div class="fs-av">YO</div>
+          <div><b>You</b><br><span class="fs-whisper">member since 2004</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Your Top 8</div>
+    <div class="fs-card">
+      <div class="fs-card-b">
+        <div class="fs-top8" id="top8"></div>
+        <div style="font-size:10px;color:#90949c;margin-top:7px">
+          Reordered nightly. Everyone is notified.
+        </div>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Shortcuts</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:12px;line-height:1.9">
+        <a href="#">Groups</a><br>
+        <a href="#">Events</a><br>
+        <a href="#">Guestbook</a><br>
+        <a href="awards.html">Awards Cabinet</a><br>
+        <span class="fs-whisper">Settings</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ MIDDLE ============ -->
+  <div class="fs-col-mid">
+
+    <div class="fs-card fs-compose">
+      <div class="fs-card-h">What's on your mind?</div>
+      <div class="fs-card-b">
+        <textarea id="composer" placeholder="Share something with your friends."></textarea>
+        <div class="fs-compose-foot">
+          <button class="fs-btn" id="postBtn">Post</button>
+          <button class="fs-btn ghost" id="photoBtn">Photo</button>
+          <span class="fs-count" id="charCount">0 of 300 characters remaining</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="shuffleBanner" style="display:none"></div>
+    <div id="feed"></div>
+
+    <div class="fs-loader" id="loader">
+      <span class="fs-spinner"></span>Loading more of the content you love…
+    </div>
+  </div>
+
+  <!-- ============ RIGHT RAIL ============ -->
+  <div class="fs-rail">
+    <div class="fs-rail-title">Sponsored</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:11px;line-height:1.5">
+        <div style="height:64px;background:linear-gradient(135deg,#ff9a3c,#ff4d4d);color:#fff;
+             font:bold 13px/64px Impact,sans-serif;text-align:center;margin-bottom:5px">
+          CLICK HERE NOW
+        </div>
+        <b>You Won't Believe #4</b><br>
+        <span style="color:#90949c">Local mothers are furious about this.</span>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">Birthdays</div>
+    <div class="fs-card">
+      <div class="fs-card-b" style="font-size:12px">
+        It's <b>someone's</b> birthday today.<br>
+        <span class="fs-whisper">We're not going to say whose.</span>
+      </div>
+    </div>
+
+    <div class="fs-rail-title">People You May Know</div>
+    <div class="fs-card">
+      <div class="fs-card-b" id="pymk"></div>
+    </div>
+  </div>
+</div>
+
+<div class="fs-footer" id="footer">
+  <div>
+    <a href="#">About</a>·<a href="#">Help</a>·<a href="#">Privacy Policy</a>·
+    <a href="#">Terms</a>·<a href="#">Delete Account</a>·<a href="#">Contact Us</a>
+  </div>
+  <div style="margin-top:6px">Friendspace © 2004–2026 · a Palgorithm Holdings company</div>
+  <div style="margin-top:4px">Last updated: 3/14/2002 · Best viewed at 800×600 in Netscape</div>
+  <div class="ring">‹ prev &nbsp;|&nbsp; <a href="#">random</a> &nbsp;|&nbsp; next ›<br>
+    <span style="font-size:10px">member of the FriendRing™ webring</span></div>
+  <div class="fs-counter" id="counter">000847</div>
+  <div style="font-size:10px;margin-top:5px">You are visitor number</div>
+</div>
+
+<script>
+"use strict";
+var T = FS.Trophies;
+var $ = function(s){ return document.querySelector(s); };
+
+/* ============================================================
+   CAST
+   ============================================================ */
+var PEOPLE = [
+  {n:"Brayden Kowalczyk", i:"BK", c:"#7b91c4"},
+  {n:"★·.·´¯`·.·★ Ashleigh ★·.·´¯`·.·★", i:"A", c:"#c47bb4"},
+  {n:"Dad", i:"D", c:"#6f8f6f"},
+  {n:"Terri from HR", i:"TH", c:"#b58f5a"},
+  {n:"MARCUS_1987", i:"M", c:"#5a86b5"},
+  {n:"xXx_Nightshade_xXx", i:"XN", c:"#4a4a55"},
+  {n:"Aunt Deb", i:"AD", c:"#b56f6f"},
+  {n:'Kyle "Big Kyle" Petersen', i:"KP", c:"#8a7bc4"},
+  {n:"Your Cousin's Wife", i:"CW", c:"#7bc4a8"},
+  {n:"Guy You Met At A Wedding In 2011", i:"GW", c:"#a8a85a"}
+];
+
+var POSTS = [
+  "Does anyone know a good plumber",
+  "Happy birthday to my beautiful daughter who does not have a Friendspace and will never see this",
+  "LIKE if you can spot the 7\n\n3333333333333333333\n3333333333733333333\n3333333333333333333",
+  "Just wanted to say thank you to everyone. You know why.",
+  "This is a test post. Please ignore.\n\nSent from my Friendspace",
+  "sorry everyone i was hacked. do not click the link i sent. also do not click this link",
+  "AMEN 🙏",
+  "Well, that's that.",
+  "Anyone else's Friendspace acting funny today or is it just mine",
+  "13 years ago today I posted this. Sharing it again so you can all experience it a second time.",
+  "I don't know how to use this yet, my grandson set it up. Testing 1 2 3.",
+  "PSA: if you can read this, my account is working. If you cannot read this, please let me know.",
+  "Not to be dramatic but I will be taking a break from Friendspace. See you all in about 40 minutes.",
+  "Who keeps moving me to slot 6",
+  "throwback to when this website worked",
+  "My condolences to the family. She was a wonderful car.",
+  "Update: found the plumber. He was in my Top 8 the whole time.",
+  "does anybody know how to delete an account. asking for me",
+  "Reminder that the annual potluck is either this Saturday or last Saturday.",
+  "I have read the Terms of Service. All 30,000 words. Ask me anything.",
+  "why is the scrollbar doing that",
+  "Congratulations to my nephew on his graduation from the thing he graduated from!!!",
+  "Selling: one (1) couch. Free. Must take today. Also I've moved.",
+  "Just liked a post and it took 11 seconds. Living the dream."
+];
+
+var ADS = [
+  {t:"Doctors HATE him. Local man discovers one weird trick.", s:"#ff9a3c"},
+  {t:"Your PC may be at risk. 3 issues detected. Scan now.", s:"#4d9aff"},
+  {t:"Singles in [Location Unavailable] want to connect with you.", s:"#ff4d94"},
+  {t:"Friendspace Premium — remove ads for $4.99/month.*\n\n*does not remove ads", s:"#7b5bd6"},
+  {t:"You have been selected to receive a free iPod Nano.", s:"#5ad68a"},
+  {t:"Congratulations! You are the 1,000,000th visitor.", s:"#d6b45a"}
+];
+
+/* ============================================================
+   FEED CONSTRUCTION
+   ============================================================ */
+var uid = 0, feed = $("#feed"), postCount = 0, MAX_POSTS = 220;
+
+function person(){ return PEOPLE[Math.floor(Math.random()*PEOPLE.length)]; }
+
+function makePost(opts){
+  opts = opts || {};
+  var isAd = opts.ad;
+  var p = opts.person || person();
+  var el = document.createElement("div");
+  el.className = "fs-post";
+  el.dataset.id = ++uid;
+  el.dataset.text = opts.text || "";
+
+  var likes = Math.floor(Math.random()*400);
+  var av = '<div class="fs-av" style="background:' + (isAd ? "#888" : p.c) + '">' +
+           (isAd ? "AD" : p.i) + "</div>";
+
+  el.innerHTML =
+    (isAd ? '<div class="fs-sponsored" title="">Sponsored</div>' : "") +
+    '<div class="fs-post-h">' + av +
+      '<div class="fs-who"><div class="fs-name">' + (isAd ? "Palgorithm Partner Network" : esc(p.n)) + "</div>" +
+      '<div class="fs-when">4h ago</div></div></div>' +
+    '<div class="fs-post-body">' + esc(opts.text) + "</div>" +
+    (opts.photo ? '<div class="fs-photo" style="background:linear-gradient(135deg,' + opts.photo +
+        ');display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.75);font:11px Helvetica">' +
+        "image not available</div>" : "") +
+    '<div class="fs-post-actions">' +
+      '<button class="fs-act like">Like</button>' +
+      '<button class="fs-act">Comment</button>' +
+      '<button class="fs-act seemore">See more</button>' +
+      '<span class="fs-likes">' + likes + " people like this</span>" +
+    "</div>";
+
+  el.dataset.likes = likes;
+  wirePost(el);
+  return el;
+}
+
+function esc(s){
+  return String(s == null ? "" : s)
+    .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+}
+
+function randomPost(){
+  if (Math.random() < 0.22){
+    var a = ADS[Math.floor(Math.random()*ADS.length)];
+    return makePost({ad:true, text:a.t, photo:a.s + "," + a.s + "88"});
+  }
+  return makePost({
+    text: POSTS[Math.floor(Math.random()*POSTS.length)],
+    photo: Math.random() < 0.25 ? "#b9c3d8,#7f8fb0" : null
+  });
+}
+
+function fill(n){
+  var frag = document.createDocumentFragment();
+  for (var i=0; i<n && postCount < MAX_POSTS; i++){ frag.appendChild(randomPost()); postCount++; }
+  feed.appendChild(frag);
+}
+
+/* ============================================================
+   CRIME: liking requires a long press, a confirmation, and is
+   permanent. (Roach motel, Brignull. Nielsen #3.)
+   ============================================================ */
+function wirePost(el){
+  var likeBtn = el.querySelector(".like");
+  var holdTimer = null, held = false;
+
+  likeBtn.addEventListener("pointerdown", function(){
+    if (el.dataset.liked){
+      T.unlock("regret");
+      flash(el, "Likes are permanent. This is for your protection.");
+      return;
+    }
+    held = false;
+    likeBtn.classList.add("holding");
+    likeBtn.textContent = "Keep holding…";
+    holdTimer = setTimeout(function(){
+      held = true;
+      likeBtn.classList.remove("holding");
+      likeBtn.textContent = "Like";
+      confirmLike(el, likeBtn);
+    }, 1200);
+  });
+  ["pointerup","pointerleave","pointercancel"].forEach(function(ev){
+    likeBtn.addEventListener(ev, function(){
+      clearTimeout(holdTimer);
+      if (!held && !el.dataset.liked){
+        likeBtn.classList.remove("holding");
+        likeBtn.textContent = "Like";
+      }
+    });
+  });
+
+  /* CRIME: "See more" collapses instead of expanding. */
+  el.querySelector(".seemore").addEventListener("click", function(){
+    if (el.classList.contains("collapsed")){
+      T.unlock("compression");
+      flash(el, "There is no more to see.");
+      return;
+    }
+    el.classList.add("collapsed");
+    this.textContent = "See more";
+  });
+
+  /* CRIME: disguised ads. The label is 4px, #F0F0F0 on white. */
+  var sp = el.querySelector(".fs-sponsored");
+  if (sp) sp.addEventListener("click", function(){
+    T.unlock("spotter");
+    this.style.cssText = "font-size:11px;color:#c00;padding:3px 10px;font-weight:bold";
+    this.textContent = "Sponsored (you found it)";
+  });
+}
+
+function confirmLike(el, btn){
+  var bg = document.createElement("div");
+  bg.className = "fs-modal-bg";
+  bg.innerHTML =
+    '<div class="fs-modal"><h3>Confirm Positive Sentiment</h3>' +
+    '<div class="b">You are about to express approval of this content.<br><br>' +
+    "<b>Likes are permanent and cannot be withdrawn.</b> Your reaction will be shared " +
+    "with 24 partners and with anyone who has ever met you.</div>" +
+    '<div class="f"><button class="fs-btn ghost" data-no>Cancel</button>' +
+    '<button class="fs-btn" data-yes>I understand, proceed</button></div></div>';
+  document.body.appendChild(bg);
+  bg.querySelector("[data-no]").onclick = function(){ bg.remove(); };
+  bg.querySelector("[data-yes]").onclick = function(){
+    bg.remove();
+    el.dataset.liked = "1";
+    btn.classList.add("liked");
+    btn.textContent = "Liked ✓";
+    T.unlock("persistence");
+  };
+}
+
+function flash(el, msg){
+  var f = document.createElement("div");
+  f.textContent = msg;
+  f.style.cssText = "position:absolute;right:8px;bottom:38px;background:#333;color:#fff;" +
+    "font:11px Helvetica;padding:4px 8px;border-radius:2px;z-index:5;opacity:0;" +
+    "transition:opacity .2s;pointer-events:none";
+  el.appendChild(f);
+  requestAnimationFrame(function(){ f.style.opacity = "1"; });
+  setTimeout(function(){ f.style.opacity = "0"; setTimeout(function(){ f.remove(); }, 260); }, 1700);
+}
+
+/* ============================================================
+   CRIME: new posts insert ABOVE your scroll position.
+   The middle column sets overflow-anchor:none, deliberately
+   disabling the browser feature that exists to prevent this.
+   ============================================================ */
+setInterval(function(){
+  if (document.hidden) return;
+  var p = randomPost();
+  p.classList.add("arriving");
+  feed.insertBefore(p, feed.firstChild);
+  postCount++;
+  bumpNotifications(-1);
+  setTimeout(function(){ p.classList.remove("arriving"); }, 500);
+}, 9000);
+
+/* ============================================================
+   CRIME: the feed reshuffles as you scroll, so no post can be
+   found twice. Animated with FLIP so the crime is legible —
+   an invisible reshuffle is just confusion.
+   ============================================================ */
+var scrolled = 0, lastY = window.scrollY;
+function reshuffle(){
+  var kids = [].slice.call(feed.children);
+  if (kids.length < 4) return;
+
+  /* FLIP: remember where each element was, keyed by the element itself */
+  var before = new Map();
+  kids.forEach(function(k){ before.set(k, k.getBoundingClientRect().top); });
+
+  for (var i = kids.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random()*(i+1));
+    var t = kids[i]; kids[i] = kids[j]; kids[j] = t;
+  }
+  kids.forEach(function(k){ feed.appendChild(k); });
+
+  kids.forEach(function(k){
+    var was = before.get(k);
+    var now = k.getBoundingClientRect().top;
+    var dy = was - now;
+    if (!dy) return;
+    k.style.transition = "none";
+    k.style.transform = "translateY(" + dy + "px)";
+    requestAnimationFrame(function(){
+      k.style.transition = "transform .45s cubic-bezier(.2,.9,.3,1)";
+      k.style.transform = "";
+    });
+  });
+
+  banner("Your feed was refreshed to show you the best content.");
+}
+
+function banner(msg){
+  var b = $("#shuffleBanner");
+  b.textContent = msg;
+  b.style.cssText = "display:block;background:#fff9d6;border:1px solid #e8d98a;" +
+    "padding:6px 9px;font-size:11px;color:#7a6a1e;margin-bottom:9px;border-radius:2px";
+  clearTimeout(b._t);
+  b._t = setTimeout(function(){ b.style.display = "none"; }, 2600);
+}
+
+/* ============================================================
+   read/unread sizing — the posts you've already seen get bigger
+   ============================================================ */
+var seen = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (e.isIntersecting && !e.target.dataset.seen){
+      e.target._t = setTimeout(function(){
+        e.target.dataset.seen = "1";
+        e.target.style.fontSize = "15px";
+        e.target.style.transform = "scale(1.015)";
+      }, 1400);
+    } else if (!e.isIntersecting){
+      clearTimeout(e.target._t);
+    }
+  });
+}, {threshold:0.6});
+
+var watchNew = new MutationObserver(function(muts){
+  muts.forEach(function(m){
+    [].forEach.call(m.addedNodes, function(n){
+      if (n.nodeType === 1 && n.classList.contains("fs-post")){
+        seen.observe(n);
+        if (!n.dataset.seen) n.style.fontSize = "12px";
+      }
+    });
+  });
+});
+watchNew.observe(feed, {childList:true});
+
+/* ============================================================
+   CRIME: notification badge counts DOWN as you receive more.
+   ============================================================ */
+var notifCount = 47;
+function bumpNotifications(d){
+  notifCount += d;
+  var el = $("#notif");
+  el.textContent = notifCount;
+  el.classList.toggle("neg", notifCount < 0);
+  if (notifCount < 0) T.unlock("negative");
+}
+$("#bell").addEventListener("click", function(e){
+  e.preventDefault();
+  bumpNotifications(-5);
+  banner("You have no new notifications. You have fewer than that.");
+});
+
+/* ============================================================
+   CRIME: your own posts vanish, then a stranger replies to them
+   ============================================================ */
+$("#composer").addEventListener("input", function(){
+  /* the counter counts the wrong direction and is also wrong */
+  $("#charCount").textContent = this.value.length + " of 300 characters remaining";
+});
+
+$("#postBtn").addEventListener("click", function(){
+  var txt = $("#composer").value.trim();
+  if (!txt) return;
+  $("#composer").value = "";
+  $("#charCount").textContent = "0 of 300 characters remaining";
+
+  var mine = makePost({person:{n:"You", i:"YO", c:"#3b5998"}, text:txt});
+  mine.classList.add("arriving");
+  feed.insertBefore(mine, feed.firstChild);
+
+  setTimeout(function(){
+    mine.style.transition = "opacity .6s, transform .6s";
+    mine.style.opacity = "0";
+    mine.style.transform = "scale(.96)";
+    setTimeout(function(){
+      mine.remove();
+      T.unlock("void");
+      var who = person();
+      var reply = makePost({
+        person: who,
+        text: "Replying to your post — totally agree!!\n\n(original post unavailable)"
+      });
+      reply.classList.add("arriving");
+      feed.insertBefore(reply, feed.firstChild);
+      banner("Your post was published successfully and is visible to everyone except you.");
+    }, 620);
+  }, 2200);
+});
+
+$("#photoBtn").addEventListener("click", function(){
+  banner("Photo upload is temporarily unavailable. It has been temporarily unavailable since 2009.");
+});
+
+/* ============================================================
+   CRIME: search results sorted by irrelevance
+   ============================================================ */
+$("#search").addEventListener("input", function(){
+  var q = this.value.trim().toLowerCase();
+  var kids = [].slice.call(feed.children);
+  if (!q){ return; }
+  kids.map(function(k){
+    var body = (k.querySelector(".fs-post-body") || {}).textContent || "";
+    var score = 0;
+    for (var i=0;i<q.length;i++) if (body.toLowerCase().indexOf(q[i]) > -1) score++;
+    return {k:k, score:score};
+  }).sort(function(a,b){ return a.score - b.score; })   /* ascending. worst first. */
+    .forEach(function(o){ feed.appendChild(o.k); });
+  banner('Showing results for "' + this.value + '", sorted by relevance.');
+});
+
+/* ============================================================
+   CRIME: infinite scroll, with the only useful links in the
+   footer. But the loader has a 900ms debounce — outrun it and
+   you reach the bottom of Friendspace.
+   ============================================================ */
+var loadTimer = null, feedDead = false;
+window.addEventListener("scroll", function(){
+  var dy = Math.abs(window.scrollY - lastY);
+  lastY = window.scrollY;
+  scrolled += dy;
+  if (scrolled > 1400){ scrolled = 0; reshuffle(); }
+
+  if (feedDead) return;
+  var nearBottom = window.innerHeight + window.scrollY > document.body.offsetHeight - 700;
+  if (nearBottom && !loadTimer){
+    loadTimer = setTimeout(function(){
+      loadTimer = null;
+      if (!feedDead) fill(6);
+    }, 900);
+  }
+});
+
+var footWatch = new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if (!e.isIntersecting || feedDead) return;
+    e.target._fv = setTimeout(function(){
+      feedDead = true;
+      clearTimeout(loadTimer); loadTimer = null;
+      $("#loader").innerHTML = "You have reached the end of Friendspace. " +
+        "This was not supposed to be possible.";
+      T.unlock("speedrunner");
+    }, 300);
+  });
+  entries.forEach(function(e){ if (!e.isIntersecting) clearTimeout(e.target._fv); });
+}, {threshold:0.25});
+footWatch.observe($("#footer"));
+
+/* ============================================================
+   AMBIENT
+   ============================================================ */
+/* the like counts are a live random walk */
+setInterval(function(){
+  [].slice.call(feed.querySelectorAll(".fs-likes")).slice(0, 14).forEach(function(el){
+    var post = el.closest(".fs-post");
+    var n = +post.dataset.likes + Math.round((Math.random()-0.48) * 9);
+    post.dataset.likes = n;
+    el.textContent = n + " people like this";
+  });
+}, 1500);
+
+/* the visitor counter counts down */
+var visitors = 847;
+setInterval(function(){
+  visitors--;
+  $("#counter").textContent = String(Math.max(0, visitors)).padStart(6, "0");
+}, 4000);
+
+/* sparkle cursor trail */
+var lastSpark = 0;
+document.addEventListener("mousemove", function(e){
+  var now = Date.now();
+  if (now - lastSpark < 38) return;
+  lastSpark = now;
+  var s = document.createElement("div");
+  s.className = "fs-sparkle";
+  s.style.left = e.clientX + "px";
+  s.style.top = e.clientY + "px";
+  s.style.background = "hsl(" + Math.floor(Math.random()*360) + ",95%,65%)";
+  document.body.appendChild(s);
+  setTimeout(function(){ s.remove(); }, 900);
+});
+
+/* Top 8 + People You May Know */
+(function(){
+  var t8 = $("#top8");
+  PEOPLE.slice(0,8).forEach(function(p,i){
+    var d = document.createElement("div");
+    d.className = "slot";
+    d.innerHTML = '<span class="rank">' + (i+1) + "</span>" +
+      '<div class="fs-av" style="background:' + p.c + '">' + p.i + "</div>";
+    t8.appendChild(d);
+  });
+  var pk = $("#pymk");
+  PEOPLE.slice(4,9).forEach(function(p){
+    var d = document.createElement("div");
+    d.className = "fs-person";
+    d.innerHTML = '<div class="fs-av" style="background:' + p.c + '">' + p.i + "</div>" +
+      "<div style='min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap'>" +
+      esc(p.n) + "<br><span class='fs-whisper'>0 mutual friends</span></div>";
+    pk.appendChild(d);
+  });
+})();
+
+/* the Top 8 reorders itself and tells everyone */
+setInterval(function(){
+  var t8 = $("#top8");
+  var kids = [].slice.call(t8.children);
+  var a = Math.floor(Math.random()*kids.length), b = Math.floor(Math.random()*kids.length);
+  if (a === b) return;
+  var avA = kids[a].querySelector(".fs-av"), avB = kids[b].querySelector(".fs-av");
+  var tmp = avA.outerHTML;
+  avA.outerHTML = avB.outerHTML;
+  avB.outerHTML = tmp;
+  banner("Your Top 8 was reordered. All 8 people have been notified.");
+}, 23000);
+
+/* go */
+fill(9);
+</script>
+</body>
+</html>

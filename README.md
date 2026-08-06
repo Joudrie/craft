@@ -1,23 +1,61 @@
-# craft
+# Friendspace
 
-A deliberately hostile signup form. Every control is functional and every control
-is nearly impossible. Open `index.html` — no build step, no dependencies.
+> *a Palgorithm Holdings company* — "Where friends happen to you."
 
-The rule for every field: there is always a legitimate path to completion. Nothing
-is merely broken.
+A parody social network where every control is deliberately hostile and every
+control still works. Open any page — no build step, no dependencies.
 
-| Field | The crime | The way through |
-|---|---|---|
-| Full name | None. It works perfectly. | — |
-| Notification volume | Angry Birds slingshot. Pull the speaker back, release, and wherever it lands on the 0–100 scale is your level. An annoying tone plays the whole time. | Practice your arc. Landing short of the scale is silence. |
-| Phone number | A slider from 1 to 1,000,000 for the subscriber number. ~1,700 values per pixel. The area code dropdown reshuffles every time you open it. | Arrow keys move by exactly 1. |
-| Date of birth | Calendar opens on today. "Next month" is disabled. | One click per month, backwards. Hold to auto-repeat. |
-| Password | On-screen keyboard only; all 68 keys reshuffle after every single keypress. | Hunt. Peck. Repeat. |
-| Email | Each character takes 700 ms to "validate". Typing during the wait discards the character. Paste is disabled. | Type slowly. |
-| Terms checkbox | Flees the cursor. | It cannot run from the keyboard. Tab to it, press Space. |
-| Cookie banner | 24 partners, all enabled, must all be off to dismiss. "Reject all" and "Accept all" both enable everything. | Untick all 24 by hand. |
-| Submit | Hold for 8 seconds. Moving the pointer more than 4px resets it. | Hold still. |
+See **[DESIGN.md](DESIGN.md)** for the premise, the crime catalogue, and the rules
+this thing is built to.
 
-Audio is capped at a gain of 0.11 — irritating, not harmful.
+## The prime directive
 
-Verified end-to-end in Chromium: the entire form is completable, with no console errors.
+**Every crime must be a toy, not a wall.** A toy responds when you poke it and
+invites another poke; a wall just costs you time. Anything that blocks or interrupts
+— pop-ups, load-time alerts, unload prompts — is cut, however funny in the abstract.
+
+Every crime ships with a legitimate escape hatch. **Nothing is merely broken.**
+
+## What's here
+
+| File | What it is |
+|---|---|
+| `feed.html` | The feed. 2013 stratum. Twelve crimes, most of them original to this project. |
+| `index.html` | The sign-up form. Slingshot volume, million-value phone slider, fleeing checkbox. |
+| `awards.html` | The Awards Cabinet. 2002 stratum, and it shows. |
+| `assets/trophies.js` | Achievement engine, shared across pages, persisted to localStorage. |
+| `assets/friendspace.css` | Shared chrome. Several crimes live in here. |
+
+## Feed crimes
+
+| Crime | Principle violated |
+|---|---|
+| New posts insert **above** your scroll position | Scroll anchoring — `overflow-anchor:none` deliberately disables the browser feature that prevents this |
+| Feed reshuffles as you scroll | Consistency & standards (Nielsen #4) |
+| Read posts grow larger, unread shrink | Visual hierarchy, inverted |
+| Notification badge counts **down**, into the negatives | Visibility of system status (Nielsen #1) |
+| "See more" collapses | Trick wording (Brignull) |
+| Liking: long press → confirm → permanent | Roach motel (Brignull); user control (Nielsen #3) |
+| Your posts vanish, then a stranger replies to them | Match with the real world (Nielsen #2) |
+| "Sponsored" at 4px, `#F0F0F0` on white | Disguised ads (Brignull) + WCAG 1.4.3 — 1.05:1 contrast |
+| Search sorted by irrelevance | — |
+| Every timestamp reads "4h ago" | Visibility of system status |
+| Like counts as a live random walk | Feedback integrity |
+| Infinite scroll hiding the only useful links | Obstruction (Brignull) |
+
+The infinite scroll has a 900ms debounce. **Outrun it and you reach the footer** —
+a skill-based escape hatch, and a trophy.
+
+## Trophies
+
+Fifteen awards, displayed as 88x31 web badges with bevel and lens flare. They drive
+exploration: poking every broken control becomes a collection game.
+
+**"Ghost" — *successfully delete your account* — is unobtainable.** It is listed,
+greyed, and permanently taunting. `unlock()` refuses it even when called directly
+from the console. That row is the thesis of the site.
+
+## Verified
+
+Driven end-to-end in Chromium: every crime fires, trophies persist across pages, and
+there are no console errors.

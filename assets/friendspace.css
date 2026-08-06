@@ -1,0 +1,245 @@
+/* ============================================================
+   Friendspace — main stylesheet
+   Last updated: 3/14/2002
+   TODO: finish the redesign (started 2013)
+   TODO: remove old styles below (do not delete, breaks profiles)
+   ============================================================ */
+
+:root{
+  /* 2013 stratum */
+  --fs-blue:#3b5998;          /* it was RIGHT THERE */
+  --fs-blue-lt:#5f7ec1;
+  --fs-chrome:#dfe3ee;
+  --fs-bg:#e9ebee;
+  --fs-card:#fff;
+  --fs-line:#dddfe2;
+  --fs-ink:#1d2129;
+  --fs-muted:#90949c;
+  /* the contrast crime: a "subtle" text colour, 1.4:1 against card */
+  --fs-whisper:#f2f3f5;
+  --fs-sponsor:#f0f0f0;
+}
+
+*{box-sizing:border-box}
+
+html,body{margin:0;padding:0}
+
+body{
+  background:var(--fs-bg);
+  color:var(--fs-ink);
+  font:13px/1.34 Helvetica, Arial, "Lucida Grande", sans-serif;
+  /* crime: the page is built for 800x600 and admits nothing else */
+  min-width:1010px;
+}
+
+a{color:var(--fs-blue);text-decoration:none}
+a:hover{text-decoration:underline}
+a:visited{color:#5a4b8a}
+
+/* ---------- header (2013, but the logo is from 2004) ---------- */
+.fs-header{
+  position:sticky;top:0;z-index:40;
+  background:var(--fs-blue);
+  border-bottom:1px solid #29487d;
+  height:43px;
+}
+.fs-header-in{
+  max-width:1000px;margin:0 auto;height:43px;
+  display:flex;align-items:center;gap:11px;padding:0 8px;
+}
+.fs-logo{
+  font:italic bold 23px/1 Georgia,"Times New Roman",serif;
+  color:#fff;letter-spacing:-.04em;
+  text-shadow:2px 2px 0 #1e3163, 3px 3px 4px rgba(0,0,0,.4);
+  /* crime: brand wordmark in a serif nothing else on the site uses */
+  padding-right:4px;
+}
+.fs-logo span{color:#ffd34d;font-size:11px;vertical-align:super;letter-spacing:0}
+
+.fs-search{
+  flex:0 0 210px;height:24px;border:1px solid #1d3a72;border-radius:2px;
+  padding:0 7px;font:12px Helvetica,Arial,sans-serif;background:#fff;
+}
+.fs-search:focus{outline:2px solid #ffd34d}
+
+.fs-nav{display:flex;align-items:center;gap:3px;margin-left:auto}
+.fs-nav a{
+  color:#dfe3ee;font-size:12px;padding:5px 8px;border-radius:2px;position:relative;
+}
+.fs-nav a:hover{background:#4a6bb0;text-decoration:none}
+
+.fs-badge-count{
+  display:inline-block;min-width:16px;height:16px;padding:0 4px;margin-left:4px;
+  background:#f33;color:#fff;border-radius:8px;
+  font:bold 10px/16px Verdana,sans-serif;text-align:center;vertical-align:2px;
+}
+.fs-badge-count.neg{background:#111;color:#0f0}
+
+/* ---------- 3-column shell ---------- */
+.fs-shell{
+  max-width:1000px;margin:9px auto 0;
+  display:grid;grid-template-columns:184px 1fr 218px;gap:11px;
+  align-items:start;
+  padding:0 8px 60px;
+}
+/* crime: the middle column disables scroll anchoring, so inserting content
+   above the viewport shoves everything down. the browser would have fixed
+   this for free. */
+.fs-col-mid{overflow-anchor:none}
+
+.fs-rail{position:sticky;top:52px}
+
+/* ---------- cards ---------- */
+.fs-card{
+  background:var(--fs-card);
+  border:1px solid var(--fs-line);
+  border-radius:3px;
+  margin-bottom:9px;
+}
+.fs-card-h{
+  padding:6px 9px;border-bottom:1px solid var(--fs-line);
+  font-weight:bold;font-size:12px;color:#4b4f56;
+  /* crime: 1px off from the body padding below it, everywhere, forever */
+}
+.fs-card-b{padding:8px 10px}
+
+.fs-rail-title{
+  font:bold 11px Helvetica,Arial,sans-serif;color:var(--fs-muted);
+  text-transform:uppercase;letter-spacing:.04em;margin:0 0 5px 2px;
+}
+
+/* ---------- composer ---------- */
+.fs-compose textarea{
+  width:100%;border:1px solid var(--fs-line);border-radius:2px;padding:7px;
+  font:14px Helvetica,Arial,sans-serif;resize:none;height:56px;
+}
+.fs-compose textarea:focus{outline:1px solid var(--fs-blue-lt)}
+.fs-compose-foot{display:flex;align-items:center;gap:8px;margin-top:6px}
+.fs-count{font-size:11px;color:var(--fs-muted);margin-left:auto}
+
+.fs-btn{
+  background:linear-gradient(#4c69ba,#3b55a0);border:1px solid #29487d;
+  color:#fff;font:bold 12px Helvetica,Arial,sans-serif;
+  padding:4px 11px;border-radius:2px;cursor:pointer;
+}
+.fs-btn:hover{background:linear-gradient(#5b78c9,#425cab)}
+.fs-btn:active{background:#35497f}
+.fs-btn.ghost{
+  background:#f6f7f9;color:#4b4f56;border:1px solid #ced0d4;
+}
+
+/* ---------- posts ---------- */
+.fs-post{
+  background:var(--fs-card);border:1px solid var(--fs-line);border-radius:3px;
+  margin-bottom:9px;position:relative;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1), font-size .5s ease, opacity .3s;
+  transform-origin:top center;
+}
+.fs-post.arriving{animation:fsSlideIn .45s cubic-bezier(.2,1.3,.35,1) both}
+@keyframes fsSlideIn{from{opacity:0;transform:translateY(-16px) scaleY(.9)}to{opacity:1;transform:none}}
+
+.fs-post-h{display:flex;align-items:flex-start;gap:8px;padding:9px 10px 0}
+.fs-av{
+  width:38px;height:38px;flex:none;border-radius:2px;
+  background:linear-gradient(135deg,#b9c3d8,#8fa0c4);
+  font:bold 15px/38px Helvetica,sans-serif;color:#fff;text-align:center;
+  /* crime: images sized by attribute, aspect ratio is a suggestion */
+}
+.fs-who{flex:1;min-width:0}
+.fs-name{font-weight:bold;color:var(--fs-blue);font-size:13px}
+.fs-when{color:var(--fs-muted);font-size:11px}
+.fs-post-body{padding:7px 10px 9px;font-size:13px;line-height:1.42;white-space:pre-wrap}
+.fs-post.collapsed .fs-post-body{
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.fs-photo{
+  display:block;width:100%;height:190px;border-top:1px solid var(--fs-line);
+  border-bottom:1px solid var(--fs-line);
+}
+
+.fs-post-actions{
+  display:flex;align-items:center;gap:2px;padding:4px 6px;
+  border-top:1px solid #f0f1f3;
+}
+.fs-act{
+  background:none;border:none;color:#4b4f56;font:bold 12px Helvetica,Arial,sans-serif;
+  padding:5px 9px;border-radius:2px;cursor:pointer;
+}
+.fs-act:hover{background:#f2f3f5}
+.fs-act.liked{color:#3b5998}
+.fs-act.holding{background:#dfe3ee}
+.fs-likes{margin-left:auto;font-size:11px;color:var(--fs-muted);padding-right:6px}
+
+/* the disguised-ad label: 4px, #F0F0F0 on #FFF — 1.05:1 contrast */
+.fs-sponsored{
+  font-size:4px;color:var(--fs-sponsor);letter-spacing:.5px;
+  padding:0 10px;cursor:pointer;user-select:none;line-height:1.1;
+}
+.fs-sponsored:hover{color:#c8c8c8}
+
+/* ---------- modal (the like confirmation) ---------- */
+.fs-modal-bg{
+  position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  animation:fsFade .18s both;
+}
+@keyframes fsFade{from{opacity:0}to{opacity:1}}
+.fs-modal{
+  background:#fff;border:1px solid #29487d;border-radius:3px;width:400px;
+  box-shadow:0 4px 22px rgba(0,0,0,.4);
+  animation:fsPopIn .28s cubic-bezier(.2,1.5,.4,1) both;
+}
+@keyframes fsPopIn{from{transform:scale(.85);opacity:0}to{transform:none;opacity:1}}
+.fs-modal h3{
+  margin:0;padding:8px 11px;background:var(--fs-blue);color:#fff;
+  font:bold 13px Helvetica,Arial,sans-serif;
+}
+.fs-modal .b{padding:14px 13px;font-size:13px;line-height:1.45}
+.fs-modal .f{padding:9px 13px;border-top:1px solid var(--fs-line);text-align:right;display:flex;gap:7px;justify-content:flex-end}
+
+/* ---------- rail bits ---------- */
+.fs-person{display:flex;align-items:center;gap:6px;padding:4px 0;font-size:12px}
+.fs-person .fs-av{width:26px;height:26px;font-size:11px;line-height:26px}
+.fs-top8{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+.fs-top8 .slot{position:relative;text-align:center;font-size:9px;color:var(--fs-muted)}
+.fs-top8 .slot .fs-av{width:100%;height:34px;line-height:34px;font-size:12px}
+.fs-top8 .rank{
+  position:absolute;top:-3px;left:-3px;background:#f33;color:#fff;
+  font:bold 9px/13px Verdana;width:14px;height:14px;border-radius:7px;
+}
+
+/* the whisper text: technically present, practically invisible */
+.fs-whisper{color:var(--fs-whisper);font-size:11px}
+
+/* ---------- loader / footer ---------- */
+.fs-loader{
+  text-align:center;padding:16px;color:var(--fs-muted);font-size:12px;
+}
+.fs-spinner{
+  display:inline-block;width:14px;height:14px;border:2px solid #ccd;
+  border-top-color:var(--fs-blue);border-radius:50%;
+  animation:fsSpin .7s linear infinite;vertical-align:-3px;margin-right:6px;
+}
+@keyframes fsSpin{to{transform:rotate(360deg)}}
+
+.fs-footer{
+  max-width:1000px;margin:0 auto;padding:18px 8px 50px;
+  border-top:1px solid #ccd0d5;color:#8d949e;font-size:11px;text-align:center;
+  /* the only useful links on the site live down here, behind infinite scroll */
+}
+.fs-footer a{color:#8d949e;margin:0 5px}
+.fs-footer .ring{font-family:"Courier New",monospace;margin-top:8px;color:#666}
+.fs-counter{
+  display:inline-block;background:#000;color:#0f0;padding:2px 5px;margin-top:9px;
+  font:bold 13px/1 "Courier New",monospace;letter-spacing:3px;border:2px inset #555;
+}
+
+/* ---------- sparkle cursor trail (ambient crime) ---------- */
+.fs-sparkle{
+  position:fixed;width:6px;height:6px;pointer-events:none;z-index:9998;
+  border-radius:50%;animation:fsFall .9s linear forwards;
+}
+@keyframes fsFall{
+  0%{opacity:1;transform:translateY(0) scale(1)}
+  100%{opacity:0;transform:translateY(26px) scale(.2)}
+}

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Craft — Create your account</title>
+<script src="assets/trophies.js"></script>
 <style>
   :root{
     --bg:#f4f5f7; --card:#fff; --ink:#1a1d21; --muted:#6b7280;
@@ -314,6 +315,7 @@ function land(x){
   $("#volnum").textContent = v;
   $("#volnote").textContent = v === 0 ? "(silent — nice shot)" : v === 100 ? "(MAXIMUM)" : "";
   mark("#ck-vol", true);
+  if (v === 0) FS.Trophies.unlock("marksman");
   setTimeout(() => { proj = null; trail = []; }, 1100);
 }
 
@@ -406,7 +408,11 @@ function renderCal(){
     g.appendChild(el);
   }
 }
-function stepBack(){ view.setMonth(view.getMonth()-1); renderCal(); }
+let monthsBack = 0;
+function stepBack(){
+  view.setMonth(view.getMonth()-1); renderCal();
+  if (++monthsBack >= 300) FS.Trophies.unlock("longway");
+}
 let holdTimer = null, holdInt = null;
 $("#prev").addEventListener("pointerdown", () => {
   stepBack();
@@ -465,7 +471,10 @@ box.addEventListener("mousemove", e => {
     cb.style.top  = Math.random() * (r.height - 34) + "px";
   }
 });
-cb.addEventListener("change", () => { state.terms = cb.checked; mark("#ck-terms", cb.checked); });
+cb.addEventListener("change", () => {
+  state.terms = cb.checked; mark("#ck-terms", cb.checked);
+  if (cb.checked) FS.Trophies.unlock("escape");
+});
 // escape hatch: Tab to it and press Space. It cannot run from the keyboard.
 
 /* ===================== COOKIES ===================== */
@@ -488,6 +497,7 @@ $("#acceptAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(
 $("#rejectAll").onclick = () => { allTogs().forEach(t=>t.checked=true); countOn(); }; // identical. of course.
 $("#continueBtn").onclick = () => {
   if (countOn() > 0){ $("#cookieCount").style.color = "var(--bad)"; return; }
+  FS.Trophies.unlock("completionist");
   $("#cookie").remove();
 };
 countOn();
